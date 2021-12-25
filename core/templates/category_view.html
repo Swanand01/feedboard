@@ -39,13 +39,15 @@
                         <p class="upvote_count">{{post.get_upvotes}}</p>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title">{{post.title}}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{post.user}} - {{post.created_at}}
-                        </h6>
-                        <h6 class="card-subtitle mb-2" style="background-color: {{post.status.colour}};">{{post.status}}</h6>
-                        <p class="card-text">{{post.content}}</p>
-                        <a href="{% url 'post_view' project.slug category.slug post.slug %}"
-                            class="btn btn-primary">View</a>
+                        <h5 class="card-title"><a href="{% url 'post_view' project.slug category.slug post.slug %}">{{post.title}}</a></h5>
+                        <p class="card-subtitle mb-2 text-muted">{{post.user}} - {{post.created_at}}
+                        </p>
+                        <div class="rounded" style="background-color: {{post.status.colour}}; display: inline-block;">
+                            <h6 class="card-subtitle p-2">
+                                {{post.status}}</h6>
+                        </div>
+                        <p class="card-text mt-1">{{post.content}}</p>
+                        
                     </div>
                     <div class="comment-div">
                         <a href="{% url 'post_view' project.slug category.slug post.slug %}">
