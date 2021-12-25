@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{category}}{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/project_settings.css' %}">
+{% endblock style %}
+
+{% block body %}
+<main>
+    <div class="container">
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Change project name:</label>
+                <input type="text" name="project_name" class="form-control" id="project_name" value="{{project}}">
+                <label>URL</label>
+                <input type="text" class="form-control" readonly
+                    value="{{request.get_host}}{{project.get_project_url}}">
+            </div>
+            <div class="form-group">
+                <button type="submit" name="project_name_change" class="btn btn-primary">Save</button>
+            </div>
+        </form>
+
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group category_list_div">
+                <label>Boards:</label>
+                {% for category in project.category_set.all %}
+                <div class="category-and-settings">
+                    <input type="text" class="form-control mb-2 status" value="{{category}}" readonly required>
+                    <a href="{% url 'board_settings' project.slug category.slug %}"><i class="material-icons board-settings">settings</i></a>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="form-group">
+                <button type="button" id="add_category" class="btn btn-secondary">Add category board</button>
+                <button type="submit" name="category_change" class="btn btn-primary" id="category_button">Save</button>
+            </div>
+        </form>
+        <div class="form-group">
+            <label>Project administrators:</label>
+            {% for admin in admins %}
+            <input type="text" class="form-control mb-2" readonly value={{admin}}>
+            {% endfor %}
+        </div>
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Delete project:</label><br>
+                <button type="submit" name="delete_project" class="btn btn-danger">Delete</button>
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock body %}
+
+{% block scripts %}
+<script src="{% static 'js/project_settings.js' %}" type="module"></script>
+{% endblock scripts %}

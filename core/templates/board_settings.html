@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{category}}{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/board_settings.css' %}">
+{% endblock style %}
+
+{% block body %}
+<main>
+	<div class="container">
+		<form action="" method="post">
+			{% csrf_token %}
+			<div class="form-group">
+				<label>Change board name:</label>
+				<input type="text" name="category_name" class="form-control" id="category_name" value="{{category}}">
+				<label>URL</label>
+				<input type="text" class="form-control" readonly
+					value="{{request.get_host}}{{category.get_category_url}}">
+			</div>
+			<div class="form-group">
+				<button type="submit" name="board_name_change" class="btn btn-primary">Save</button>
+			</div>
+		</form>
+
+		<label>Status:</label>
+		<div class="form-group status_list_div">
+			{% for status in category.status_set.all %}
+			<div class="status-div">
+				<input type="text" name="{{status.id}}" class="form-control mb-2 status" value="{{status.title}}"
+					required>
+				<input type="color" id="colour_{{status.id}}" name="favcolor" value="{{status.colour}}">
+			</div>
+			{% endfor %}
+		</div>
+		<div class="form-group">
+			<button type="button" id="add_status" class="btn btn-secondary">Add status</button>
+			<button type="button" name="status_change" class="btn btn-primary" id="status_button">Save</button>
+		</div>
+		<form action="" method="post">
+			{% csrf_token %}
+			<div class="form-group">
+				<label>Delete board:</label><br>
+				<button type="submit" name="delete_board" class="btn btn-danger">Delete</button>
+			</div>
+		</form>
+	</div>
+</main>
+{% endblock body %}
+
+{% block scripts %}
+<script src="{% static 'js/board_settings.js' %}" type="module"></script>
+{% endblock scripts %}

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{category}}{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/category_view.css' %}">
+{% endblock style %}
+
+{% block body %}
+
+<main>
+    <div class="container">
+        <h4>{{category}}</h4>
+        {% if is_admin %}
+        <a href="{% url 'board_settings' project.slug category.slug %}">Board settings</a>
+        {% endif %}
+        <div class="dropdown show">
+            <form action="" method="get">
+                <select id="sort_by" name="sort_by" onchange="if (this.selectedIndex) this.form.submit()">
+                    <option value="-1" selected>Sort by</option>
+                    <option value="upvotes">Upvotes</option>
+                    <option value="created_at">Date</option>
+                </select>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-sm-8">
+                {% for post in posts %}
+
+                <div class="card post">
+                    <p class="post_id" hidden>{{post.id}}</p>
+                    <div class="upvotes">
+                        {% if request.user in post.upvotes.all %}
+                        <i class="material-icons footer-icons upvote_button already-voted">keyboard_arrow_up</i>
+                        {% else %}
+                        <i class="material-icons footer-icons upvote_button">keyboard_arrow_up</i>
+                        {% endif %}
+                        <p class="upvote_count">{{post.get_upvotes}}</p>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{post.title}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{post.user}} - {{post.created_at}}
+                        </h6>
+                        <h6 class="card-subtitle mb-2" style="background-color: {{post.status.colour}};">{{post.status}}</h6>
+                        <p class="card-text">{{post.content}}</p>
+                        <a href="{% url 'post_view' project.slug category.slug post.slug %}"
+                            class="btn btn-primary">View</a>
+                    </div>
+                    <div class="comment-div">
+                        <a href="{% url 'post_view' project.slug category.slug post.slug %}">
+                            <i class="material-icons">comment</i>
+                        </a>
+                        <h6>{{post.comments.count}}</h6>
+                    </div>
+
+                    {% if post.user == request.user or is_admin %}
+                    <div class="dropdown options">
+                        <button class="btn dropdown-toggle caret" type="button" data-toggle="dropdown"></button>
+                        <ul class="dropdown-menu pl-2">
+                            {% if post.user == request.user %}
+                            <li><a href="{% url 'edit_post' post.id %}">Edit post</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'delete_post' post.id %}">Delete post</a></li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="col-sm-4">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input type="text" name="title" id="title" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea name="description" id="description" class="form-control" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock body %}
+
+{% block scripts %}
+<script src="{% static 'js/category_view.js' %}" type="module"></script>
+{% endblock scripts %}

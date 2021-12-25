@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{post}}{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/category_view.css' %}">
+<link rel="stylesheet" href="{% static 'css/post_view.css' %}">
+{% endblock style %}
+
+{% block body %}
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="card post">
+                    <p class="post_id" hidden>{{post.id}}</p>
+                    <div class="upvotes">
+                        {% if request.user in post.upvotes.all %}
+                        <i class="material-icons footer-icons upvote_button already-voted">keyboard_arrow_up</i>
+                        {% else %}
+                        <i class="material-icons footer-icons upvote_button">keyboard_arrow_up</i>
+                        {% endif %}
+                        <p class="upvote_count">{{post.get_upvotes}}</p>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{post.title}}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{post.user}} - {{post.created_at}}</h6>
+                        {% if is_admin %}
+                        <form action="" class="form-inline" method="post">
+                            {% csrf_token %}
+                            <select name="status" id="">
+                                {% for status in statuses %}
+                                {% if status == post.status %}
+                                <option value="{{status}}" selected>{{status}}</option>
+                                {% else %}
+                                <option value="{{status}}">{{status}}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </form>
+                        {% else %}
+                        <h6 class="card-subtitle mb-2 text-muted">{{post.status}}</h6>
+                        {% endif %}
+                        <p class="card-text">{{post.content}}</p>
+                    </div>
+                    
+                    {% if post.user == request.user or is_admin %}
+                    <div class="dropdown options">
+                        <button class="btn dropdown-toggle caret" type="button"
+                            data-toggle="dropdown"></button>
+                        <ul class="dropdown-menu pl-2">
+                            {% if post.user == request.user %}
+                            <li><a href="{% url 'edit_post' post.id %}">Edit post</a></li>
+                            {% endif %}
+                            <li><a href="{% url 'delete_post' post.id %}">Delete post</a></li>
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div id="comment_box">
+                    <form action="{% url 'add_comment' %}" method="post" class="comment-form">
+                        {% csrf_token %}
+                        <input type="text" class="form-control" name="comment_input" id="comment_input"
+                            placeholder="Add a comment..." required>
+                        <input type="text" name="post_id" value={{post.id}} hidden>
+                        <input type="submit" value="Comment" id="post-comment">
+                    </form>
+                </div>
+
+                <div class="comments">
+                    <h5 class="mt-2">Comments - {{post.comments.count}}</h5>
+                    {% for comment in comments %}
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2">
+                                {{comment.user}}
+                            </h6>
+                            <h6 class="card-subtitle mb-2 text-muted">{{comment.pub_date}}</h6>
+                            <p class="card-text">{{comment.content}}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-sm-4 voters">
+                <h5>Voters - {{post.get_upvotes}}</h5>
+                {% for voter in voters %}
+                <p>{{voter}}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock body %}
+
+{% block scripts %}
+<script src="{% static 'js/post_view.js' %}" type="module"></script>
+{% endblock scripts %}

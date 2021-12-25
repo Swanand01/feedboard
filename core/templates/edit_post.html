@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{post}}{% endblock title %}
+
+
+{% block navbar_head %}
+<a class="navbar-brand" href="">{{post.project}}</a>
+{% endblock navbar_head %}
+
+{% block body %}
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8">
+                <div class="card post">
+                    <p class="post_id" hidden>{{post.id}}</p>
+                    <div class="card-body">
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <label>Title:</label>
+                            <textarea class="form-control mb-2" name="title">{{post.title}}</textarea>
+                            <label>Description:</label>
+                            <textarea class="form-control mb-2" name="description">{{post.content}}</textarea>
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock body %}
+
+{% block scripts %}
+{% endblock scripts %}

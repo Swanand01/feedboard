@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{project}}{% endblock title %}
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/project_view.css' %}">
+{% endblock style %}
+
+{% block body %}
+<main>
+    <div class="list-group">
+        {% for category in categories %}
+        <a href="{% url 'category_view' project.slug category.slug %}"
+            class="list-group-item list-group-item-action">{{category.title}} - {{category.post_set.count}}
+        </a>
+        {% endfor %}
+        {% if is_admin %}
+        <a href="{% url 'project_settings' project.slug %}" class="list-group-item list-group-item-action">Project Settings</a>
+        {% endif %}
+    </div>
+</main>
+{% endblock body %}
+
+{% block scripts %}{% endblock scripts %}

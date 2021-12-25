@@ -1,0 +1,53 @@
+#description{
+    height: 160px;
+}
+
+.post{
+    display: grid;
+    grid-template-columns: 1fr 7fr 1fr 1fr;
+    position: relative;
+}
+
+.upvotes{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.upvote_button{
+    font-size: 2rem;
+}
+
+.already-voted{
+    color: #1a66d9;
+}
+
+.material-icons{
+    cursor: pointer;
+}
+
+.comment-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.comment-div a{
+    color: black;
+}
+
+.options{
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+.dropdown{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+

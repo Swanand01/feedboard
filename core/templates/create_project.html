@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create project{% endblock title %}
+
+{% block navbar_head %}
+<a class="navbar-brand" href="">Lol</a>
+{% endblock navbar_head %}
+
+{% block body %}
+<main>
+    <div class="container">
+        {{ request.user }}
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="project_title">Project title</label>
+                <input type="text" name="project_title" class="form-control" id="project_title"
+                    placeholder="Project title" required>
+            </div>
+            <div class="form-group">
+                <label for="project_description">Project description</label>
+                <textarea class="form-control" name="project_description" id="project_description"
+                    placeholder="Project description" required></textarea>
+            </div>
+            <div class="form-group categories">
+                <label>Add Categories:</label>
+                <input type="text" class="form-control" name="category" value="Feature Requests" required>
+                <input type="text" class="form-control mt-2" name="category" value="Bugs">
+            </div>
+            <button type="button" class="btn btn-secondary" id="add_category_btn">Add another category</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</main>
+{% endblock body %}
+
+{% block scripts %}
+<script src="{% static 'js/create_project.js' %}" type="module"></script>
+{% endblock scripts %}

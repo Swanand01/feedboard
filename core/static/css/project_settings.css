@@ -1,0 +1,10 @@
+.category-and-settings{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.board-settings{
+    margin-left: 4px;
+    font-size: 30px;
+}

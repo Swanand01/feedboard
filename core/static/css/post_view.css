@@ -1,0 +1,31 @@
+.voters{
+    background-color: ghostwhite;
+}
+
+.comment{
+    width: 100%;
+}
+
+#comment_box{
+    margin: 10px 0px 10px 0px;
+}
+
+.comment-form{
+    display: flex;
+    width: 100%;
+}
+
+#comment_input{
+    width: 100%;
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+
+#post-comment{
+    font-size: 15px;
+    border: none;
+    padding: 5px 20px;
+    margin-left: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
