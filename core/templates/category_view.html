@@ -38,35 +38,45 @@
                         {% endif %}
                         <p class="upvote_count">{{post.get_upvotes}}</p>
                     </div>
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="{% url 'post_view' project.slug category.slug post.slug %}">{{post.title}}</a></h5>
-                        <p class="card-subtitle mb-2 text-muted">{{post.user}} - {{post.created_at}}
-                        </p>
-                        <div class="rounded" style="background-color: {{post.status.colour}}; display: inline-block;">
-                            <h6 class="card-subtitle p-2">
-                                {{post.status}}</h6>
-                        </div>
-                        <p class="card-text mt-1">{{post.content}}</p>
-                        
-                    </div>
-                    <div class="comment-div">
-                        <a href="{% url 'post_view' project.slug category.slug post.slug %}">
-                            <i class="material-icons">comment</i>
-                        </a>
-                        <h6>{{post.comments.count}}</h6>
-                    </div>
+                    <div class="post-body">
+                        <div class="card-body pb-1">
+                            <h5 class="card-title"><a
+                                    href="{% url 'post_view' project.slug category.slug post.slug %}">{{post.title}}</a>
+                            </h5>
 
-                    {% if post.user == request.user or is_admin %}
-                    <div class="dropdown options">
-                        <button class="btn dropdown-toggle caret" type="button" data-toggle="dropdown"></button>
-                        <ul class="dropdown-menu pl-2">
-                            {% if post.user == request.user %}
-                            <li><a href="{% url 'edit_post' post.id %}">Edit post</a></li>
-                            {% endif %}
-                            <li><a href="{% url 'delete_post' post.id %}">Delete post</a></li>
-                        </ul>
+                            <p class="card-subtitle mb-2 text-muted">{{post.user}} - {{post.created_at}}
+                            </p>
+
+                            <div class="rounded"
+                                style="background-color: {{post.status.colour}}; display: inline-block;">
+                                <h6 class="card-subtitle p-2">
+                                    {{post.status}}</h6>
+                            </div>
+
+                            <p class="card-text mt-1">{{post.content}}</p>
+                            <div class="post-footer">
+
+                                <a href="{% url 'post_view' project.slug category.slug post.slug %}"
+                                    class="footer-item">
+                                    <div class="comment-div">
+                                        <i class="material-icons">comment</i>
+                                        {{post.comments.count}} Comments
+                                    </div>
+                                </a>
+
+                                {% if post.user == request.user or is_admin %}
+                                <div class="options">
+                                    {% if post.user == request.user %}
+                                    <a href="{% url 'edit_post' post.id %}" class="footer-item">Edit</a>
+                                    {% endif %}
+                                    <a href="{% url 'delete_post' post.id %}" class="footer-item">Delete</a>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+
                     </div>
-                    {% endif %}
                 </div>
                 {% endfor %}
             </div>

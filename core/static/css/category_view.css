@@ -4,8 +4,18 @@
 
 .post{
     display: grid;
-    grid-template-columns: 1fr 7fr 1fr 1fr;
-    position: relative;
+    grid-template-columns: 1fr 9fr;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.post-body{
+    display: flex;
+    flex-direction: column;
+}
+
+.post-footer{
+    display: flex;
 }
 
 .upvotes{
@@ -13,6 +23,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #efefef;
 }
 
 .upvote_button{
@@ -27,23 +38,34 @@
     cursor: pointer;
 }
 
-.comment-div{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.footer-item{
+    color: #6c757d;
 }
 
-.comment-div a{
+.footer-item a{
     color: black;
 }
 
+.footer-item:link { text-decoration: none; }
+.footer-item:visited { text-decoration: none; }
+.footer-item:hover { text-decoration: none; color: #363738;}
+.footer-item:active { text-decoration: none; }
+
+.comment-div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    column-gap: 0.4rem;
+}
+
 .options{
-    position: absolute;
-    right: 0;
-    top: 0;
-    margin-top: 10px;
-    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    column-gap: 1rem;
+    margin-left: 1rem;
 }
 
 .dropdown{
