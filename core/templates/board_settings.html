@@ -38,7 +38,7 @@
 			<button type="button" id="add_status" class="btn btn-secondary">Add status</button>
 			<button type="button" name="status_change" class="btn btn-primary" id="status_button">Save</button>
 		</div>
-		<form action="" method="post">
+		<form action="" method="post" onsubmit="return confirm('Do you really want to delete this board?');">
 			{% csrf_token %}
 			<div class="form-group">
 				<label>Delete board:</label><br>

@@ -206,7 +206,8 @@ def project_settings(request, project_slug):
                         Status(category=c, title="In Progress").save()
                         Status(category=c, title="Live").save()
             elif "delete_project" in request.POST:
-                project.delete()
+                print("DELETE")
+                # project.delete()
                 return redirect("/app")
 
         return render(request, "project_settings.html", context)

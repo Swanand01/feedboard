@@ -41,7 +41,11 @@
                             <button type="submit" class="btn btn-primary">Save</button>
                         </form>
                         {% else %}
-                        <h6 class="card-subtitle mb-2 text-muted">{{post.status}}</h6>
+                        <div class="rounded"
+                                style="background-color: {{post.status.colour}}; display: inline-block;">
+                                <h6 class="card-subtitle p-2">
+                                    {{post.status}}</h6>
+                            </div>
                         {% endif %}
                         <p class="card-text">{{post.content}}</p>
                     </div>

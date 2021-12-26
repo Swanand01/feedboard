@@ -31,7 +31,8 @@
                 {% for category in project.category_set.all %}
                 <div class="category-and-settings">
                     <input type="text" class="form-control mb-2 status" value="{{category}}" readonly required>
-                    <a href="{% url 'board_settings' project.slug category.slug %}"><i class="material-icons board-settings">settings</i></a>
+                    <a href="{% url 'board_settings' project.slug category.slug %}"><i
+                            class="material-icons board-settings">settings</i></a>
                 </div>
                 {% endfor %}
             </div>
@@ -46,11 +47,14 @@
             <input type="text" class="form-control mb-2" readonly value={{admin}}>
             {% endfor %}
         </div>
-        <form action="" method="post">
+
+        <form action="" method="post" class="delete_project_form"
+            onsubmit="return confirm('Do you really want to delete the project?');">
             {% csrf_token %}
             <div class="form-group">
                 <label>Delete project:</label><br>
-                <button type="submit" name="delete_project" class="btn btn-danger">Delete</button>
+                <input type="submit" value="Delete" name="delete_project" id="delete_project_btn"
+                    class="btn btn-danger">
             </div>
         </form>
     </div>

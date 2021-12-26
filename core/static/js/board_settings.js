@@ -31,13 +31,14 @@ statusSaveBtn.addEventListener("click", () => {
             window.alert("Status cannot be empty")
         }
     });
-    console.log(context);
 
     fetch(window.location.pathname, {
         method: 'POST',
         body: JSON.stringify(context),
         headers: { "X-CSRFToken": csrftoken },
-    })
+    }).then(function () {
+        alert("Changes saved.");
+    });
 })
 
 let addStatusBtn = document.querySelector("#add_status");
