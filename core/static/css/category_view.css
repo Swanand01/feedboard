@@ -2,11 +2,21 @@
     height: 160px;
 }
 
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header h5{
+    margin-bottom: 0;
+}
+
 .post{
     display: grid;
     grid-template-columns: 1fr 9fr;
-    margin-bottom: 1rem;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 8px;
+    margin-bottom: 0.8rem;
 }
 
 .post-body{
@@ -16,6 +26,7 @@
 
 .post-footer{
     display: flex;
+    align-items: center;
 }
 
 .upvotes{
@@ -43,6 +54,7 @@
 }
 
 .footer-item a{
+    font-size: 14px;
     color: black;
 }
 
@@ -71,8 +83,37 @@
 .dropdown{
     margin-top: 10px;
     margin-bottom: 10px;
+    background-color: #ffffff;
+}
+
+
+.card-title{
+    margin-bottom: 0.5rem;
 }
 
 .card-title a{
+    font-size: 1rem;
     color: black;
+}
+
+.new-post-form{
+    background-color: #ffffff;
+    padding: 0.8rem;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 8px;
+}
+
+.category_title{
+    display: flex;
+    column-gap: 0.6rem;
+}
+
+.search-bar{
+    padding: 0.8rem;
+    margin-bottom: 0.8rem;
+    background-color: #ffffff;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 8px;
 }

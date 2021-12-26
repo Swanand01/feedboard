@@ -13,6 +13,8 @@
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     {% block style %}{% endblock style %}
@@ -31,14 +33,14 @@
             </button>
             <div class="links">
                 {% if request.user.is_authenticated %}
-                    <a class="navbar-link" href="">{{ user.user_name }}</a>
+                <a class="navbar-link" href="">{{ user.user_name }}</a>
                 {% else %}
-                    <a class="btn btn-primary" href="/login?next={{request.path}}">Sign in</a>
+                <a class="btn btn-primary" href="/login?next={{request.path}}">Sign in</a>
                 {% endif %}
             </div>
         </div>
     </nav>
-    
+
     {% block body %}{% endblock body %}
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"

@@ -1,0 +1,27 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+html * {
+    font-size: 14px;
+    font-family: 'Noto Sans', sans-serif;
+} */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+
+html * {
+    font-family: 'Montserrat', sans-serif;
+}
+
+
+a{
+    font-size: 14px;
+    color: black;
+}
+
+p{
+    font-size: 14px;
+}
+
+.navbar{
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 8px;
+}

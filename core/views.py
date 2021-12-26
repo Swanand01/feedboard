@@ -131,8 +131,9 @@ def post_view(request, project_slug, category_slug, post_slug):
         if request.method == "POST":
             status = Status.objects.get(
                 category=post.category, title=request.POST.get("status"))
-            post.status = status
-            post.save()
+
+            Post.objects.filter(
+                project=project, slug=post_slug).update(status=status)
             return redirect(post.get_post_url())
 
     return render(request, "post_view.html", context)
