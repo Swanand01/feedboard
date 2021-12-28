@@ -109,11 +109,15 @@
     column-gap: 0.6rem;
 }
 
-.search-bar{
+.search-div{
     padding: 0.8rem;
     margin-bottom: 0.8rem;
     background-color: #ffffff;
     border: 1px solid rgba(0,0,0,.125);
     border-radius: 0.25rem;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 8px;
+}
+
+.search-results{
+    display: none;
 }

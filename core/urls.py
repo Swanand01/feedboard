@@ -5,6 +5,7 @@ urlpatterns = [
     path('create-project/', views.create_project, name='create_project'),
     path('vote/', views.vote, name='vote'),
     path('comment/', views.add_comment, name='add_comment'),
+    path('search-post/', views.search_posts, name='search_posts'),
     path('edit-post/<int:post_id>/', views.edit_post, name='edit_post'),
     path('delete-post/<int:post_id>/', views.delete_post, name='delete_post'),
     path('<slug:project_slug>/', views.project_view, name='project_view'),

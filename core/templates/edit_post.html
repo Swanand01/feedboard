@@ -5,27 +5,23 @@
 
 
 {% block navbar_head %}
-<a class="navbar-brand" href="">{{post.project}}</a>
+<a class="navbar-brand" href="{{post.project.get_project_url}}">{{post.project}}</a>
 {% endblock navbar_head %}
 
 {% block body %}
 <main>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-8">
-                <div class="card post">
-                    <p class="post_id" hidden>{{post.id}}</p>
-                    <div class="card-body">
-                        <form action="" method="post">
-                            {% csrf_token %}
-                            <label>Title:</label>
-                            <textarea class="form-control mb-2" name="title">{{post.title}}</textarea>
-                            <label>Description:</label>
-                            <textarea class="form-control mb-2" name="description">{{post.content}}</textarea>
-                            <button class="btn btn-primary" type="submit">Submit</button>
-                        </form>
-                    </div>
-                </div>
+    <div class="container pt-3 pb-3">
+        <div class="card post">
+            <p class="post_id" hidden>{{post.id}}</p>
+            <div class="card-body">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <label>Title:</label>
+                    <textarea class="form-control mb-2" name="title">{{post.title}}</textarea>
+                    <label>Description:</label>
+                    <textarea class="form-control mb-2" name="description">{{post.content}}</textarea>
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </form>
             </div>
         </div>
     </div>

@@ -8,87 +8,94 @@
 {% endblock style %}
 
 {% block body %}
-
+{% csrf_token %}
+{{category.id|json_script:"category_id"}}
 <main>
     <div class="container pt-3 pb-3">
 
         <div class="row">
             <div class="col-sm-8">
-                <div class="header">
-                    <div class="category_title">
-                        <h5>{{category}}</h5>
-                        {% if is_admin %}
-                        <a href="{% url 'board_settings' project.slug category.slug %}"><i
-                                class="material-icons board-settings">settings</i></a>
-                        {% endif %}
-                    </div>
-                    <div class="dropdown show">
-                        <form action="" method="get">
-                            <select id="sort_by" name="sort_by" onchange="if (this.selectedIndex) this.form.submit()">
-                                <option value="-1" selected>Sort by</option>
-                                <option value="upvotes">Upvotes</option>
-                                <option value="created_at">Date</option>
-                            </select>
-                        </form>
-                    </div>
+
+                <div class="search-results">
                 </div>
-                {% for post in posts %}
+                <div class="posts">
 
-                <div class="card post">
-                    <p class="post_id" hidden>{{post.id}}</p>
-                    <div class="upvotes">
-                        {% if request.user in post.upvotes.all %}
-                        <i class="material-icons footer-icons upvote_button already-voted">keyboard_arrow_up</i>
-                        {% else %}
-                        <i class="material-icons footer-icons upvote_button">keyboard_arrow_up</i>
-                        {% endif %}
-                        <p class="upvote_count">{{post.get_upvotes}}</p>
+                    <div class="header">
+                        <div class="category_title">
+                            <h5>{{category}}</h5>
+                            {% if is_admin %}
+                            <a href="{% url 'board_settings' project.slug category.slug %}"><i
+                                    class="material-icons board-settings">settings</i></a>
+                            {% endif %}
+                        </div>
+                        <div class="dropdown show">
+                            <form action="" method="get">
+                                <select id="sort_by" name="sort_by"
+                                    onchange="if (this.selectedIndex) this.form.submit()">
+                                    <option value="-1" selected>Sort by</option>
+                                    <option value="upvotes">Upvotes</option>
+                                    <option value="created_at">Date</option>
+                                </select>
+                            </form>
+                        </div>
                     </div>
-                    <div class="post-body">
-                        <div class="card-body pb-1 pt-1">
-                            <h6 class="card-title"><a
-                                    href="{% url 'post_view' project.slug category.slug post.slug %}">{{post.title|truncatewords:10}}</a>
-                            </h6>
 
-                            <div class="rounded"
-                                style="background-color: {{post.status.colour}}; display: inline-block;">
-                                <p class="card-subtitle p-1">
-                                    {{post.status}}</p>
-                            </div>
+                    {% for post in posts %}
+                    <div class="card post">
+                        <p class="post_id" hidden>{{post.id}}</p>
+                        <div class="upvotes">
+                            {% if request.user in post.upvotes.all %}
+                            <i class="material-icons footer-icons upvote_button already-voted">keyboard_arrow_up</i>
+                            {% else %}
+                            <i class="material-icons footer-icons upvote_button">keyboard_arrow_up</i>
+                            {% endif %}
+                            <p class="upvote_count">{{post.get_upvotes}}</p>
+                        </div>
+                        <div class="post-body">
+                            <div class="card-body pb-1 pt-1">
+                                <h6 class="card-title"><a
+                                        href="{% url 'post_view' project.slug category.slug post.slug %}">{{post.title|truncatewords:10}}</a>
+                                </h6>
 
-                            <p class="card-text mt-1 mb-1">{{post.content|truncatewords:12}}</p>
-                            <div class="post-footer">
+                                <div class="rounded"
+                                    style="background-color: {{post.status.colour}}; display: inline-block;">
+                                    <p class="card-subtitle p-1">
+                                        {{post.status}}</p>
+                                </div>
 
-                                <a href="{% url 'post_view' project.slug category.slug post.slug %}"
-                                    class="footer-item">
-                                    <div class="comment-div">
-                                        <i class="material-icons">comment</i>
-                                        {{post.comments.count}} Comments
+                                <p class="card-text mt-1 mb-1">{{post.content|truncatewords:12}}</p>
+                                <div class="post-footer">
+
+                                    <a href="{% url 'post_view' project.slug category.slug post.slug %}"
+                                        class="footer-item">
+                                        <div class="comment-div">
+                                            <i class="material-icons">comment</i>
+                                            {{post.comments.count}} Comments
+                                        </div>
+                                    </a>
+
+                                    {% if post.user == request.user %}
+                                    <div class="options">
+                                        <a href="{% url 'edit_post' post.id %}" class="footer-item">Edit</a>
+
+                                        <a href="{% url 'delete_post' post.id %}" class="footer-item"
+                                            onclick="return confirm('Do you want to delete this post?')">Delete</a>
                                     </div>
-                                </a>
-
-                                {% if post.user == request.user %}
-                                <div class="options">
-                                    <a href="{% url 'edit_post' post.id %}" class="footer-item">Edit</a>
-
+                                    {% elif is_admin %}
                                     <a href="{% url 'delete_post' post.id %}" class="footer-item"
                                         onclick="return confirm('Do you want to delete this post?')">Delete</a>
+                                    {% endif %}
                                 </div>
-                                {% elif is_admin %}
-                                <a href="{% url 'delete_post' post.id %}" class="footer-item"
-                                    onclick="return confirm('Do you want to delete this post?')">Delete</a>
-                                {% endif %}
                             </div>
                         </div>
-
-
                     </div>
+                    {% endfor %}
+
                 </div>
-                {% endfor %}
             </div>
             <div class="col-sm-4">
-                <div class="input-group rounded search-bar">
-                    <input type="search" class="form-control rounded" placeholder="Search">
+                <div class="input-group rounded search-div">
+                    <input type="search" class="form-control rounded" placeholder="Search" id="search_bar">
                 </div>
                 <div class="new-post-form">
                     <form action="" method="post">

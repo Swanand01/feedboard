@@ -5,6 +5,7 @@ from django.urls.base import reverse
 from core.models import Category, Project, ProjectAdmin, Post, Comment, Status
 from account.models import CustomUser
 import json
+from django.core import serializers
 
 
 def project_view(request, project_slug):
@@ -258,3 +259,55 @@ def board_settings(request, project_slug, category_slug):
         return render(request, "board_settings.html", context)
     else:
         return HttpResponse("Unauthorised")
+
+
+def search_posts(request):
+    if request.method == "POST":
+        if request.body:
+            uname = str(request.user)
+            user = CustomUser.objects.get(user_name=uname)
+
+            data = json.loads(request.body)
+            category = Category.objects.get(pk=data["category_id"])
+            project = category.project
+            search_query = data["search_query"]
+
+            context = {
+                "posts": {}
+            }
+
+            posts = Post.objects.filter(
+                category=category, title__icontains=search_query)
+            if ProjectAdmin.objects.filter(user=user).exists():
+                context["is_admin"] = True
+
+            for post in posts:
+                post_id = post.id
+                post_title = post.title
+                post_desc = post.content
+                post_status = post.status.title
+                post_url = post.get_post_url()
+                edit_post_url = reverse("edit_post", kwargs={
+                    "post_id": post_id
+                })
+                delete_post_url = reverse("delete_post", kwargs={
+                    "post_id": post_id
+                })
+                creator = post.user.user_name
+                upvotes = post.get_upvotes()
+                comments = post.comments.count()
+                context["posts"][post_id] = {
+                    "title": post_title,
+                    "description": post_desc,
+                    "status": post_status,
+                    "status_colour": post.status.colour,
+                    "post_url": post_url,
+                    "edit_post_url": edit_post_url,
+                    "delete_post_url": delete_post_url,
+                    "creator": creator,
+                    "user_is_creator": request.user.user_name == creator,
+                    "has_upvoted": request.user in post.upvotes.all(),
+                    "upvotes": upvotes,
+                    "comments": comments
+                }
+            return JsonResponse(context)
