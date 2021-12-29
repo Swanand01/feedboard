@@ -1,0 +1,49 @@
+.status-div {
+  display: flex;
+  padding: 0.75rem 1.25rem;
+  flex-direction: row;
+  column-gap: 10px;
+  justify-content: space-between;
+}
+
+.status{
+  text-align: center;
+}
+
+.status h6{
+  padding: 0.2rem;
+  display: inline;
+}
+
+.posts{
+  height: 20rem;
+  overflow-y: auto;
+}
+
+.post{
+  display: grid;
+  grid-template-columns: 1fr 9fr;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 8px;
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
+}
+
+.upvotes{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #efefef;
+}
+
+.upvote_button{
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+@media (max-width: 800px) {
+  .status-div {
+    flex-direction: column;
+    row-gap: 10px;
+  }
+}
