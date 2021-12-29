@@ -1,5 +1,5 @@
-import { getCookie } from "./helpers.js";
-let csrftoken = getCookie("csrftoken");
+console.log("BOARD SETTINGS");
+const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
 
 let statusDiv = document.querySelector(".status_list_div");
 
@@ -10,10 +10,11 @@ statusSaveBtn.addEventListener("click", () => {
     let context = {
         "type": "status_change",
         "statuses": {},
-        "new_statuses": {}
+        "new_statuses": []
     }
     Array.from(statuses).forEach(element => {
         if (element.value != "") {
+
             context["statuses"][element.name] = {
                 "title": element.value,
                 "colour": document.querySelector(`#colour_${element.name}`).value
@@ -25,19 +26,20 @@ statusSaveBtn.addEventListener("click", () => {
     });
     Array.from(newStatuses).forEach(element => {
         if (element.value != "") {
-            context["new_statuses"][element.name] = element.value
+            console.log(element.value);
+            context["new_statuses"].push(element.value)
         }
         else {
             window.alert("Status cannot be empty")
         }
     });
-
     fetch(window.location.pathname, {
         method: 'POST',
         body: JSON.stringify(context),
         headers: { "X-CSRFToken": csrftoken },
     }).then(function () {
         alert("Changes saved.");
+        window.location.reload();
     });
 })
 
@@ -51,3 +53,27 @@ addStatusBtn.addEventListener("click", () => {
     input.required = true;
     statusDiv.appendChild(input);
 });
+
+async function deleteStatus(statusId) {
+    let warning = "All posts with this status will have their status changed to the default one. Are you sure you want to delete this status?"
+    if (confirm(warning) == true) {
+        let data = {
+            "status_id": statusId,
+        }
+        let res = await fetch("/app/delete-status/", {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: { "X-CSRFToken": csrftoken },
+        })
+        res = await res.json();
+        window.location.reload();
+    }
+}
+
+let deleteStatusBtns = document.querySelectorAll(".status-settings");
+Array.from(deleteStatusBtns).forEach(element => {
+    element.addEventListener("click", () => {
+        deleteStatus(element.id.replace("delete_", ""));
+    })
+
+})

@@ -31,8 +31,8 @@
                 {% for category in project.category_set.all %}
                 <div class="category-and-settings">
                     <input type="text" class="form-control mb-2 status" value="{{category}}" readonly required>
-                    <a href="{% url 'board_settings' project.slug category.slug %}"><i
-                            class="material-icons board-settings">settings</i></a>
+                    <a href="{% url 'board_settings' project.slug category.slug %}">
+                        <i class="material-icons board-settings">settings</i></a>
                 </div>
                 {% endfor %}
             </div>

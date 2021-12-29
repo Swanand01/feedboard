@@ -2,3 +2,9 @@
     display: flex;
     column-gap: 6px;
 }
+
+.status-settings{
+    font-size: 30px;
+    color: rgb(219, 27, 27);
+    cursor: pointer;
+}

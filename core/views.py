@@ -236,9 +236,11 @@ def board_settings(request, project_slug, category_slug):
                         "project_slug": project.slug,
                         "category_slug": category.slug
                     }))
+
             elif "delete_board" in request.POST:
                 category.delete()
                 return redirect(project.get_project_url())
+
             elif request.body:
                 data = json.loads(request.body)
                 if "type" in data.keys() and data["type"] == "status_change":
@@ -251,9 +253,10 @@ def board_settings(request, project_slug, category_slug):
                         status.save()
 
                     new_statuses = data["new_statuses"]
-                    for status_id in new_statuses.keys():
+                    print(new_statuses)
+                    for new_status in new_statuses:
                         status = Status(category=category,
-                                        title=new_statuses[status_id])
+                                        title=new_status)
                         status.save()
 
         return render(request, "board_settings.html", context)
@@ -311,3 +314,18 @@ def search_posts(request):
                     "comments": comments
                 }
             return JsonResponse(context)
+
+
+def delete_status(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        status_id = data["status_id"]
+        status = Status.objects.get(pk=status_id)
+        category = status.category
+
+        posts = Post.objects.filter(category=category, status=status)
+        default_status = Status.objects.get(category=category, is_default=True)
+
+        posts.update(status=default_status)
+        status.delete()
+        return JsonResponse({"Status": "OK"})

@@ -8,6 +8,7 @@
 {% endblock style %}
 
 {% block body %}
+{% csrf_token %}
 <main>
 	<div class="container mt-3">
 		<form action="" method="post">
@@ -28,9 +29,14 @@
 		<div class="form-group status_list_div">
 			{% for status in category.status_set.all %}
 			<div class="status-div">
-				<input type="text" name="{{status.id}}" class="form-control mb-2 status" value="{{status.title}}"
-					required>
-				<input type="color" id="colour_{{status.id}}" name="favcolor" value="{{status.colour}}">
+				<input type="text" name="{{status.id}}" class="form-control mb-2 status" value="{{status.title}}" required>
+				{% if status.is_default %}
+				<input type="text" disabled value="Default" class="form-control mb-2 default-status">
+				{% endif %}
+				<input type="color" id="colour_{{status.id}}" name="favcolor" value="{{status.colour}}" class="status-colour">
+				{% if not status.is_default %}
+				<i class="material-icons status-settings" id="delete_{{status.id}}">delete</i>
+				{% endif %}
 			</div>
 			{% endfor %}
 		</div>
