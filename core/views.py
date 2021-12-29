@@ -147,7 +147,7 @@ def edit_post(request, post_id):
         if request.method == "POST":
             post_title = request.POST.get("title")
             post_desc = request.POST.get("description")
-            post.title = post_title  # Discuss
+            post.title = post_title
             post.content = post_desc
             post.save()
             return redirect(post.get_post_url())
@@ -208,8 +208,7 @@ def project_settings(request, project_slug):
                         Status(category=c, title="In Progress").save()
                         Status(category=c, title="Live").save()
             elif "delete_project" in request.POST:
-                print("DELETE")
-                # project.delete()
+                project.delete()
                 return redirect("/app")
 
         return render(request, "project_settings.html", context)
@@ -318,14 +317,18 @@ def search_posts(request):
 
 def delete_status(request):
     if request.method == "POST":
+        user = CustomUser.objects.get(user_name=str(request.user))
         data = json.loads(request.body)
         status_id = data["status_id"]
         status = Status.objects.get(pk=status_id)
         category = status.category
+        if ProjectAdmin.objects.filter(project=category.project, user=user).exists():
+            posts = Post.objects.filter(category=category, status=status)
+            default_status = Status.objects.get(
+                category=category, is_default=True)
 
-        posts = Post.objects.filter(category=category, status=status)
-        default_status = Status.objects.get(category=category, is_default=True)
-
-        posts.update(status=default_status)
-        status.delete()
-        return JsonResponse({"Status": "OK"})
+            posts.update(status=default_status)
+            status.delete()
+            return JsonResponse({"Status": "OK"})
+        else:
+            return HttpResponse("Unauthorised")

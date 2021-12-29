@@ -29,3 +29,9 @@
     border-radius: 10px;
     cursor: pointer;
 }
+
+.options{
+    margin-left: 0;
+    font-size: 2rem;
+}
+
