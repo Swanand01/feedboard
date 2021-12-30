@@ -67,11 +67,16 @@ def category_view(request, project_slug, category_slug):
         else:
             return redirect(f"/login/?next={request.META.get('HTTP_REFERER')}")
 
-    if request.method == "GET":
-        sort_by = request.GET.get("sort_by")
-        if sort_by:
-            posts = Post.objects.filter(
-                category=category).order_by("-" + sort_by)
+    sort_by = request.GET.get("sort_by", "")
+    if sort_by:
+        posts = posts.order_by("-" + sort_by)
+
+    filter_by = request.GET.get("filter_by", "")
+    if filter_by:
+        print("FILTERING...")
+        print(filter_by)
+        status = Status.objects.get(category=category, title=filter_by)
+        posts = posts.filter(status=status)
 
     context = {
         'project': project,

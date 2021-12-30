@@ -6,20 +6,16 @@
 {% endblock style %}
 {% block body %}
 <main>
+	<h6 class="section-title">Boards</h6>
 	<div class="list-group">
 		{% for category in categories %}
 		<a href="{% url 'category_view' project.slug category.slug %}"
 			class="list-group-item list-group-item-action">{{category.title}} - {{category.post_set.count}}
 		</a>
 		{% endfor %}
-
-		{% if is_admin %}
-		<a href="{% url 'project_settings' project.slug %}" class="list-group-item list-group-item-action">Project
-			Settings</a>
-		{% endif %}
 	</div>
 
-	<h6 class="mt-3 pl-3">Roadmaps</h6>
+	<h6 class="section-title">Roadmaps</h6>
 	<div id="accordion">
 		{% for category in categories %}
 
@@ -61,6 +57,12 @@
 
 		{% endfor %}
 	</div>
+
+	<h6 class="section-title">Settings</h6>
+	{% if is_admin %}
+		<a href="{% url 'project_settings' project.slug %}" class="list-group-item list-group-item-action">Project
+			Settings</a>
+	{% endif %}
 
 </main>
 {% endblock body %} {% block scripts %}{% endblock scripts %}

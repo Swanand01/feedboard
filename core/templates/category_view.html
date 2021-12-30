@@ -29,14 +29,20 @@
                             {% endif %}
                         </div>
                         <div class="dropdown show">
-                            <form action="" method="get">
-                                <select id="sort_by" name="sort_by"
-                                    onchange="if (this.selectedIndex) this.form.submit()">
-                                    <option value="-1" selected>Sort by</option>
-                                    <option value="upvotes">Upvotes</option>
-                                    <option value="created_at">Date</option>
-                                </select>
-                            </form>
+
+                            <select id="filter_by" name="filter_by" onchange="if (this.selectedIndex) location=finalurl2()">
+                                <option value="-1" selected>Filter by status</option>
+                                {% for status in category.status_set.all %}
+                                <option value="{{status}}">{{status}}</option>
+                                {% endfor %}
+                            </select>
+
+                            <select id="sort_by" name="sort_by" onchange="if (this.selectedIndex) location=finalurl()">
+                                <option value="-1" selected>Sort by</option>
+                                <option value="upvotes">Upvotes</option>
+                                <option value="created_at">Date</option>
+                            </select>
+
                         </div>
                     </div>
 
@@ -122,4 +128,25 @@
 
 {% block scripts %}
 <script src="{% static 'js/category_view.js' %}" type="module"></script>
+<script>
+    // for getting url after applying sorting
+    function finalurl() {
+        var url = new URL(window.location.href);
+        var search_params = url.searchParams;
+        search_params.set('sort_by', document.getElementById("sort_by").value);
+        url.search = search_params.toString();
+        var new_url = url.toString();
+        return new_url
+    }
+
+    // for getting url after applying filtering
+    function finalurl2() {
+        var url = new URL(window.location.href);
+        var search_params = url.searchParams;
+        search_params.set('filter_by', document.getElementById("filter_by").value);
+        url.search = search_params.toString();
+        var new_url = url.toString();
+        return new_url
+    }
+</script>
 {% endblock scripts %}
