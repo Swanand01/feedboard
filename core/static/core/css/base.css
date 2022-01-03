@@ -5,14 +5,13 @@ html * {
     font-family: 'Montserrat', sans-serif;
 }
 
-
 a{
     font-size: 14px;
     color: black;
 }
 
 p{
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .navbar{

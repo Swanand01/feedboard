@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load humanize %}
 
 {% block title %}{{post}}{% endblock title %}
 
@@ -12,7 +13,7 @@
 <main>
     <div class="container pt-3 pb-3">
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-9">
                 <div class="card post">
                     <p class="post_id" hidden>{{post.id}}</p>
                     <div class="upvotes">
@@ -25,11 +26,11 @@
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">{{post.title}}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{post.user}} - {{post.created_at}}</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">{{post.user}} - {{post.created_at|naturaltime}}</h6>
                         {% if is_admin %}
                         <form action="" class="form-inline" method="post">
                             {% csrf_token %}
-                            <select name="status" id="">
+                            <select name="status" id="" onchange="this.form.submit()">
                                 {% for status in statuses %}
                                 {% if status == post.status %}
                                 <option value="{{status}}" selected>{{status}}</option>
@@ -38,7 +39,6 @@
                                 {% endif %}
                                 {% endfor %}
                             </select>
-                            <button type="submit" class="btn btn-primary">Save</button>
                         </form>
                         {% else %}
                         <div class="rounded" style="background-color: {{post.status.colour}}; display: inline-block;">
@@ -46,6 +46,7 @@
                                 {{post.status}}</h6>
                         </div>
                         {% endif %}
+
                         <p class="card-text">{{post.content}}</p>
 
                         <div class="post-footer">
@@ -75,22 +76,23 @@
                 </div>
 
                 <div class="comments">
-                    <h5 class="mt-2">Comments - {{post.comments.count}}</h5>
+                    <h6 class="mt-2">Comments - {{post.comments.count}}</h6>
                     {% for comment in comments %}
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-subtitle mb-2">
+                    <div class="comment">
+                        <div class="comment-body">
+                            <div>
                                 {{comment.user}}
-                            </h6>
-                            <h6 class="card-subtitle mb-2 text-muted">{{comment.pub_date}}</h6>
-                            <p class="card-text">{{comment.content}}</p>
+                            </div>
+                            <small>{{comment.pub_date|naturaltime}}</small>
+                            <p>{{comment.content}}</p>
+                            <hr>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
             </div>
-            <div class="col-sm-4 voters">
-                <h5>Voters - {{post.get_upvotes}}</h5>
+            <div class="col-3 voters">
+                <h6>Voters - {{post.get_upvotes}}</h6>
                 {% for voter in voters %}
                 <p>{{voter}}</p>
                 {% endfor %}

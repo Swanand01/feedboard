@@ -1,5 +1,23 @@
+p {
+    font-size: 15.5px;
+}
+
+.card-body{
+    padding: 0.75rem;
+}
+
+.card-text{
+    margin-top: 1rem;
+}
+
 .voters{
-    background-color: ghostwhite;
+    height: 20rem;
+    padding: 1rem;
+    background-color: #ffffff;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: 0.25rem;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 8px;
+    overflow-y: auto;
 }
 
 .comment{
@@ -24,7 +42,7 @@
 #post-comment{
     font-size: 15px;
     border: none;
-    padding: 5px 20px;
+    padding: 5px 15px;
     margin-left: 10px;
     border-radius: 10px;
     cursor: pointer;
