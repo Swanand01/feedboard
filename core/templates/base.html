@@ -33,9 +33,11 @@
             </button>
             <div class="links">
                 {% if request.user.is_authenticated %}
-                <a class="navbar-link" href="">{{ user.user_name }}</a>
+                <a class="navbar-link" href="{% url 'me' %}">{{ user.user_name }}</a>
                 {% else %}
                 <a class="btn btn-primary" href="/login?next={{request.path}}">Sign in</a>
+                or
+                <a class="btn btn-dark" href="/register?next={{request.path}}">Register</a>
                 {% endif %}
             </div>
         </div>

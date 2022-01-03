@@ -58,8 +58,8 @@
 		{% endfor %}
 	</div>
 
-	<h6 class="section-title">Settings</h6>
 	{% if is_admin %}
+	<h6 class="section-title">Settings</h6>
 		<a href="{% url 'project_settings' project.slug %}" class="list-group-item list-group-item-action">Project
 			Settings</a>
 	{% endif %}

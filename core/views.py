@@ -5,7 +5,6 @@ from django.urls.base import reverse
 from core.models import Category, Project, ProjectAdmin, Post, Comment, Status
 from account.models import CustomUser
 import json
-from django.core import serializers
 
 
 def project_view(request, project_slug):
@@ -26,28 +25,34 @@ def project_view(request, project_slug):
 
 @login_required
 def create_project(request):
-    uname = str(request.user)
-    user = CustomUser.objects.get(user_name=uname)
+    if request.user.is_superuser:
+        uname = str(request.user)
+        user = CustomUser.objects.get(user_name=uname)
 
-    if request.method == 'POST':
-        project_title = request.POST.get('project_title')
-        project_description = request.POST.get('project_description')
-        project = Project(title=project_title, description=project_description)
-        project.save()
-        admin = ProjectAdmin(project=project, user=user)
-        admin.save()
-        categories = request.POST.getlist('category')
-        for category in categories:
-            if category != "":
-                c = Category(title=category, project=project)
-                c.save()
-                Status(category=c, title="Pending Review",
-                       is_default=True).save()
-                Status(category=c, title="In Progress").save()
-                Status(category=c, title="Live").save()
-        return redirect("project_view", project_slug=project.slug)
+        if request.method == 'POST':
+            project_title = request.POST.get('project_title')
+            project_description = request.POST.get('project_description')
+            project = Project(title=project_title,
+                              description=project_description)
+            project.save()
 
-    return render(request, 'create_project.html')
+            admin = ProjectAdmin(project=project, user=user)
+            admin.save()
+
+            categories = request.POST.getlist('category')
+            for category in categories:
+                if category != "":
+                    c = Category(title=category, project=project)
+                    c.save()
+                    Status(category=c, title="Pending Review",
+                           is_default=True).save()
+                    Status(category=c, title="In Progress").save()
+                    Status(category=c, title="Live").save()
+            return redirect("project_view", project_slug=project.slug)
+
+        return render(request, 'create_project.html')
+    else:
+        return HttpResponse("Unauthorised")
 
 
 def category_view(request, project_slug, category_slug):
@@ -337,3 +342,24 @@ def delete_status(request):
             return JsonResponse({"Status": "OK"})
         else:
             return HttpResponse("Unauthorised")
+
+
+def me(request):
+    context = {
+        "projects": []
+    }
+    if request.user.is_authenticated:
+        uname = str(request.user)
+        user = CustomUser.objects.get(user_name=uname)
+        if ProjectAdmin.objects.filter(user=user).exists():
+            context["is_admin"] = True
+            projects = ProjectAdmin.objects.filter(user=user).values('project')
+            for project in projects:
+                p = Project.objects.get(pk=project["project"])
+                context["projects"].append(
+                    {
+                        "title": p.title,
+                        "url": p.get_project_url()
+                    }
+                )
+    return render(request, "me.html", context)

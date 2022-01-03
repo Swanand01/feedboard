@@ -4,13 +4,12 @@
 {% block title %}Create project{% endblock title %}
 
 {% block navbar_head %}
-<a class="navbar-brand" href="">Lol</a>
+<a class="navbar-brand" href="">Feedboard</a>
 {% endblock navbar_head %}
 
 {% block body %}
 <main>
-    <div class="container">
-        {{ request.user }}
+    <div class="container mt-2">
         <form action="" method="post">
             {% csrf_token %}
             <div class="form-group">
@@ -28,8 +27,8 @@
                 <input type="text" class="form-control" name="category" value="Feature Requests" required>
                 <input type="text" class="form-control mt-2" name="category" value="Bugs">
             </div>
-            <button type="button" class="btn btn-secondary" id="add_category_btn">Add another category</button>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="button" class="btn btn-primary" id="add_category_btn">Add another category</button>
+            <button type="submit" class="btn btn-dark">Create</button>
         </form>
     </div>
 </main>

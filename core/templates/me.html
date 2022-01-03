@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create project{% endblock title %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'core/css/me.css' %}">
+{% endblock style %}
+
+{% block navbar_head %}
+<a class="navbar-brand" href="">Feedboard</a>
+{% endblock navbar_head %}
+
+{% block body %}
+<main>
+    <div class="container mt-2">
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" name="username" class="form-control" id="username" required value="{{request.user}}">
+            </div>
+            <button type="submit" class="btn btn-dark">Update</button>
+        </form>
+        {% if is_admin %}
+        <div class="form-group mt-2">
+            <label for="projects">Your projects:</label>
+            {% for project in projects %}
+            <div class="project-list">
+                <input type="text" class="form-control mb-2" readonly value={{project.title}}>
+                <a href="{{project.url}}" target="_blank">
+                    <i class="material-icons open-in-new">open_in_new</i>
+                </a>
+            </div>
+            {% endfor %}
+            {% if request.user.is_superuser %}
+            <a href="{% url 'create_project' %}" class="btn btn-dark">
+                Create new project
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</main>
+{% endblock body %}
+
+{% block scripts %}
+<script src="{% static 'core/js/create_project.js' %}" type="module"></script>
+{% endblock scripts %}
