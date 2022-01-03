@@ -5,16 +5,47 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
+	<title>Signup</title>
+
+	{% load static %}
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	<link rel="stylesheet" href="{% static 'account/css/register.css' %}">
 </head>
 
 <body>
-	<form method="POST">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<button type="submit">Register</button>
-	</form>
-	<a href="/login">Login</a>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="">Feedboard</a>
+		</div>
+	</nav>
+
+	<div class="container">
+		<form method="POST" action="" class="signup-form mt-3">
+			<h5>Sign up</h5>
+			{% csrf_token %}
+			{% for field in form %}
+
+				{{ field.label_tag }}
+				{{ field }}
+				<p></p>
+
+				{% for error in field.errors %}
+					<p style="color: red">
+						{{ error }}
+					</p>
+				{% endfor %}
+
+			{% endfor %}
+			<button class="btn btn-dark mt-2" type="submit">Sign up</button>
+			or
+			<a href="/login">Login</a>
+		</form>
+	</div>
+
 </body>
 
 </html>

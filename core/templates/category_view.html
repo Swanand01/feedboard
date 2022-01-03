@@ -4,7 +4,7 @@
 {% block title %}{{category}}{% endblock title %}
 
 {% block style %}
-<link rel="stylesheet" href="{% static 'css/category_view.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/category_view.css' %}">
 {% endblock style %}
 
 {% block body %}
@@ -31,14 +31,14 @@
                         <div class="dropdown show">
 
                             <select id="filter_by" name="filter_by" onchange="if (this.selectedIndex) location=finalurl2()">
-                                <option value="-1" selected>Filter by status</option>
+                                <option value="-1" selected hidden>Filter by status</option>
                                 {% for status in category.status_set.all %}
                                 <option value="{{status}}">{{status}}</option>
                                 {% endfor %}
                             </select>
 
                             <select id="sort_by" name="sort_by" onchange="if (this.selectedIndex) location=finalurl()">
-                                <option value="-1" selected>Sort by</option>
+                                <option value="-1" selected hidden>Sort by</option>
                                 <option value="upvotes">Upvotes</option>
                                 <option value="created_at">Date</option>
                             </select>
@@ -127,7 +127,7 @@
 {% endblock body %}
 
 {% block scripts %}
-<script src="{% static 'js/category_view.js' %}" type="module"></script>
+<script src="{% static 'core/js/category_view.js' %}" type="module"></script>
 <script>
     // for getting url after applying sorting
     function finalurl() {
