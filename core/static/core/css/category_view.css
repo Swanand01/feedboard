@@ -50,6 +50,7 @@
 }
 
 .footer-item{
+    margin-right: 0.5rem;
     color: #6c757d;
 }
 
@@ -76,8 +77,6 @@
     justify-content: center;
     align-items: center;
     height: 100%;
-    column-gap: 1rem;
-    margin-left: 1rem;
 }
 
 .dropdown{
