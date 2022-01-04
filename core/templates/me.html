@@ -18,7 +18,14 @@
             {% csrf_token %}
             <div class="form-group">
                 <label for="username">Username</label>
-                <input type="text" name="username" class="form-control" id="username" required value="{{request.user}}">
+                <input type="text" name="user_name" class="form-control" id="username" required value="{{request.user}}">
+            </div>
+            <div class="form-group">
+                <label for="old_password">Current password:</label>
+                <input type="password" name="old_password" class="form-control" id="old_password">
+
+                <label for="new_password">New password:</label>
+                <input type="password" name="new_password" class="form-control" id="new_password">
             </div>
             <button type="submit" class="btn btn-dark">Update</button>
         </form>

@@ -6,18 +6,22 @@ from django.contrib.auth.models import PermissionsMixin
 class CustomUserManager(BaseUserManager):
     use_in_migrations = True
 
-    def create_user(self, user_name, password):
+    def create_user(self, user_name, email, password):
         """
         Creates and saves a User with the given username and password.
         """
         if not user_name:
             raise ValueError('Users must have an username')
 
+        if not email:
+            raise ValueError('Users must have an email')
+
         if not password:
             raise ValueError('Users must have an password')
 
         user = self.model(
             user_name=user_name,
+            email=email
         )
 
         user.set_password(password)

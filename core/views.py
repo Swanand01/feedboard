@@ -344,6 +344,7 @@ def delete_status(request):
             return HttpResponse("Unauthorised")
 
 
+@login_required
 def me(request):
     context = {
         "projects": []
@@ -362,4 +363,13 @@ def me(request):
                         "url": p.get_project_url()
                     }
                 )
+        if request.method == "POST":
+            user_name = request.POST.get("user_name")
+            user.user_name = user_name
+            old_password = request.POST.get("old_password")
+            new_password = request.POST.get("new_password")
+            print(user_name, old_password, new_password)
+            if user.check_password(old_password):
+                user.set_password(new_password)
+            user.save()
     return render(request, "me.html", context)
