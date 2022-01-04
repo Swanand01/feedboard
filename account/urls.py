@@ -1,15 +1,30 @@
 from django.urls import path
 from django.contrib.auth.views import (
+    PasswordChangeView,
+    PasswordChangeDoneView,
     PasswordResetView,
     PasswordResetDoneView,
     PasswordResetConfirmView,
     PasswordResetCompleteView
 )
-from . import views
 
 
 urlpatterns = [
-    path('register/', views.register, name='register'),
+    path(
+        'password_change/',
+        PasswordChangeView.as_view(
+            template_name='account/password_change.html'
+        ),
+        name='password_change'
+    ),
+
+    path(
+        'password_change/done/',
+        PasswordChangeDoneView.as_view(
+            template_name='account/password_change_done.html'
+        ),
+        name='password_change_done'
+    ),
 
     path(
         'password_reset/',
@@ -33,7 +48,7 @@ urlpatterns = [
             template_name='account/password_reset_confirm.html'
         ),
         name='password_reset_confirm'
-	),
+    ),
 
     path(
         'password_reset/complete/',
