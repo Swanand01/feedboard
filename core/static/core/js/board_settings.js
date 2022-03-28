@@ -60,7 +60,7 @@ async function deleteStatus(statusId) {
         let data = {
             "status_id": statusId,
         }
-        let res = await fetch("/app/delete-status/", {
+        let res = await fetch("/delete-status/", {
             method: 'POST',
             body: JSON.stringify(data),
             headers: { "X-CSRFToken": csrftoken },

@@ -6,7 +6,7 @@ let postId = document.querySelector(".post_id").textContent;
 let upvoteButton = document.querySelector(".upvote_button");
 let upvoteCount = document.querySelector(".upvote_count");
 upvoteButton.addEventListener('click', event => {
-    fetch("/app/vote/", {
+    fetch("/vote/", {
         method: 'POST',
         body: JSON.stringify({
             "post_id": postId,

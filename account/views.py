@@ -19,7 +19,7 @@ def register(request):
                     url = iri_to_uri(request.GET['next'])
                     return redirect(url)
             else:
-                return redirect("/app/me")
+                return redirect("/me")
     else:
         form = CustomUserCreationForm()
 
