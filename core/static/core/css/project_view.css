@@ -50,6 +50,10 @@
   margin-bottom: 0.4rem;
 }
 
+.card-text{
+  font-size: 0.85rem;
+}
+
 .upvote_button{
   font-size: 2rem;
   cursor: pointer;

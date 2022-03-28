@@ -16,6 +16,7 @@ p{
     margin-bottom: 0;
 }
 
+
 .post{
     display: grid;
     grid-template-columns: 1fr 9fr;
@@ -107,6 +108,11 @@ p{
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 8px;
 }
 
+.form-footer{
+    display: flex;
+    justify-content: space-between;
+}
+
 .category_title{
     display: flex;
     column-gap: 0.6rem;
@@ -123,4 +129,17 @@ p{
 
 .search-results{
     display: none;
+}
+
+#remove-files{
+    display: none;
+}
+
+#image-files{
+    display: none;
+}
+
+.status{
+    font-size: 0.85rem;
+    padding: 0.1rem;
 }

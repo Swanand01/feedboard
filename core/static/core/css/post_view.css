@@ -1,5 +1,9 @@
 p {
-    font-size: 15.5px;
+    font-size: 14px;
+}
+
+.card-title{
+    font-size: 17px;
 }
 
 .card-body{
@@ -8,6 +12,12 @@ p {
 
 .card-text{
     margin-top: 1rem;
+}
+
+#images{
+    display: flex;
+    column-gap: 8px;
+    margin-bottom: 1rem;
 }
 
 .voters{

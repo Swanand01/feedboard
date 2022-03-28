@@ -1,0 +1,17 @@
+#post-images{
+    display: flex;
+    column-gap: 10px;
+}
+
+.post-image{
+    position: relative;
+    display: flex;
+}
+
+.post-image .remove-image{
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    color: #dc3545;
+    cursor: pointer;
+}
