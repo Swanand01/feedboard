@@ -8,7 +8,7 @@
 {% endblock style %}
 
 {% block navbar_head %}
-<a class="navbar-brand" href="">Feedboard</a>
+<a class="navbar-brand" href="/">{{project}}</a>
 {% endblock navbar_head %}
 
 {% block body %}
@@ -24,20 +24,15 @@
         </form>
         {% if is_admin %}
         <div class="form-group mt-2">
-            <label for="projects">Your projects:</label>
-            {% for project in projects %}
+            <label for="projects">Your project:</label>
+            
             <div class="project-list">
                 <input type="text" class="form-control mb-2" readonly value={{project.title}}>
-                <a href="{{project.url}}" target="_blank">
+                <a href="{{project.get_project_url}}" target="_blank">
                     <i class="material-icons open-in-new">open_in_new</i>
                 </a>
             </div>
-            {% endfor %}
-            {% if request.user.is_superuser %}
-            <a href="{% url 'create_project' %}" class="btn btn-dark">
-                Create new project
-            </a>
-            {% endif %}
+            
         </div>
         {% endif %}
     </div>

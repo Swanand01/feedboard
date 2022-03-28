@@ -1,49 +1,15 @@
 const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-function addUpvoteEventListener(postCard) {
-    let postId = postCard.querySelector(".post_id").textContent;
-    let upvoteButton = postCard.querySelector(".upvote_button");
-    let upvoteCount = postCard.querySelector(".upvote_count");
-    upvoteButton.addEventListener('click', event => {
-        fetch("/app/vote/", {
-            method: 'POST',
-            body: JSON.stringify({
-                "post_id": postId,
-                'to_url': window.location.pathname
-            }),
-            headers: { "X-CSRFToken": csrftoken },
-        }).then(res => res.json())
-            .then(function (res) {
-                if (res['type'] == 'Redirect') {
-                    window.location.replace(window.location.origin + res['to_url']);
-                }
-
-                if (res['type'] == 'OK') {
-
-                    if (upvoteButton.classList.contains('already-voted')) {
-                        upvoteButton.classList.remove('already-voted');
-                        upvoteCount.innerHTML = Number(upvoteCount.textContent) - 1;
-                    }
-                    else {
-                        upvoteButton.classList.add('already-voted');
-                        upvoteCount.innerHTML = Number(upvoteCount.textContent) + 1;
-                    }
-                }
-            })
-    })
-}
-
-function truncate(str, no_words) {
-    return str.split(" ").splice(0, no_words).join(" ");
-}
-
 let postsDiv = document.querySelector(".posts");
 let postCards = postsDiv.getElementsByClassName("post");
-Array.from(postCards).forEach(post => addUpvoteEventListener(post))
-
 let searchBar = document.querySelector("#search_bar");
 let categoryId = document.querySelector("#category_id").textContent;
 let searchResults = document.querySelector(".search-results");
+let fileInput = document.querySelector("#image-files");
+let removeFileBtn = document.querySelector("#remove-files");
+let fileCountDiv = document.querySelector("#file-count");
+
+Array.from(postCards).forEach(post => addUpvoteEventListener(post));
+
 searchBar.addEventListener("keyup", async event => {
     if (event.target.value != "") {
         searchResults.innerHTML = "";
@@ -53,7 +19,7 @@ searchBar.addEventListener("keyup", async event => {
             "category_id": categoryId,
             "search_query": event.target.value
         }
-        let res = await fetch("/app/search-post/", {
+        let res = await fetch("/search-post/", {
             method: 'POST',
             body: JSON.stringify(data),
             headers: { "X-CSRFToken": csrftoken },
@@ -123,3 +89,52 @@ searchBar.addEventListener("keyup", async event => {
         searchResults.style.display = "none";
     }
 })
+
+fileInput.addEventListener("change", () => {
+    console.log(fileInput.files.length);
+    removeFileBtn.style.display = "inline-block";
+    fileCountDiv.innerHTML = fileInput.files.length + " files selected";
+})
+
+removeFileBtn.addEventListener("click", () => {
+    fileInput.value = "";
+    console.log(fileInput.files.length);
+    removeFileBtn.style.display = "";
+    fileCountDiv.innerHTML = "";
+})
+
+function addUpvoteEventListener(postCard) {
+    let postId = postCard.querySelector(".post_id").textContent;
+    let upvoteButton = postCard.querySelector(".upvote_button");
+    let upvoteCount = postCard.querySelector(".upvote_count");
+    upvoteButton.addEventListener('click', event => {
+        fetch("/vote/", {
+            method: 'POST',
+            body: JSON.stringify({
+                "post_id": postId,
+                'to_url': window.location.pathname
+            }),
+            headers: { "X-CSRFToken": csrftoken },
+        }).then(res => res.json())
+            .then(function (res) {
+                if (res['type'] == 'Redirect') {
+                    window.location.replace(window.location.origin + res['to_url']);
+                }
+
+                if (res['type'] == 'OK') {
+                    if (upvoteButton.classList.contains('already-voted')) {
+                        upvoteButton.classList.remove('already-voted');
+                        upvoteCount.innerHTML = Number(upvoteCount.textContent) - 1;
+                    }
+                    else {
+                        upvoteButton.classList.add('already-voted');
+                        upvoteCount.innerHTML = Number(upvoteCount.textContent) + 1;
+                    }
+                }
+            })
+    })
+}
+
+function truncate(str, no_words) {
+    return str.split(" ").splice(0, no_words).join(" ");
+}

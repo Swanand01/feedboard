@@ -9,7 +9,7 @@
 	<h6 class="section-title">Boards</h6>
 	<div class="list-group">
 		{% for category in categories %}
-		<a href="{% url 'category_view' project.slug category.slug %}"
+		<a href="{% url 'category_view' category.slug %}"
 			class="list-group-item list-group-item-action">{{category.title}} - {{category.post_set.count}}
 		</a>
 		{% endfor %}
@@ -39,11 +39,11 @@
 								</div>
 								<div class="post-body">
 									<div class="card-body pb-1 pt-1">
-										<h6 class="card-title"><a
-												href="{% url 'post_view' project.slug category.slug post.slug %}">{{post.title|truncatechars:35}}</a>
-										</h6>
-
-										<p class="card-text mt-1">{{post.content|truncatechars:35}}</p>
+										<a href="{% url 'post_view' category.slug post.slug %}">
+											<h6 class="card-title">{{post.title|truncatechars:25}}
+											</h6>
+										</a>
+										<p class="card-text">{{post.content|truncatechars:53}}</p>
 									</div>
 								</div>
 							</div>
@@ -60,9 +60,11 @@
 
 	{% if is_admin %}
 	<h6 class="section-title">Settings</h6>
-		<a href="{% url 'project_settings' project.slug %}" class="list-group-item list-group-item-action">Project
-			Settings</a>
+	<a href="{% url 'project_settings' %}" class="list-group-item list-group-item-action">Project
+		Settings</a>
 	{% endif %}
 
 </main>
 {% endblock body %} {% block scripts %}{% endblock scripts %}
+
+

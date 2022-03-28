@@ -8,19 +8,37 @@
 <a class="navbar-brand" href="{{post.project.get_project_url}}">{{post.project}}</a>
 {% endblock navbar_head %}
 
+{% block style %}
+<link rel="stylesheet" href="{% static 'core/css/edit_post.css' %}">
+{% endblock style %}
+
 {% block body %}
 <main>
     <div class="container pt-3 pb-3">
         <div class="card post">
             <p class="post_id" hidden>{{post.id}}</p>
             <div class="card-body">
-                <form action="" method="post">
+                <form action="" method="post" id="post-update-form">
                     {% csrf_token %}
                     <label>Title:</label>
-                    <textarea class="form-control mb-2" name="title">{{post.title}}</textarea>
+                    <textarea class="form-control mb-2" id="title" name="title">{{post.title}}</textarea>
+                    
                     <label>Description:</label>
-                    <textarea class="form-control mb-2" name="description">{{post.content}}</textarea>
-                    <button class="btn btn-primary" type="submit">Submit</button>
+                    <textarea class="form-control mb-2" id="description" name="description">{{post.content}}</textarea>
+                    
+                    <label>Images:</label>
+                    <div id="post-images">
+                        {% for image in images %}
+                            <div class="post-image">
+                                <div class="image-id" hidden>{{image.id}}</div>
+                                <i class="material-icons remove-image">cancel</i>
+                                <a href="{{image.image.url}}">
+                                    <img src={{image.image.url}} alt="" height="120px" width="120px">
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button class="btn btn-primary mt-3" type="submit" id="update-btn">Update</button>
                 </form>
             </div>
         </div>
@@ -29,4 +47,5 @@
 {% endblock body %}
 
 {% block scripts %}
+<script src="{% static 'core/js/edit_post.js' %}"></script>
 {% endblock scripts %}

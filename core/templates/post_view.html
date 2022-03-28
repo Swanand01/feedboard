@@ -49,6 +49,17 @@
 
                         <p class="card-text">{{post.content}}</p>
 
+                        {% if images %}
+                            <h6>Images:</h6>
+                            <div id="images">
+                                {% for image in images %}
+                                    <a href="{{image.image.url}}">
+                                        <img src={{image.image.url}} alt="" height="120px" width="120px">
+                                    </a>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
                         <div class="post-footer">
                             {% if post.user == request.user %}
                             <div class="options">

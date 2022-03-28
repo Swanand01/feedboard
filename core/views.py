@@ -2,13 +2,13 @@ from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.urls.base import reverse
-from core.models import Category, Project, ProjectAdmin, Post, Comment, Status
+from core.models import Category, Image, Project, ProjectAdmin, Post, Comment, Status
 from account.models import CustomUser
 import json
 
 
-def project_view(request, project_slug):
-    project = get_object_or_404(Project, slug=project_slug)
+def project_view(request):
+    project = Project.objects.first()
     categories = Category.objects.filter(project=project)
     context = {
         "project": project,
@@ -29,6 +29,9 @@ def create_project(request):
         uname = str(request.user)
         user = CustomUser.objects.get(user_name=uname)
 
+        if Project.objects.first():
+            return HttpResponse("Project already exists")
+
         if request.method == 'POST':
             project_title = request.POST.get('project_title')
             project_description = request.POST.get('project_description')
@@ -48,15 +51,15 @@ def create_project(request):
                            is_default=True).save()
                     Status(category=c, title="In Progress").save()
                     Status(category=c, title="Live").save()
-            return redirect("project_view", project_slug=project.slug)
+            return redirect("project_view")
 
         return render(request, 'create_project.html')
     else:
         return HttpResponse("Unauthorised")
 
 
-def category_view(request, project_slug, category_slug):
-    project = Project.objects.get(slug=project_slug)
+def category_view(request, category_slug):
+    project = Project.objects.first()
     category = Category.objects.get(project=project, slug=category_slug)
     posts = Post.objects.filter(category=category)
 
@@ -67,8 +70,14 @@ def category_view(request, project_slug, category_slug):
             post_desc = request.POST.get('description')
             default_status = Status.objects.get(
                 category=category, is_default=True)
-            Post(user=user, project=project, category=category, title=post_title,
-                 content=post_desc, status=default_status).save()
+            post = Post(user=user, project=project, category=category, title=post_title,
+                 content=post_desc, status=default_status)
+            post.save()
+
+            if request.FILES.getlist('image-files'):
+                for file in request.FILES.getlist('image-files'):
+                    Image(image=file, post=post).save()
+        
         else:
             return redirect(f"/login/?next={request.META.get('HTTP_REFERER')}")
 
@@ -78,8 +87,6 @@ def category_view(request, project_slug, category_slug):
 
     filter_by = request.GET.get("filter_by", "")
     if filter_by:
-        print("FILTERING...")
-        print(filter_by)
         status = Status.objects.get(category=category, title=filter_by)
         posts = posts.filter(status=status)
 
@@ -104,6 +111,7 @@ def vote(request):
         if request.user.is_authenticated:
             user = CustomUser.objects.get(user_name=str(request.user))
             post_id = json.loads(request.body)['post_id']
+            
             post = Post.objects.get(id=post_id)
 
             if user in post.upvotes.all():
@@ -120,18 +128,20 @@ def vote(request):
         })
 
 
-def post_view(request, project_slug, category_slug, post_slug):
-    project = Project.objects.get(slug=project_slug)
+def post_view(request, category_slug, post_slug):
+    project = Project.objects.first()
     post = Post.objects.get(project=project, slug=post_slug)
     statuses = post.category.status_set.all()
     comments = Comment.objects.filter(post=post).order_by("-pub_date")
     voters = post.upvotes.all()
+    images = Image.objects.filter(post=post)
     context = {
         "project": project,
         "post": post,
         "comments": comments,
         "voters": voters,
-        "statuses": statuses
+        "statuses": statuses,
+        "images": images
     }
     if request.user.is_authenticated:
         uname = str(request.user)
@@ -153,15 +163,26 @@ def post_view(request, project_slug, category_slug, post_slug):
 @login_required
 def edit_post(request, post_id):
     post = Post.objects.get(id=post_id)
+    ctx = {
+        "post": post,
+        "images": post.images.all()
+    }
     if post.user == request.user:
         if request.method == "POST":
             post_title = request.POST.get("title")
             post_desc = request.POST.get("description")
+            
+            if request.POST.get("removedImages"):
+                print(request.POST.getlist("removedImages"), type(request.POST.getlist("removedImages")))
+                removed_images = request.POST.getlist("removedImages")
+                for id in removed_images:
+                    Image.objects.get(id=id).delete()
+            
             post.title = post_title
             post.content = post_desc
             post.save()
             return redirect(post.get_post_url())
-        return render(request, "edit_post.html", context={"post": post})
+        return render(request, "edit_post.html", context=ctx)
     else:
         return HttpResponse("Unauthorised")
 
@@ -191,8 +212,8 @@ def add_comment(request):
         return redirect(f"/login/?next={request.META.get('HTTP_REFERER')}")
 
 
-def project_settings(request, project_slug):
-    project = Project.objects.get(slug=project_slug)
+def project_settings(request):
+    project = Project.objects.first()
     user = CustomUser.objects.get(user_name=str(request.user))
     if ProjectAdmin.objects.filter(project=project, user=user).exists():
         admins = ProjectAdmin.objects.filter(project=project)
@@ -205,9 +226,7 @@ def project_settings(request, project_slug):
                 if project.title != request.POST.get("project_name"):
                     project.title = request.POST.get("project_name")
                     project.save()
-                    return redirect(reverse("project_settings", kwargs={
-                        "project_slug": project.slug
-                    }))
+                    return redirect(reverse("project_settings"))
             elif "new_category" in request.POST:
                 for category in request.POST.getlist("new_category"):
                     if category != "":
@@ -219,15 +238,15 @@ def project_settings(request, project_slug):
                         Status(category=c, title="Live").save()
             elif "delete_project" in request.POST:
                 project.delete()
-                return redirect("/app")
+                return redirect("/")
 
         return render(request, "project_settings.html", context)
     else:
         return HttpResponse("Unauthorised")
 
 
-def board_settings(request, project_slug, category_slug):
-    project = Project.objects.get(slug=project_slug)
+def board_settings(request, category_slug):
+    project = Project.objects.first()
     category = Category.objects.get(project=project, slug=category_slug)
     user = CustomUser.objects.get(user_name=str(request.user))
     if ProjectAdmin.objects.filter(project=project, user=user).exists():
@@ -242,7 +261,6 @@ def board_settings(request, project_slug, category_slug):
                     category.title = request.POST.get("category_name")
                     category.save()
                     return redirect(reverse("board_settings", kwargs={
-                        "project_slug": project.slug,
                         "category_slug": category.slug
                     }))
 
@@ -262,7 +280,6 @@ def board_settings(request, project_slug, category_slug):
                         status.save()
 
                     new_statuses = data["new_statuses"]
-                    print(new_statuses)
                     for new_status in new_statuses:
                         status = Status(category=category,
                                         title=new_status)
@@ -281,7 +298,6 @@ def search_posts(request):
 
             data = json.loads(request.body)
             category = Category.objects.get(pk=data["category_id"])
-            project = category.project
             search_query = data["search_query"]
 
             context = {
@@ -346,23 +362,15 @@ def delete_status(request):
 
 @login_required
 def me(request):
-    context = {
-        "projects": []
-    }
+    context = {}
     if request.user.is_authenticated:
+        project = Project.objects.first()
         uname = str(request.user)
         user = CustomUser.objects.get(user_name=uname)
         if ProjectAdmin.objects.filter(user=user).exists():
             context["is_admin"] = True
-            projects = ProjectAdmin.objects.filter(user=user).values('project')
-            for project in projects:
-                p = Project.objects.get(pk=project["project"])
-                context["projects"].append(
-                    {
-                        "title": p.title,
-                        "url": p.get_project_url()
-                    }
-                )
+
+        
         if request.method == "POST":
             user_name = request.POST.get("user_name")
             user.user_name = user_name
@@ -372,4 +380,6 @@ def me(request):
             if user.check_password(old_password):
                 user.set_password(new_password)
             user.save()
+
+        context["project"] = project
     return render(request, "me.html", context)

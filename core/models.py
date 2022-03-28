@@ -14,9 +14,7 @@ class Project(models.Model):
         return self.title
 
     def get_project_url(self):
-        return reverse("project_view", kwargs={
-            "project_slug": self.slug
-        })
+        return reverse("project_view")
 
 
 class ProjectAdmin(models.Model):
@@ -48,7 +46,6 @@ class Category(models.Model):
 
     def get_category_url(self):
         return reverse("category_view", kwargs={
-            "project_slug": self.project.slug,
             "category_slug": self.slug
         })
 
@@ -86,7 +83,6 @@ class Post(models.Model):
 
     def get_post_url(self):
         return reverse("post_view", kwargs={
-            "project_slug": self.project.slug,
             "category_slug": self.category.slug,
             "post_slug": self.slug
         })
@@ -104,3 +100,11 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.content
+
+
+class Image(models.Model):
+    image = models.ImageField(upload_to='')
+    post = models.ForeignKey(Post, related_name="images", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.image.name

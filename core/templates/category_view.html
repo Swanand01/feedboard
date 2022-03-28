@@ -24,13 +24,14 @@
                         <div class="category_title">
                             <h5>{{category}}</h5>
                             {% if is_admin %}
-                            <a href="{% url 'board_settings' project.slug category.slug %}"><i
+                            <a href="{% url 'board_settings' category.slug %}"><i
                                     class="material-icons board-settings">settings</i></a>
                             {% endif %}
                         </div>
                         <div class="dropdown show">
 
-                            <select id="filter_by" name="filter_by" onchange="if (this.selectedIndex) location=finalurl2()">
+                            <select id="filter_by" name="filter_by"
+                                onchange="if (this.selectedIndex) location=finalurl2()">
                                 <option value="-1" selected hidden>Filter by status</option>
                                 {% for status in category.status_set.all %}
                                 <option value="{{status}}">{{status}}</option>
@@ -59,21 +60,21 @@
                         </div>
                         <div class="post-body">
                             <div class="card-body pb-1 pt-1">
-                                <h6 class="card-title"><a
-                                        href="{% url 'post_view' project.slug category.slug post.slug %}">{{post.title|truncatewords:10}}</a>
-                                </h6>
+                                <h5 class="card-title"><a
+                                        href="{% url 'post_view' category.slug post.slug %}">{{post.title|truncatewords:11}}</a>
+                                </h5>
 
                                 <div class="rounded"
                                     style="background-color: {{post.status.colour}}; display: inline-block;">
-                                    <p class="card-subtitle p-1">
-                                        {{post.status}}</p>
+                                    <div class="status">
+                                        {{post.status}}
+                                    </div>
                                 </div>
 
-                                <p class="card-text mt-1 mb-1">{{post.content|truncatewords:12}}</p>
+                                <p class="card-text mt-2 mb-1">{{post.content|truncatewords:12}}</p>
                                 <div class="post-footer">
 
-                                    <a href="{% url 'post_view' project.slug category.slug post.slug %}"
-                                        class="footer-item">
+                                    <a href="{% url 'post_view' category.slug post.slug %}" class="footer-item">
                                         <div class="comment-div">
                                             <i class="material-icons">comment</i>
                                             {{post.comments.count}} Comments
@@ -104,7 +105,7 @@
                     <input type="search" class="form-control rounded" placeholder="Search" id="search_bar">
                 </div>
                 <div class="new-post-form">
-                    <form action="" method="post">
+                    <form action="" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         <h6>Create a new post</h6>
                         <div class="form-group">
@@ -117,7 +118,17 @@
                             <textarea name="description" id="description" class="form-control" required
                                 placeholder="Short description"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-dark">Create</button>
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-dark">Create</button>
+                            <div id="file-count"></div>
+                            <div id="remove-files">
+                                <i class="material-icons">close</i>
+                            </div>
+                            <label for="image-files">
+                                <i class="material-icons">attach_file</i>
+                            </label>
+                            <input type="file" name="image-files" id="image-files" accept="image/*" multiple>
+                        </div>
                     </form>
                 </div>
             </div>
