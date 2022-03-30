@@ -90,6 +90,9 @@ p{
     background-color: #ffffff;
 }
 
+.dropdown-mobile{
+    display: none;
+}
 
 .card-title{
     margin-bottom: 0.5rem;
@@ -142,4 +145,28 @@ p{
 .status{
     font-size: 0.85rem;
     padding: 0.1rem;
+}
+
+@media (max-width: 992px) {
+    .maincol{
+        order: 2;
+    }
+    .formcol{
+        order: 1;
+    }
+    #description{
+        height: 120px;
+    }
+    .category_title{
+        margin-top: 1rem;
+    }
+    .category_title h5{
+        font-size: 1.1rem;
+    }
+    .dropdown{
+        display: none;
+    }
+    .dropdown-mobile{
+        display: inline-block;
+    }
 }

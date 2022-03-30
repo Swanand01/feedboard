@@ -48,6 +48,7 @@
 
 .card-title{
   margin-bottom: 0.4rem;
+  font-weight: 500;
 }
 
 .card-text{
@@ -63,5 +64,9 @@
   .status-div {
     flex-direction: column;
     row-gap: 10px;
+  }
+
+  .posts{
+    height: 17rem;
   }
 }

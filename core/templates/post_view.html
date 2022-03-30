@@ -13,7 +13,7 @@
 <main>
     <div class="container pt-3 pb-3">
         <div class="row">
-            <div class="col-9">
+            <div class="col-md-9 maincol">
                 <div class="card post">
                     <p class="post_id" hidden>{{post.id}}</p>
                     <div class="upvotes">
@@ -102,7 +102,7 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="col-3 voters">
+            <div class="col-md-3 voters votercol">
                 <h6>Voters - {{post.get_upvotes}}</h6>
                 {% for voter in voters %}
                 <p>{{voter}}</p>

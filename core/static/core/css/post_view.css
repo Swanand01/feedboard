@@ -23,6 +23,7 @@ p {
 .voters{
     height: 20rem;
     padding: 1rem;
+    margin: 1rem;
     background-color: #ffffff;
     border: 1px solid rgba(0,0,0,.125);
     border-radius: 0.25rem;
@@ -63,3 +64,14 @@ p {
     font-size: 2rem;
 }
 
+@media (max-width: 992px) {
+    .maincol{
+        order: 2;
+    }
+    .votercol{
+        order: 1;
+    }
+    .voters{
+        height: 7.5rem;
+    }
+}

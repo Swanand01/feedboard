@@ -17,3 +17,15 @@ p{
 .navbar{
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 8px;
 }
+
+@media (max-width: 800px) {
+    .sign-in-btn{
+        font-size: 1rem;
+        padding: 0.4rem;
+    }
+
+    .register-btn{
+        font-size: 1rem;
+        padding: 0.4rem;
+    }
+  }

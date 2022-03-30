@@ -14,7 +14,7 @@
     <div class="container pt-3 pb-3">
 
         <div class="row">
-            <div class="col-sm-8">
+            <div class="col-md-8 maincol">
 
                 <div class="search-results">
                 </div>
@@ -29,10 +29,9 @@
                             {% endif %}
                         </div>
                         <div class="dropdown show">
-
                             <select id="filter_by" name="filter_by"
                                 onchange="if (this.selectedIndex) location=finalurl2()">
-                                <option value="-1" selected hidden>Filter by status</option>
+                                <option value="-1" selected hidden>Filter by</option>
                                 {% for status in category.status_set.all %}
                                 <option value="{{status}}">{{status}}</option>
                                 {% endfor %}
@@ -43,8 +42,23 @@
                                 <option value="upvotes">Upvotes</option>
                                 <option value="created_at">Date</option>
                             </select>
-
                         </div>
+                    </div>
+
+                    <div class="dropdown show dropdown-mobile">
+                        <select id="filter_by" name="filter_by"
+                            onchange="if (this.selectedIndex) location=finalurl2()">
+                            <option value="-1" selected hidden>Filter by</option>
+                            {% for status in category.status_set.all %}
+                            <option value="{{status}}">{{status}}</option>
+                            {% endfor %}
+                        </select>
+
+                        <select id="sort_by" name="sort_by" onchange="if (this.selectedIndex) location=finalurl()">
+                            <option value="-1" selected hidden>Sort by</option>
+                            <option value="upvotes">Upvotes</option>
+                            <option value="created_at">Date</option>
+                        </select>
                     </div>
 
                     {% for post in posts %}
@@ -100,7 +114,7 @@
 
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-md-4 formcol">
                 <div class="input-group rounded search-div">
                     <input type="search" class="form-control rounded" placeholder="Search" id="search_bar">
                 </div>

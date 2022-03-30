@@ -40,8 +40,8 @@
 								<div class="post-body">
 									<div class="card-body pb-1 pt-1">
 										<a href="{% url 'post_view' category.slug post.slug %}">
-											<h6 class="card-title">{{post.title|truncatechars:25}}
-											</h6>
+											<div class="card-title">{{post.title|truncatechars:25}}
+											</div>
 										</a>
 										<p class="card-text">{{post.content|truncatechars:53}}</p>
 									</div>
