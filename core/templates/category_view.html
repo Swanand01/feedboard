@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load core_extras %}
 
 {% block title %}{{category}}{% endblock title %}
 
@@ -46,8 +47,7 @@
                     </div>
 
                     <div class="dropdown show dropdown-mobile">
-                        <select id="filter_by" name="filter_by"
-                            onchange="if (this.selectedIndex) location=finalurl2()">
+                        <select id="filter_by" name="filter_by" onchange="if (this.selectedIndex) location=finalurl2()">
                             <option value="-1" selected hidden>Filter by</option>
                             {% for status in category.status_set.all %}
                             <option value="{{status}}">{{status}}</option>
@@ -112,6 +112,17 @@
                     </div>
                     {% endfor %}
 
+                    <div class="page-links">
+                        {% if has_previous %}
+                        <a class="infinite-more-link"
+                            href="{% relative_url previous_page_number 'page' request.GET.urlencode %}">Previous</a>
+                        {% endif %}
+
+                        {% if has_next %}
+                        <a class="infinite-more-link"
+                            href="{% relative_url next_page_number 'page' request.GET.urlencode %}">Next</a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
             <div class="col-md-4 formcol">

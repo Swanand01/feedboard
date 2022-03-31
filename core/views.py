@@ -2,6 +2,8 @@ from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 from django.urls.base import reverse
+from django.core.paginator import Paginator, EmptyPage
+from django.conf import settings
 from core.models import Category, Image, Project, ProjectAdmin, Post, Comment, Status
 from account.models import CustomUser
 import json
@@ -90,12 +92,22 @@ def category_view(request, category_slug):
         status = Status.objects.get(category=category, title=filter_by)
         posts = posts.filter(status=status)
 
+    post_paginator = Paginator(posts, settings.POSTS_PER_PAGE)
+    page_num = request.GET.get("page", 1)
+    try:
+        posts = post_paginator.page(page_num)
+    except EmptyPage:
+        posts = post_paginator.page(1)
     context = {
         'project': project,
         'category': category,
         'posts': posts,
+        'has_previous': posts.has_previous(),
+        'has_next': posts.has_next(),
+        'previous_page_number': posts.previous_page_number,
+        'next_page_number': posts.next_page_number
     }
-
+    print(context)
     if request.user.is_authenticated:
         uname = str(request.user)
         user = CustomUser.objects.get(user_name=uname)
