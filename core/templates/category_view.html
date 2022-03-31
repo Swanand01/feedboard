@@ -12,7 +12,11 @@
 {% csrf_token %}
 {{category.id|json_script:"category_id"}}
 <main>
+    <a href="{% url 'project_view' %}">
+        <i class="material-icons" id="back-button-icon">arrow_back</i>
+    </a>
     <div class="container pt-3 pb-3">
+
 
         <div class="row">
             <div class="col-md-8 maincol">
@@ -114,12 +118,12 @@
 
                     <div class="page-links">
                         {% if has_previous %}
-                        <a class="infinite-more-link"
+                        <a class="page-link"
                             href="{% relative_url previous_page_number 'page' request.GET.urlencode %}">Previous</a>
                         {% endif %}
 
                         {% if has_next %}
-                        <a class="infinite-more-link"
+                        <a class="page-link"
                             href="{% relative_url next_page_number 'page' request.GET.urlencode %}">Next</a>
                         {% endif %}
                     </div>

@@ -10,6 +10,9 @@
 {% block body %}
 {% csrf_token %}
 <main>
+	<a href="{% url 'category_view' category.slug %}">
+        <i class="material-icons" id="back-button-icon">arrow_back</i>
+    </a>
 	<div class="container mt-3">
 		<form action="" method="post">
 			{% csrf_token %}

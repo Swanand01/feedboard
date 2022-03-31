@@ -18,6 +18,19 @@ p{
     box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 8px;
 }
 
+#back-button-icon{
+	position: sticky;
+	top: 70px;
+	left: 40px;
+	padding: 6px;
+	height: fit-content;
+	background-color: #ffffff;
+	border: 1px solid rgba(0,0,0,.125);
+	border-radius: 3rem;
+	box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 8px;
+    z-index: 50;
+}
+
 @media (max-width: 800px) {
     .sign-in-btn{
         font-size: 1rem;
@@ -28,4 +41,10 @@ p{
         font-size: 1rem;
         padding: 0.4rem;
     }
-  }
+
+    #back-button-icon{
+    	position:static;
+        margin-left: 1rem;
+        margin-top: 1rem;
+    }
+}

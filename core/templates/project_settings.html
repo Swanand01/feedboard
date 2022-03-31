@@ -9,11 +9,14 @@
 
 {% block body %}
 <main>
+    <a href="{% url 'project_view' %}">
+        <i class="material-icons" id="back-button-icon">arrow_back</i>
+    </a>
     <div class="container">
         <form action="" method="post">
             {% csrf_token %}
             <div class="form-group">
-                <div class="mb-2">
+                <div class="mb-2 mt-2">
                     <label>Change project name:</label>
                     <input type="text" name="project_name" class="form-control" id="project_name" value="{{project}}">
                 </div>

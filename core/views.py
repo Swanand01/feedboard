@@ -149,6 +149,7 @@ def post_view(request, category_slug, post_slug):
     images = Image.objects.filter(post=post)
     context = {
         "project": project,
+        "category": post.category,
         "post": post,
         "comments": comments,
         "voters": voters,
