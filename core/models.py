@@ -38,7 +38,8 @@ pre_save.connect(save_title_slug, sender=Project)
 
 class Category(models.Model):
     title = models.TextField(default='')
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, related_name="category")
     slug = models.SlugField(blank=True)
 
     def __str__(self):
@@ -51,7 +52,8 @@ class Category(models.Model):
 
 
 class Status(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, related_name="statuses")
     title = models.TextField(default='')
     is_default = models.BooleanField(default=False)
     colour = models.CharField(max_length=7, default="#808080")
@@ -65,15 +67,18 @@ pre_save.connect(save_title_slug, sender=Category)
 
 class Post(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    project = models.ForeignKey(
+        Project, on_delete=models.CASCADE, related_name="posts")
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, related_name="posts")
     title = models.TextField(default='')
     content = models.TextField(default='')
     slug = models.SlugField(blank=True)
     upvotes = models.ManyToManyField(
         CustomUser, blank=True,  related_name="feature_upvotes")
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
-    status = models.ForeignKey(Status, on_delete=models.CASCADE)
+    status = models.ForeignKey(
+        Status, on_delete=models.CASCADE, related_name="posts")
 
     def __str__(self):
         return self.title
@@ -104,7 +109,8 @@ class Comment(models.Model):
 
 class Image(models.Model):
     image = models.ImageField(upload_to='')
-    post = models.ForeignKey(Post, related_name="images", on_delete=models.CASCADE)
+    post = models.ForeignKey(
+        Post, related_name="images", on_delete=models.CASCADE)
 
     def __str__(self):
         return self.image.name

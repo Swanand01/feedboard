@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
+    path('__debug__/', include('debug_toolbar.urls')),
     path('register/', register, name='register'),
     path('login/', LoginView.as_view()),
     path('logout/', LogoutView.as_view()),

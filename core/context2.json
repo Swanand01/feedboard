@@ -1,0 +1,25 @@
+{
+	"feature requests": {
+		"count": 5,
+		"status": {
+			"Pending review": {
+				"colour": "#808080",
+				"posts": [
+					{
+						"title": "Post 1",
+						"description": "Post 1 desc"
+					}
+				]
+			},
+			"In Progress": {
+				"colour": "#808080",
+				"posts": [
+					{
+						"title": "Post 2",
+						"description": "Post 2 desc"
+					}
+				]
+			}
+		}
+	}
+}

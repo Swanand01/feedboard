@@ -35,7 +35,7 @@
             {% csrf_token %}
             <div class="form-group category_list_div">
                 <label>Boards:</label>
-                {% for category in project.category_set.all %}
+                {% for category in project.category.all %}
                 <div class="category-and-settings">
                     <input type="text" class="form-control mb-2 status" value="{{category}}" readonly required>
                     <a href="{% url 'board_settings' category.slug %}">
@@ -51,7 +51,7 @@
         <div class="form-group">
             <label>Project administrators:</label>
             {% for admin in admins %}
-            <input type="text" class="form-control mb-2" readonly value={{admin}}>
+            <input type="text" class="form-control mb-2" readonly value={{admin.user.user_name}}>
             {% endfor %}
         </div>
 

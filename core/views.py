@@ -1,8 +1,9 @@
 from django.http.response import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 from django.urls.base import reverse
 from django.core.paginator import Paginator, EmptyPage
+from django.db.models import Prefetch
 from django.conf import settings
 from core.models import Category, Image, Project, ProjectAdmin, Post, Comment, Status
 from account.models import CustomUser
@@ -10,26 +11,49 @@ import json
 
 
 def project_view(request):
-    project = Project.objects.first()
-    categories = Category.objects.filter(project=project)
-    context = {
-        "project": project,
-        "categories": categories
-    }
-    if request.user.is_authenticated:
-        uname = str(request.user)
-        user = CustomUser.objects.get(user_name=uname)
-        if ProjectAdmin.objects.filter(project=project, user=user).exists():
-            context["is_admin"] = True
+    # Needs more optimization
+    user = request.user
+    project = Project.objects.prefetch_related("category").first()
+    categories = project.category.prefetch_related("posts", "statuses").all()
 
-    return render(request, 'project_view.html', context)
+    ctx = {
+        "project": project,
+        "categories": []
+    }
+    for category in categories:
+        posts = category.posts.prefetch_related("status", Prefetch(
+            "upvotes",
+            to_attr="post_upvotes_")).all()
+        statuses = category.statuses.all()
+        cat_ctx = {
+            "title": category.title,
+            "id": category.id,
+            "slug": category.slug,
+            "count": len(posts),
+            "status": {status.title: [] for status in statuses}
+        }
+        for post in posts:
+            cat_ctx["status"][post.status.title].append({
+                "title": post.title,
+                "slug": post.slug,
+                "content": post.content,
+                "upvote_count": len(post.post_upvotes_)
+            })
+
+        ctx["categories"].append(cat_ctx)
+
+    if user.is_authenticated:
+        if ProjectAdmin.objects.filter(project=project, user=user).exists():
+            ctx["is_admin"] = True
+
+    print(ctx)
+    return render(request, 'project_view.html', ctx)
 
 
 @login_required
 def create_project(request):
-    if request.user.is_superuser:
-        uname = str(request.user)
-        user = CustomUser.objects.get(user_name=uname)
+    user = request.user
+    if user.is_superuser:
 
         if Project.objects.first():
             return HttpResponse("Project already exists")
@@ -61,25 +85,32 @@ def create_project(request):
 
 
 def category_view(request, category_slug):
-    project = Project.objects.first()
-    category = Category.objects.get(project=project, slug=category_slug)
-    posts = Post.objects.filter(category=category)
+    user = request.user
+    project = Project.objects.prefetch_related("category").first()
+    category = project.category.prefetch_related(
+        "posts").get(slug=category_slug)
+    posts = category.posts.select_related(
+        "user",
+        "status").prefetch_related(
+            Prefetch(
+                "upvotes",
+                to_attr="post_upvotes_")
+    ).all()
 
     if request.method == "POST":
-        if request.user.is_authenticated:
-            user = CustomUser.objects.get(user_name=str(request.user))
+        if user.is_authenticated:
             post_title = request.POST.get('title')
             post_desc = request.POST.get('description')
             default_status = Status.objects.get(
                 category=category, is_default=True)
             post = Post(user=user, project=project, category=category, title=post_title,
-                 content=post_desc, status=default_status)
+                        content=post_desc, status=default_status)
             post.save()
 
             if request.FILES.getlist('image-files'):
                 for file in request.FILES.getlist('image-files'):
                     Image(image=file, post=post).save()
-        
+
         else:
             return redirect(f"/login/?next={request.META.get('HTTP_REFERER')}")
 
@@ -94,23 +125,35 @@ def category_view(request, category_slug):
 
     post_paginator = Paginator(posts, settings.POSTS_PER_PAGE)
     page_num = request.GET.get("page", 1)
+
     try:
         posts = post_paginator.page(page_num)
     except EmptyPage:
         posts = post_paginator.page(1)
+
     context = {
         'project': project,
         'category': category,
-        'posts': posts,
+        'posts': [],
         'has_previous': posts.has_previous(),
         'has_next': posts.has_next(),
         'previous_page_number': posts.previous_page_number,
         'next_page_number': posts.next_page_number
     }
-    print(context)
-    if request.user.is_authenticated:
-        uname = str(request.user)
-        user = CustomUser.objects.get(user_name=uname)
+
+    for post in posts:
+        post_data = {
+            "id": post.id,
+            "title": post.title,
+            "content": post.content,
+            "slug": post.slug,
+            "status": post.status,
+            'is_upvoted': user in post.post_upvotes_,
+            'upvote_count': len(post.post_upvotes_)
+        }
+        context["posts"].append(post_data)
+
+    if user.is_authenticated:
         if ProjectAdmin.objects.filter(project=project, user=user).exists():
             context["is_admin"] = True
 
@@ -120,13 +163,16 @@ def category_view(request, category_slug):
 def vote(request):
     if request.method == "POST":
         data = json.loads(request.body)
-        if request.user.is_authenticated:
-            user = CustomUser.objects.get(user_name=str(request.user))
+        user = request.user
+        if user.is_authenticated:
             post_id = json.loads(request.body)['post_id']
-            
-            post = Post.objects.get(id=post_id)
 
-            if user in post.upvotes.all():
+            post = Post.objects.prefetch_related(
+                Prefetch(
+                    "upvotes",
+                    to_attr="post_upvotes_")).get(id=post_id)
+
+            if user in post.post_upvotes_:
                 post.upvotes.remove(user)
             else:
                 post.upvotes.add(user)
@@ -141,24 +187,35 @@ def vote(request):
 
 
 def post_view(request, category_slug, post_slug):
-    project = Project.objects.first()
-    post = Post.objects.get(project=project, slug=post_slug)
-    statuses = post.category.status_set.all()
-    comments = Comment.objects.filter(post=post).order_by("-pub_date")
-    voters = post.upvotes.all()
-    images = Image.objects.filter(post=post)
+    user = request.user
+    project = Project.objects.prefetch_related("category", "posts").first()
+    post = Post.objects.select_related("user", "status").prefetch_related(
+        Prefetch(
+            "upvotes",
+            to_attr="post_upvotes_")
+    ).get(
+        project=project,
+        slug=post_slug
+    )
+    statuses = post.category.statuses.all()
+    comments = Comment.objects.select_related(
+        "user").filter(post=post).order_by("-pub_date")
+    voters = post.post_upvotes_
+    # images = Image.objects.filter(post=post)
     context = {
+        "user": user,
         "project": project,
         "category": post.category,
         "post": post,
         "comments": comments,
+        "comments_count": len(comments),
         "voters": voters,
         "statuses": statuses,
-        "images": images
+        # "images": images,
+        'is_upvoted': user in post.post_upvotes_,
+        'upvote_count': len(post.post_upvotes_)
     }
-    if request.user.is_authenticated:
-        uname = str(request.user)
-        user = CustomUser.objects.get(user_name=uname)
+    if user.is_authenticated:
         if ProjectAdmin.objects.filter(project=project, user=user).exists():
             context["is_admin"] = True
 
@@ -175,22 +232,24 @@ def post_view(request, category_slug, post_slug):
 
 @login_required
 def edit_post(request, post_id):
-    post = Post.objects.get(id=post_id)
+    user = request.user
+    post = Post.objects.select_related("user").get(id=post_id)
     ctx = {
         "post": post,
         "images": post.images.all()
     }
-    if post.user == request.user:
+    if post.user == user:
         if request.method == "POST":
             post_title = request.POST.get("title")
             post_desc = request.POST.get("description")
-            
+
             if request.POST.get("removedImages"):
-                print(request.POST.getlist("removedImages"), type(request.POST.getlist("removedImages")))
+                print(request.POST.getlist("removedImages"),
+                      type(request.POST.getlist("removedImages")))
                 removed_images = request.POST.getlist("removedImages")
                 for id in removed_images:
                     Image.objects.get(id=id).delete()
-            
+
             post.title = post_title
             post.content = post_desc
             post.save()
@@ -202,8 +261,7 @@ def edit_post(request, post_id):
 
 @login_required
 def delete_post(request, post_id):
-    uname = str(request.user)
-    user = CustomUser.objects.get(user_name=uname)
+    user = request.user
 
     post = Post.objects.get(id=post_id)
     category_url = post.category.get_category_url()
@@ -213,9 +271,9 @@ def delete_post(request, post_id):
 
 
 def add_comment(request):
-    if request.user.is_authenticated:
+    user = request.user
+    if user.is_authenticated:
         if request.method == "POST":
-            user = CustomUser.objects.get(user_name=str(request.user))
             post = Post.objects.get(id=request.POST.get('post_id'))
             content = request.POST.get('comment_input')
             comment = Comment(post=post, user=user, content=content)
@@ -227,9 +285,11 @@ def add_comment(request):
 
 def project_settings(request):
     project = Project.objects.first()
-    user = CustomUser.objects.get(user_name=str(request.user))
+    user = request.user
     if ProjectAdmin.objects.filter(project=project, user=user).exists():
-        admins = ProjectAdmin.objects.filter(project=project)
+        admins = ProjectAdmin.objects.filter(
+            project=project).select_related("user")
+        # Doubt
         context = {
             "project": project,
             "admins": admins
@@ -261,7 +321,7 @@ def project_settings(request):
 def board_settings(request, category_slug):
     project = Project.objects.first()
     category = Category.objects.get(project=project, slug=category_slug)
-    user = CustomUser.objects.get(user_name=str(request.user))
+    user = request.user
     if ProjectAdmin.objects.filter(project=project, user=user).exists():
         context = {
             "project": project,
@@ -306,8 +366,7 @@ def board_settings(request, category_slug):
 def search_posts(request):
     if request.method == "POST":
         if request.body:
-            uname = str(request.user)
-            user = CustomUser.objects.get(user_name=uname)
+            user = request.user
 
             data = json.loads(request.body)
             category = Category.objects.get(pk=data["category_id"])
@@ -383,7 +442,6 @@ def me(request):
         if ProjectAdmin.objects.filter(user=user).exists():
             context["is_admin"] = True
 
-        
         if request.method == "POST":
             user_name = request.POST.get("user_name")
             user.user_name = user_name

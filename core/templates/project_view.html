@@ -9,8 +9,8 @@
 	<h6 class="section-title">Boards</h6>
 	<div class="list-group">
 		{% for category in categories %}
-		<a href="{% url 'category_view' category.slug %}"
-			class="list-group-item list-group-item-action">{{category.title}} - {{category.post_set.count}}
+		<a href={% url 'category_view' category.slug %}
+			class="list-group-item list-group-item-action">{{category.title}} - {{category.count}}
 		</a>
 		{% endfor %}
 	</div>
@@ -20,22 +20,22 @@
 		{% for category in categories %}
 
 		<a class="list-group-item list-group-item-action" data-toggle="collapse"
-			href="#multiCollapseExample{{category.id}}" role="button">{{category}} Roadmap</a>
+			href="#multiCollapseExample{{category.id}}" role="button">{{category.title}} Roadmap</a>
 
 		<div class="collapse multi-collapse" id="multiCollapseExample{{category.id}}">
 			<div class="container">
 				<div class="card status-div mt-2 mb-2 border-0">
-					{% for status in category.status_set.all %}
+					{% for status, post_set in category.status.items %}
 					<div class="status-posts">
 						<div class="status">
-							<h6 class="rounded" style="background-color: {{status.colour}};">{{status}}</h6>
+							<h6 class="rounded" style="background-color: {{status.colour}};">{{status.title}}</h6>
 						</div>
 						<div class="posts">
-							{% for post in status.post_set.all %}
+							{% for post in post_set %}
 							<div class="card post">
 								<div class="upvotes">
 									<i class="material-icons footer-icons upvote_button">keyboard_arrow_up</i>
-									<p class="upvote_count">{{post.get_upvotes}}</p>
+									<p class="upvote_count">{{post.upvote_count}}</p>
 								</div>
 								<div class="post-body">
 									<div class="card-body pb-1 pt-1">

@@ -34,7 +34,7 @@
 
 		<label>Status:</label>
 		<div class="form-group status_list_div">
-			{% for status in category.status_set.all %}
+			{% for status in category.statuses.all %}
 			<div class="status-div">
 				<input type="text" name="{{status.id}}" class="form-control mb-2 status" value="{{status.title}}" required>
 				{% if status.is_default %}

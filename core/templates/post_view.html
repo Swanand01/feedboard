@@ -20,12 +20,12 @@
                 <div class="card post">
                     <p class="post_id" hidden>{{post.id}}</p>
                     <div class="upvotes">
-                        {% if request.user in post.upvotes.all %}
+                        {% if is_upvoted %}
                         <i class="material-icons footer-icons upvote_button already-voted">keyboard_arrow_up</i>
                         {% else %}
                         <i class="material-icons footer-icons upvote_button">keyboard_arrow_up</i>
                         {% endif %}
-                        <p class="upvote_count">{{post.get_upvotes}}</p>
+                        <p class="upvote_count">{{upvote_count}}</p>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">{{post.title}}</h5>
@@ -64,7 +64,7 @@
                         {% endif %}
 
                         <div class="post-footer">
-                            {% if post.user == request.user %}
+                            {% if post.user == user %}
                             <div class="options">
                                 <a href="{% url 'edit_post' post.id %}" class="footer-item">Edit</a>
 
@@ -90,7 +90,7 @@
                 </div>
 
                 <div class="comments">
-                    <h6 class="mt-2">Comments - {{post.comments.count}}</h6>
+                    <h6 class="mt-2">Comments - {{comments_count}}</h6>
                     {% for comment in comments %}
                     <div class="comment">
                         <div class="comment-body">
@@ -107,7 +107,7 @@
             </div>
 
             <div class="col-md-3 voters">
-                <h6>Voters - {{post.get_upvotes}}</h6>
+                <h6>Voters - {{upvote_count}}</h6>
                 {% for voter in voters %}
                 <p>{{voter}}</p>
                 {% endfor %}

@@ -69,12 +69,12 @@
                     <div class="card post">
                         <p class="post_id" hidden>{{post.id}}</p>
                         <div class="upvotes">
-                            {% if request.user in post.upvotes.all %}
+                            {% if post.is_upvoted %}
                             <i class="material-icons footer-icons upvote_button already-voted">keyboard_arrow_up</i>
                             {% else %}
                             <i class="material-icons footer-icons upvote_button">keyboard_arrow_up</i>
                             {% endif %}
-                            <p class="upvote_count">{{post.get_upvotes}}</p>
+                            <p class="upvote_count">{{post.upvote_count}}</p>
                         </div>
                         <div class="post-body">
                             <div class="card-body pb-1 pt-1">
@@ -99,7 +99,7 @@
                                         </div>
                                     </a>
 
-                                    {% if post.user == request.user %}
+                                    {% if post.user == user %}
                                     <div class="options">
                                         <a href="{% url 'edit_post' post.id %}" class="footer-item">Edit</a>
 

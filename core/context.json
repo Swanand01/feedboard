@@ -1,0 +1,20 @@
+{
+	"categories": [
+		{
+			"title": "Feature requests",
+			"count": 5,
+			"status": [
+				{
+					"title": "Pending review",
+					"colour": "#808080",
+					"posts": [
+						{
+							"title": "Post 1",
+							"description": "Post desc"
+						}
+					]
+				}
+			]
+		}
+	]
+}
