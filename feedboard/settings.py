@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 import os
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-5tvcf8-u9++86@xn!o*!v311hr7i#)%3x$mwh2g!y50+t11^)-'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=lambda v: [s.strip() for s in v.split(',')])
 
 
 # Application definition
@@ -79,12 +80,20 @@ WSGI_APPLICATION = 'feedboard.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+POSTGRES = config('POSTGRES', cast=bool)
+
+if POSTGRES:
+    DATABASES = {
+        'default': dj_database_url.config(ssl_require=True)
     }
-}
+    
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3'
+        }
+    }
 
 
 # Password validation
@@ -143,7 +152,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 POSTS_PER_PAGE = 5
 
 INTERNAL_IPS = [
-    # ...
-    "127.0.0.1",
-    # ...
+    "127.0.0.1"
 ]
