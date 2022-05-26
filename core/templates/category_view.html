@@ -34,14 +34,14 @@
                             {% endif %}
                         </div>
                         <div class="dropdown show">
-                            <select id="filter_by" name="filter_by" onchange="if (this.selectedIndex) location=finalurl2(this.value)">
+                            <select id="filter_by" name="filter_by" onchange="if (this.selectedIndex) location.href=finalurl2(this.value)">
                                 <option value="-1" selected hidden>Filter by</option>
                                 {% for status in category.statuses.all %}
                                 <option value="{{status}}">{{status}}</option>
                                 {% endfor %}
                             </select>
 
-                            <select id="sort_by" name="sort_by" onchange="if (this.selectedIndex) location=finalurl(this.value)">
+                            <select id="sort_by" name="sort_by" onchange="if (this.selectedIndex) location.href=finalurl(this.value)">
                                 <option value="-1" selected hidden>Sort by</option>
                                 <option value="upvotes">Upvotes</option>
                                 <option value="created_at">Date</option>
@@ -50,14 +50,14 @@
                     </div>
 
                     <div class="dropdown show dropdown-mobile">
-                        <select id="filter_by" name="filter_by" onchange="if (this.selectedIndex) finalurl2(this.value)">
+                        <select id="filter_by" name="filter_by" onchange="if (this.selectedIndex) location.href=finalurl2(this.value)">
                             <option value="-1" selected hidden>Filter by</option>
                             {% for status in category.statuses.all %}
                             <option value="{{status}}">{{status}}</option>
                             {% endfor %}
                         </select>
 
-                        <select id="sort_by" name="sort_by" onchange="if (this.selectedIndex) finalurl(this.value)">
+                        <select id="sort_by" name="sort_by" onchange="if (this.selectedIndex) location.href=finalurl(this.value)">
                             <option value="-1" selected hidden>Sort by</option>
                             <option value="upvotes">Upvotes</option>
                             <option value="created_at">Date</option>
