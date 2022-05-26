@@ -46,7 +46,6 @@ def project_view(request):
         if ProjectAdmin.objects.filter(project=project, user=user).exists():
             ctx["is_admin"] = True
 
-    print(ctx)
     return render(request, 'project_view.html', ctx)
 
 
@@ -447,7 +446,6 @@ def me(request):
             user.user_name = user_name
             old_password = request.POST.get("old_password")
             new_password = request.POST.get("new_password")
-            print(user_name, old_password, new_password)
             if user.check_password(old_password):
                 user.set_password(new_password)
             user.save()
