@@ -34,15 +34,14 @@
                             {% endif %}
                         </div>
                         <div class="dropdown show">
-                            <select id="filter_by" name="filter_by"
-                                onchange="if (this.selectedIndex) location=finalurl2()">
+                            <select id="filter_by" name="filter_by" onchange="if (this.selectedIndex) location=finalurl2(this.value)">
                                 <option value="-1" selected hidden>Filter by</option>
                                 {% for status in category.statuses.all %}
                                 <option value="{{status}}">{{status}}</option>
                                 {% endfor %}
                             </select>
 
-                            <select id="sort_by" name="sort_by" onchange="if (this.selectedIndex) location=finalurl()">
+                            <select id="sort_by" name="sort_by" onchange="if (this.selectedIndex) location=finalurl(this.value)">
                                 <option value="-1" selected hidden>Sort by</option>
                                 <option value="upvotes">Upvotes</option>
                                 <option value="created_at">Date</option>
@@ -51,14 +50,14 @@
                     </div>
 
                     <div class="dropdown show dropdown-mobile">
-                        <select id="filter_by" name="filter_by" onchange="if (this.selectedIndex) location=finalurl2()">
+                        <select id="filter_by" name="filter_by" onchange="if (this.selectedIndex) finalurl2(this.value)">
                             <option value="-1" selected hidden>Filter by</option>
                             {% for status in category.statuses.all %}
                             <option value="{{status}}">{{status}}</option>
                             {% endfor %}
                         </select>
 
-                        <select id="sort_by" name="sort_by" onchange="if (this.selectedIndex) location=finalurl()">
+                        <select id="sort_by" name="sort_by" onchange="if (this.selectedIndex) finalurl(this.value)">
                             <option value="-1" selected hidden>Sort by</option>
                             <option value="upvotes">Upvotes</option>
                             <option value="created_at">Date</option>
@@ -170,20 +169,21 @@
 <script src="{% static 'core/js/category_view.js' %}" type="module"></script>
 <script>
     // for getting url after applying sorting
-    function finalurl() {
+    function finalurl(val) {
         var url = new URL(window.location.href);
         var search_params = url.searchParams;
-        search_params.set('sort_by', document.getElementById("sort_by").value);
+        console.log(this.value);
+        search_params.set('sort_by', val);
         url.search = search_params.toString();
         var new_url = url.toString();
         return new_url
     }
 
     // for getting url after applying filtering
-    function finalurl2() {
+    function finalurl2(val) {
         var url = new URL(window.location.href);
         var search_params = url.searchParams;
-        search_params.set('filter_by', document.getElementById("filter_by").value);
+        search_params.set('filter_by', val);
         url.search = search_params.toString();
         var new_url = url.toString();
         return new_url
