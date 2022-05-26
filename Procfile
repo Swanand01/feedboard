@@ -1,0 +1,1 @@
+web: gunicorn feedboard.wsgi
