@@ -37,7 +37,7 @@
                             <select id="filter_by" name="filter_by"
                                 onchange="if (this.selectedIndex) location=finalurl2()">
                                 <option value="-1" selected hidden>Filter by</option>
-                                {% for status in category.status_set.all %}
+                                {% for status in category.statuses.all %}
                                 <option value="{{status}}">{{status}}</option>
                                 {% endfor %}
                             </select>
@@ -53,7 +53,7 @@
                     <div class="dropdown show dropdown-mobile">
                         <select id="filter_by" name="filter_by" onchange="if (this.selectedIndex) location=finalurl2()">
                             <option value="-1" selected hidden>Filter by</option>
-                            {% for status in category.status_set.all %}
+                            {% for status in category.statuses.all %}
                             <option value="{{status}}">{{status}}</option>
                             {% endfor %}
                         </select>

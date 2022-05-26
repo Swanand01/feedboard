@@ -14,6 +14,9 @@ def project_view(request):
     # Needs more optimization
     user = request.user
     project = Project.objects.prefetch_related("category").first()
+    if not project:
+        return redirect("create_project")
+
     categories = project.category.prefetch_related("posts", "statuses").all()
 
     ctx = {
