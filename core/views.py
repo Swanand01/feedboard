@@ -5,7 +5,7 @@ from django.urls.base import reverse
 from django.core.paginator import Paginator, EmptyPage
 from django.db.models import Prefetch
 from django.conf import settings
-from core.models import Category, Image, Project, ProjectAdmin, Post, Comment, Status
+from core.models import Category, Project, ProjectAdmin, Post, Comment, Status #Image
 from account.models import CustomUser
 import json
 
@@ -107,9 +107,9 @@ def category_view(request, category_slug):
                         content=post_desc, status=default_status)
             post.save()
 
-            if request.FILES.getlist('image-files'):
-                for file in request.FILES.getlist('image-files'):
-                    Image(image=file, post=post).save()
+            # if request.FILES.getlist('image-files'):
+            #     for file in request.FILES.getlist('image-files'):
+            #         Image(image=file, post=post).save()
 
         else:
             return redirect(f"/login/?next={request.META.get('HTTP_REFERER')}")
@@ -243,12 +243,12 @@ def edit_post(request, post_id):
             post_title = request.POST.get("title")
             post_desc = request.POST.get("description")
 
-            if request.POST.get("removedImages"):
-                print(request.POST.getlist("removedImages"),
-                      type(request.POST.getlist("removedImages")))
-                removed_images = request.POST.getlist("removedImages")
-                for id in removed_images:
-                    Image.objects.get(id=id).delete()
+            # if request.POST.get("removedImages"):
+            #     print(request.POST.getlist("removedImages"),
+            #           type(request.POST.getlist("removedImages")))
+            #     removed_images = request.POST.getlist("removedImages")
+            #     for id in removed_images:
+            #         Image.objects.get(id=id).delete()
 
             post.title = post_title
             post.content = post_desc
