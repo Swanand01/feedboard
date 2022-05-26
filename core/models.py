@@ -107,10 +107,10 @@ class Comment(models.Model):
         return self.content
 
 
-class Image(models.Model):
-    image = models.ImageField(upload_to='')
-    post = models.ForeignKey(
-        Post, related_name="images", on_delete=models.CASCADE)
+# class Image(models.Model):
+#     image = models.ImageField(upload_to='')
+#     post = models.ForeignKey(
+#         Post, related_name="images", on_delete=models.CASCADE)
 
-    def __str__(self):
-        return self.image.name
+#     def __str__(self):
+#         return self.image.name
