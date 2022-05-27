@@ -5,7 +5,7 @@ from django.urls.base import reverse
 from django.core.paginator import Paginator, EmptyPage
 from django.db.models import Prefetch
 from django.conf import settings
-from core.models import Category, Project, ProjectAdmin, Post, Comment, Status #Image
+from core.models import Category, Project, ProjectAdmin, Post, Comment, Status  # Image
 from account.models import CustomUser
 import json
 
@@ -90,7 +90,7 @@ def category_view(request, category_slug):
     user = request.user
     project = Project.objects.prefetch_related("category").first()
     category = project.category.prefetch_related(
-        "posts").get(slug=category_slug)
+        "posts", "statuses").get(slug=category_slug)
     posts = category.posts.select_related(
         "user",
         "status").prefetch_related(
