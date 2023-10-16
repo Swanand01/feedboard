@@ -1,5 +1,5 @@
 *.pyc
 db.sqlite3
 media/*
-settings.ini
+.env
 venv/
