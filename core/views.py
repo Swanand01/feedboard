@@ -285,6 +285,7 @@ def add_comment(request):
         return redirect(f"/login/?next={request.META.get('HTTP_REFERER')}")
 
 
+@login_required
 def project_settings(request):
     project = Project.objects.first()
     user = request.user
@@ -320,6 +321,7 @@ def project_settings(request):
         return HttpResponse("Unauthorised")
 
 
+@login_required
 def board_settings(request, category_slug):
     project = Project.objects.first()
     category = Category.objects.get(project=project, slug=category_slug)
