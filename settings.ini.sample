@@ -1,5 +1,0 @@
-[settings]
-SECRET_KEY=YOURKEY
-DEBUG=True
-ALLOWED_HOSTS=localhost, 127.0.0.1
-POSTGRES=True
