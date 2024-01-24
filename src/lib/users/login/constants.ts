@@ -7,7 +7,4 @@ export const formSchema = z.object({
     password: z.string().min(5, "Password must be at least 6 characters"),
 });
 
-export interface LoginFormInputs {
-    email: string;
-    password: string;
-}
+export type LoginFormInputs = z.infer<typeof formSchema>;
