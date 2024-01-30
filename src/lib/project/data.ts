@@ -36,3 +36,20 @@ export async function getPostsByStatus(statusId: string) {
     })
     return posts;
 }
+
+export async function getProjectAdmins(projectId: string) {
+    const projectAdmins = await prisma.projectAdmin.findMany({
+        where: {
+            projectId: projectId
+        },
+        select: {
+            id: true,
+            user: {
+                select: {
+                    username: true
+                }
+            }
+        }
+    });
+    return projectAdmins;
+}
