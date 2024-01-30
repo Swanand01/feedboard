@@ -24,14 +24,20 @@ export default async function ProjectAdminsForm({
                 <CardTitle>Edit Project Admins</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
-                {projectAdmins.map((admin) => (
-                    <div className="flex gap-4" key={admin.id}>
-                        <div className="flex items-center w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors">
-                            <p>{admin.user.username}</p>
+                {projectAdmins.length === 0 ? (
+                    <div className="text-sm">No Project Admins.</div>
+                ) : (
+                    projectAdmins.map((admin) => (
+                        <div className="flex gap-4" key={admin.id}>
+                            <div className="flex items-center w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors">
+                                <p>{admin.user.username}</p>
+                            </div>
+                            <DeleteProjectAdminDialog
+                                projectAdminId={admin.id}
+                            />
                         </div>
-                        <DeleteProjectAdminDialog projectAdminId={admin.id} />
-                    </div>
-                ))}
+                    ))
+                )}
             </CardContent>
             <CardFooter>
                 <AddProjectAdmin projectId={projectId} />
