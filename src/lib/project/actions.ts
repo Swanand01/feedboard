@@ -234,8 +234,16 @@ export async function updateProject(projectId: string, values: ProjectFormInputs
 }
 
 export async function deleteCategory(categoryId: string) {
+    const session = await getUserSession();
+    if (!session?.user?.isSuperuser) {
+        return {
+            success: false,
+            message: 'Access denied. You are not a superuser.'
+        };
+    }
+
     try {
-        const createdCategory = await prisma.category.delete({
+        const deletedCategory = await prisma.category.delete({
             where: {
                 id: categoryId
             },
@@ -243,7 +251,7 @@ export async function deleteCategory(categoryId: string) {
         return {
             success: true,
             message: 'Category deleted successfully.',
-            category: createdCategory
+            category: deletedCategory
         }
     } catch (error) {
         return {
@@ -273,7 +281,64 @@ export async function createDefaultStatuses(categoryId: string) {
     } catch (error) {
         return {
             success: false,
-            message: `Failed to create default statuses.`,
+            message: 'Failed to create default statuses.',
+        };
+    }
+}
+
+export async function createProjectAdmin(userId: string, projectId: string) {
+    const session = await getUserSession();
+    if (!session?.user?.isSuperuser) {
+        return {
+            success: false,
+            message: 'Access denied. You are not a superuser.'
+        };
+    }
+
+    try {
+        const createdProjectAdmin = await prisma.projectAdmin.create({
+            data: {
+                projectId: projectId,
+                userId: userId,
+            }
+        });
+        revalidatePath('/project/[slug]/edit/', 'page');
+        return {
+            success: true,
+            message: 'ProjectAdmin created successfully.',
+            projectAdmin: createdProjectAdmin,
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: 'Failed to create the ProjectAdmin.',
+        };
+    }
+}
+
+export async function deleteProjectAdmin(projectAdminId: string) {
+    const session = await getUserSession();
+    if (!session?.user?.isSuperuser) {
+        return {
+            success: false,
+            message: 'Access denied. You are not a superuser.'
+        };
+    }
+
+    try {
+        const deletedProjectAdmin = await prisma.projectAdmin.delete({
+            where: { id: projectAdminId }
+        });
+        revalidatePath('/project/[slug]/edit/', 'page');
+        return {
+            success: true,
+            message: 'ProjectAdmin deleted successfully.',
+            projectAdmin: deletedProjectAdmin,
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: 'Failed to delete the ProjectAdmin.',
         };
     }
 }

@@ -34,10 +34,12 @@ export default function ProjectForm({
     edit = false,
     project,
     initialCategories,
+    className,
 }: {
     edit?: Boolean;
     project?: Project;
     initialCategories?: Array<CategoryFormField>;
+    className?: string;
 }) {
     const router = useRouter();
     const { toast } = useToast();
@@ -104,7 +106,6 @@ export default function ProjectForm({
         setIsSubmitting(true);
         if (edit && project?.id) {
             result = await updateProject(project.id, values);
-            console.log("result", result);
         } else {
             result = await createProject(values);
             if (result.success) {
@@ -116,7 +117,7 @@ export default function ProjectForm({
     };
 
     return (
-        <Card className="w-full md:w-96 mx-auto">
+        <Card className={className}>
             <CardHeader>
                 <CardTitle>
                     {edit ? "Edit Project" : "Create Project"}

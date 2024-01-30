@@ -61,6 +61,8 @@ model ProjectAdmin {
   user      User     @relation(fields: [userId], references: [id])
   projectId String
   project   Project  @relation(fields: [projectId], references: [id])
+
+  @@unique([userId, projectId])
 }
 
 model Post {
