@@ -25,7 +25,7 @@ model Category {
   slug      String?  @unique
   createdAt DateTime @default(now())
   projectId String
-  project   Project  @relation(fields: [projectId], references: [id])
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   statuses  Status[]
 }
 
@@ -58,9 +58,9 @@ model ProjectAdmin {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   projectId String
-  project   Project  @relation(fields: [projectId], references: [id])
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   @@unique([userId, projectId])
 }
@@ -68,7 +68,7 @@ model ProjectAdmin {
 model Post {
   id        String   @id @default(uuid())
   userId    String
-  creator   User     @relation(fields: [userId], references: [id])
+  creator   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   title     String
   content   String
   slug      String?  @unique
@@ -81,9 +81,9 @@ model Post {
 model Upvote {
   createdAt DateTime @default(now())
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   postId    String
-  post      Post     @relation(fields: [postId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   @@id([userId, postId])
 }
