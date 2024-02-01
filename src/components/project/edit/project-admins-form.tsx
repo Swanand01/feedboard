@@ -21,7 +21,7 @@ export default async function ProjectAdminsForm({
             <CardContent>
                 <div>
                     {projectAdmins.length === 0 ? (
-                        <div className="text-sm">No Project Admins.</div>
+                        <div className="text-sm mb-4">No Project Admins.</div>
                     ) : (
                         projectAdmins.map((admin) => (
                             <div className="flex gap-4 mb-4" key={admin.id}>
