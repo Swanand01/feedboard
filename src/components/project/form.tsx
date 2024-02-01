@@ -109,9 +109,9 @@ export default function ProjectForm({
             result = await updateProject(project.id, values);
         } else {
             result = await createProject(values);
-            if (result.success) {
-                router.push(`/project/${result.project?.slug}/`);
-            }
+        }
+        if (result.success) {
+            router.replace(`/project/${result.project?.slug}/`);
         }
         setIsSubmitting(false);
         toast({ title: result.message });
