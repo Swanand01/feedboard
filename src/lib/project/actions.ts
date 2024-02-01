@@ -342,3 +342,29 @@ export async function deleteProjectAdmin(projectAdminId: string) {
         };
     }
 }
+
+export async function deleteProject(projectId: string) {
+    const session = await getUserSession();
+    if (!session?.user?.isSuperuser) {
+        return {
+            success: false,
+            message: 'Access denied. You are not a superuser.'
+        };
+    }
+    try {
+        const deletedProject = await prisma.project.delete({
+            where: { id: projectId }
+        });
+        revalidatePath('/home');
+        return {
+            success: true,
+            message: 'Project deleted successfully.',
+            deletedProject: deletedProject
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: 'Failed to delete the Project.',
+        };
+    }
+}
