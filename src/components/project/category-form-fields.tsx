@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { MinusCircledIcon } from "@radix-ui/react-icons";
 import { Control, FieldArrayWithId, UseFormRegister } from "react-hook-form";
 import { CategoryFormField, ProjectFormInputs } from "@/lib/project/constants";
+import ActionDialog from "../ui/action-dialog";
 
 interface CategoryFieldsProps {
     categories: FieldArrayWithId<CategoryFormField>[];
@@ -42,18 +43,41 @@ export default function CategoryFormFields({
                                             `categories.${index}.title` as const
                                         )}
                                     />
-                                    <Button
-                                        type="button"
-                                        variant={"destructive"}
-                                        onClick={() =>
-                                            handleRemoveCategory(index)
-                                        }
-                                    >
-                                        <MinusCircledIcon
-                                            width={16}
-                                            height={16}
+                                    {category.categoryId === "" ? (
+                                        <Button
+                                            type="button"
+                                            variant={"destructive"}
+                                            onClick={() =>
+                                                handleRemoveCategory(index)
+                                            }
+                                        >
+                                            <MinusCircledIcon
+                                                width={16}
+                                                height={16}
+                                            />
+                                        </Button>
+                                    ) : (
+                                        <ActionDialog
+                                            trigger={
+                                                <Button
+                                                    type="button"
+                                                    variant={"destructive"}
+                                                >
+                                                    <MinusCircledIcon
+                                                        width={16}
+                                                        height={16}
+                                                    />
+                                                </Button>
+                                            }
+                                            title="Are you absolutely sure?"
+                                            description={
+                                                "This will remove the category and all its posts."
+                                            }
+                                            onClickContinue={() =>
+                                                handleRemoveCategory(index)
+                                            }
                                         />
-                                    </Button>
+                                    )}
                                 </div>
                             </FormControl>
                             <FormMessage>
