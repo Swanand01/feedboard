@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
@@ -108,16 +109,16 @@ export default function ProjectForm({
             result = await updateProject(project.id, values);
         } else {
             result = await createProject(values);
-            if (result.success) {
-                router.push(`/project/${result.project?.slug}/`);
-            }
+        }
+        if (result.success) {
+            router.replace(`/project/${result.project?.slug}/`);
         }
         setIsSubmitting(false);
         toast({ title: result.message });
     };
 
     return (
-        <Card className={className}>
+        <Card className={cn("h-fit w-full md:w-96", className)}>
             <CardHeader>
                 <CardTitle>
                     {edit ? "Edit Project" : "Create Project"}
@@ -127,7 +128,7 @@ export default function ProjectForm({
                 <Form {...form}>
                     <form
                         onSubmit={form.handleSubmit(onSubmit)}
-                        className="space-y-8"
+                        className="space-y-4"
                     >
                         <FormField
                             control={form.control}
