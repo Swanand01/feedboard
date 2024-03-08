@@ -31,7 +31,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
             </div>
             <div className="flex flex-col gap-4">
                 <h3 className="text-xl">Boards</h3>
-                <Boards categories={categories} />
+                <Boards projectSlug={slug} categories={categories} />
             </div>
             <div className="flex flex-col gap-4">
                 <Roadmaps categories={categories} />
