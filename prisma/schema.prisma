@@ -32,6 +32,7 @@ model Category {
 model Status {
   id        String   @id @default(uuid())
   title     String
+  slug      String?  @unique
   isDefault Boolean  @default(false)
   colour    String   @default("#808080")
   createdAt DateTime @default(now())
@@ -74,7 +75,7 @@ model Post {
   slug      String?  @unique
   createdAt DateTime @default(now())
   statusId  String
-  status    Status   @relation(fields: [statusId], references: [id])
+  status    Status   @relation(fields: [statusId], references: [id], onDelete: Cascade)
   upvotes   Upvote[]
 }
 
