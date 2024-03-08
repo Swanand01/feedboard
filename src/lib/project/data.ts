@@ -21,22 +21,6 @@ export async function getProject(slug: string) {
     return project;
 }
 
-export async function getPostsByStatus(statusId: string) {
-    const posts = await prisma.post.findMany({
-        where: {
-            statusId: statusId
-        },
-        include: {
-            _count: {
-                select: {
-                    upvotes: true
-                }
-            }
-        }
-    })
-    return posts;
-}
-
 export async function getProjectAdmins(projectId: string) {
     const projectAdmins = await prisma.projectAdmin.findMany({
         where: {
