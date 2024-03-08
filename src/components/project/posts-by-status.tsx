@@ -2,7 +2,7 @@ import { Status } from "@prisma/client";
 import PostCard from "./post-card";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { getPostsByStatus } from "@/lib/project/data";
+import { getPostsByStatus } from "@/lib/post/data";
 
 async function PostsByStatus({ status }: { status: Status }) {
     const posts = await getPostsByStatus(status.id);
@@ -22,7 +22,9 @@ async function PostsByStatus({ status }: { status: Status }) {
             <ScrollArea className="max-h-96 w-full">
                 <div className="flex flex-col gap-4 w-full">
                     {posts.map((post) => {
-                        return <PostCard key={post.id} post={post} />;
+                        return (
+                            <PostCard key={post.id} post={post} clampContent />
+                        );
                     })}
                 </div>
             </ScrollArea>

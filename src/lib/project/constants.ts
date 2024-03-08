@@ -28,7 +28,7 @@ export interface CategoryFormField {
 export type ProjectFormInputs = z.infer<typeof formSchema>;
 
 export const statusesData = [
-    { title: 'Pending', colour: '#FFD700' },
-    { title: 'In progress', colour: '#00FF00' },
-    { title: 'Completed', colour: '#0000FF' }
+    { title: 'Pending', colour: '#FFD700', isDefault: true },
+    { title: 'In progress', colour: '#00FF00', isDefault: false },
+    { title: 'Completed', colour: '#0000FF', isDefault: false }
 ];
