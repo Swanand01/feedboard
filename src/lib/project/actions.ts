@@ -264,12 +264,16 @@ export async function deleteCategory(categoryId: string) {
 export async function createDefaultStatuses(categoryId: string) {
     try {
         await Promise.all(
-            statusesData.map(async ({ title, colour }) => {
+            statusesData.map(async ({ title, colour, isDefault }) => {
+                const uniqueSlug = await generateUniqueSlug('status', title);
+
                 return prisma.status.create({
                     data: {
                         title,
                         colour,
-                        categoryId
+                        categoryId,
+                        isDefault,
+                        slug: uniqueSlug,
                     }
                 });
             })
@@ -362,6 +366,8 @@ export async function deleteProject(projectId: string) {
             deletedProject: deletedProject
         };
     } catch (error) {
+        console.log(error);
+
         return {
             success: false,
             message: 'Failed to delete the Project.',
