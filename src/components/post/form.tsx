@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useRouter } from "next/navigation";
 import { useToast } from "../ui/use-toast";
 import { useState } from "react";
 import { PostFormInputs, formSchema } from "@/lib/post/constants";
