@@ -1,7 +1,15 @@
 "use client";
 
-import { MinusCircledIcon } from "@radix-ui/react-icons";
+import {
+    CaretUpIcon,
+    MinusCircledIcon,
+    TriangleUpIcon,
+} from "@radix-ui/react-icons";
 import { Button } from "../ui/button";
+import { useToast } from "../ui/use-toast";
+import { votePost } from "@/lib/post/actions";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 export function RemoveProjectAdminButton({ onClick }: { onClick?: Function }) {
     return (
@@ -34,5 +42,66 @@ export function AddProjectAdminButton({
         >
             Add Project Admin
         </Button>
+    );
+}
+
+export function UpvotePostButton({
+    postId,
+    upvotes,
+    hasUpvoted,
+}: {
+    postId: string;
+    upvotes: number;
+    hasUpvoted: boolean;
+}) {
+    const form = useForm();
+    const { toast } = useToast();
+    const [vote, setVote] = useState<{ isUpvoted: boolean; voteCount: number }>(
+        {
+            isUpvoted: hasUpvoted,
+            voteCount: upvotes,
+        },
+    );
+
+    const handleUpvote = async () => {
+        setVote((vote) => {
+            if (vote.isUpvoted) {
+                return {
+                    isUpvoted: !vote.isUpvoted,
+                    voteCount: vote.voteCount - 1,
+                };
+            }
+            return {
+                isUpvoted: !vote.isUpvoted,
+                voteCount: vote.voteCount + 1,
+            };
+        });
+        const res = await votePost(postId);
+        if (res?.success === false) {
+            toast({ title: res.message });
+        }
+    };
+
+    return (
+        <form
+            className={
+                "bg-tertiary ml-4 flex h-full flex-none flex-col items-center justify-center rounded-l-md"
+            }
+        >
+            {vote.isUpvoted ? (
+                <TriangleUpIcon
+                    width={28}
+                    height={28}
+                    onClick={form.handleSubmit(handleUpvote)}
+                />
+            ) : (
+                <CaretUpIcon
+                    width={28}
+                    height={28}
+                    onClick={form.handleSubmit(handleUpvote)}
+                />
+            )}
+            <p>{vote.voteCount.toString()}</p>
+        </form>
     );
 }
