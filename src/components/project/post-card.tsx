@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Post } from "@/lib/types";
-import { CaretUpIcon } from "@radix-ui/react-icons";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "../ui/badge";
+import { UpvotePostButton } from "./buttons";
+import { getUserSession } from "@/auth";
 
-function PostCard({
+async function PostCard({
     post,
     clampContent,
     showStatus,
@@ -13,27 +14,34 @@ function PostCard({
     clampContent?: boolean;
     showStatus?: boolean;
 }) {
+    let hasUpvoted = false;
+    const session = await getUserSession();
+
+    if (
+        session?.user &&
+        post.upvotes?.map((obj) => obj.userId).includes(session.user.id)
+    ) {
+        hasUpvoted = true;
+    }
+
     return (
         <Card key={post.id}>
             <Link href={""} className="flex items-center">
-                <div
-                    className={
-                        "flex flex-col flex-none justify-center rounded-l-md items-center bg-tertiary h-full ml-4"
-                    }
-                >
-                    <CaretUpIcon width={28} height={28} />
-                    <p>{post._count?.upvotes || 0}</p>
-                </div>
+                <UpvotePostButton
+                    postId={post.id}
+                    upvotes={post._count?.upvotes || 0}
+                    hasUpvoted={hasUpvoted}
+                />
                 <div>
                     <CardHeader className="p-4">
                         <div className="flex flex-col gap-4">
-                            <CardTitle className="hover:opacity-70 line-clamp-1 font-semibold">
+                            <CardTitle className="line-clamp-1 font-semibold hover:opacity-70">
                                 {post.title}
                             </CardTitle>
                             {showStatus && (
                                 <Badge
                                     variant="outline"
-                                    className="text-sm w-fit"
+                                    className="w-fit text-sm"
                                     style={{
                                         color: `${post?.status?.colour}`,
                                         borderColor: `${post?.status?.colour}`,
