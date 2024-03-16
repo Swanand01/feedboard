@@ -9,6 +9,7 @@ export type Category = PrismaCategory &
         Prisma.CategoryGetPayload<{
             include: {
                 statuses: true;
+                project: { select: { slug: true } };
             };
         }>
     >;
