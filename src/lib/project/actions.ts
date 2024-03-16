@@ -7,6 +7,7 @@ import { ProjectFormInputs } from "@/lib/project/constants";
 import { CategoryFormField, formSchema as CreateProject } from "./constants";
 import { generateUniqueSlug } from "@/lib/utils";
 import { createCategory, updateCategory } from "../board/actions";
+import { isSuperuser } from "../permissions";
 
 async function createOrUpdateProjectCategory(
     projectId: string,
@@ -20,7 +21,7 @@ async function createOrUpdateProjectCategory(
 
 export async function createProject(values: ProjectFormInputs) {
     const session = await getUserSession();
-    if (!session?.user?.isSuperuser) {
+    if (!(session?.user && (await isSuperuser()))) {
         return {
             success: false,
             message: "Access denied. You are not a superuser.",
@@ -43,7 +44,7 @@ export async function createProject(values: ProjectFormInputs) {
                 title,
                 description,
                 slug: uniqueSlug,
-                userId: session?.user.id,
+                userId: session.user.id,
             },
         });
 
@@ -87,8 +88,7 @@ export async function updateProject(
     projectId: string,
     values: ProjectFormInputs,
 ) {
-    const session = await getUserSession();
-    if (!session?.user?.isSuperuser) {
+    if (!(await isSuperuser())) {
         return {
             success: false,
             message: "Access denied. You are not a superuser.",
@@ -175,8 +175,7 @@ export async function updateProject(
 }
 
 export async function createProjectAdmin(userId: string, projectId: string) {
-    const session = await getUserSession();
-    if (!session?.user?.isSuperuser) {
+    if (!(await isSuperuser())) {
         return {
             success: false,
             message: "Access denied. You are not a superuser.",
@@ -205,8 +204,7 @@ export async function createProjectAdmin(userId: string, projectId: string) {
 }
 
 export async function deleteProjectAdmin(projectAdminId: string) {
-    const session = await getUserSession();
-    if (!session?.user?.isSuperuser) {
+    if (!(await isSuperuser())) {
         return {
             success: false,
             message: "Access denied. You are not a superuser.",
@@ -233,7 +231,7 @@ export async function deleteProjectAdmin(projectAdminId: string) {
 
 export async function deleteProject(projectId: string) {
     const session = await getUserSession();
-    if (!session?.user?.isSuperuser) {
+    if (!(await isSuperuser())) {
         return {
             success: false,
             message: "Access denied. You are not a superuser.",
