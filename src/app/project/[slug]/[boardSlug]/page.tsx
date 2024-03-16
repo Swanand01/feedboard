@@ -11,18 +11,18 @@ export default async function Page({
     params,
     searchParams,
 }: {
-    params: { boardSlug: string };
+    params: { slug: string; boardSlug: string };
     searchParams?: {
         query?: string;
         page?: string;
         status?: string;
     };
 }) {
-    const slug = params.boardSlug;
+    const { slug: projectSlug, boardSlug } = params;
     const query = searchParams?.query || "";
     const currentPage = Number(searchParams?.page) || 1;
     const status = searchParams?.status || "all";
-    const category = await getCategory(slug);
+    const category = await getCategory(boardSlug);
 
     if (!category) {
         notFound();
@@ -30,17 +30,17 @@ export default async function Page({
 
     return (
         <div className="flex flex-col gap-8">
-            <div className="flex gap-4 items-center">
-                <Link href="">
+            <div className="flex items-center gap-4">
+                <Link href={`/project/${projectSlug}/`}>
                     <ArrowLeftIcon width={28} height={28} />
                 </Link>
                 <h3 className="text-2xl">{category.title}</h3>
-                <Link href={`/project/${slug}/edit/`}>
+                <Link href={`/project/${projectSlug}/${boardSlug}/edit/`}>
                     <GearIcon width={24} height={24} />
                 </Link>
             </div>
-            <div className="flex gap-8 flex-wrap">
-                <div className="flex flex-col gap-8 flex-1 order-2 lg:order-1">
+            <div className="flex flex-wrap gap-8">
+                <div className="order-2 flex flex-1 flex-col gap-8 lg:order-1">
                     <div className="flex gap-4">
                         <Search
                             placeholder="Search by title..."
