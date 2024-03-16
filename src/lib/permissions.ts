@@ -1,11 +1,7 @@
 "use server";
 
 import { getUserSession } from "@/auth";
-
-export async function isLoggedIn() {
-    const session = await getUserSession();
-    return !!session?.user;
-}
+import prisma from "./prisma";
 
 export async function isSuperuser() {
     const session = await getUserSession();
