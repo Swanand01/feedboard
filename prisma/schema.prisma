@@ -1,90 +1,90 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
 }
 
 model Project {
-  id           String         @id @default(uuid())
-  title        String
-  description  String         @default("")
-  slug         String?        @unique
-  createdAt    DateTime       @default(now())
-  categories   Category[]
-  owner        User           @relation(fields: [userId], references: [id])
-  userId       String
-  ProjectAdmin ProjectAdmin[]
+    id           String         @id @default(uuid())
+    title        String
+    description  String         @default("")
+    slug         String?        @unique
+    createdAt    DateTime       @default(now())
+    categories   Category[]
+    owner        User           @relation(fields: [userId], references: [id])
+    userId       String
+    ProjectAdmin ProjectAdmin[]
 }
 
 model Category {
-  id        String   @id @default(uuid())
-  title     String
-  slug      String?  @unique
-  createdAt DateTime @default(now())
-  projectId String
-  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  statuses  Status[]
+    id        String   @id @default(uuid())
+    title     String
+    slug      String?  @unique
+    createdAt DateTime @default(now())
+    projectId String
+    project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    statuses  Status[]
 }
 
 model Status {
-  id        String   @id @default(uuid())
-  title     String
-  slug      String?  @unique
-  isDefault Boolean  @default(false)
-  colour    String   @default("#808080")
-  createdAt DateTime @default(now())
+    id        String   @id @default(uuid())
+    title     String
+    slug      String?  @unique
+    isDefault Boolean  @default(false)
+    colour    String   @default("#808080")
+    createdAt DateTime @default(now())
 
-  categoryId String
-  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  posts      Post[]
+    categoryId String
+    category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+    posts      Post[]
 }
 
 model User {
-  id                   String         @id @default(uuid())
-  username             String         @unique
-  email                String         @unique
-  password             String
-  dateJoined           DateTime       @default(now())
-  isSuperuser          Boolean        @default(false)
-  projectsCreated      Project[]
-  projectsAdministered ProjectAdmin[]
-  postsCreated         Post[]
-  upvotesGiven         Upvote[]
+    id                   String         @id @default(uuid())
+    username             String         @unique
+    email                String         @unique
+    password             String
+    dateJoined           DateTime       @default(now())
+    isSuperuser          Boolean        @default(false)
+    projectsCreated      Project[]
+    projectsAdministered ProjectAdmin[]
+    postsCreated         Post[]
+    upvotesGiven         Upvote[]
 }
 
 model ProjectAdmin {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  projectId String
-  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    projectId String
+    project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, projectId])
+    @@unique([userId, projectId])
 }
 
 model Post {
-  id        String   @id @default(uuid())
-  userId    String
-  creator   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  title     String
-  content   String
-  slug      String?  @unique
-  createdAt DateTime @default(now())
-  statusId  String
-  status    Status   @relation(fields: [statusId], references: [id], onDelete: Cascade)
-  upvotes   Upvote[]
+    id        String   @id @default(uuid())
+    userId    String
+    creator   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    title     String
+    content   String
+    slug      String?  @unique
+    createdAt DateTime @default(now())
+    statusId  String
+    status    Status   @relation(fields: [statusId], references: [id], onDelete: Cascade)
+    upvotes   Upvote[]
 }
 
 model Upvote {
-  createdAt DateTime @default(now())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  postId    String
-  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+    createdAt DateTime @default(now())
+    userId    String
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    postId    String
+    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-  @@id([userId, postId])
+    @@id([userId, postId])
 }
