@@ -23,11 +23,8 @@ import {
     formSchema,
 } from "@/lib/project/constants";
 import CategoryFormFields from "./category-form-fields";
-import {
-    createProject,
-    deleteCategory,
-    updateProject,
-} from "@/lib/project/actions";
+import { createProject, updateProject } from "@/lib/project/actions";
+import { deleteCategory } from "@/lib/board/actions";
 import { Project } from "@prisma/client";
 import { useRouter } from "next/navigation";
 
@@ -74,7 +71,6 @@ export default function ProjectForm({
         } else {
             toast({
                 title: "Maximum limit reached.",
-                description: "You can add more categories later.",
             });
         }
     };
@@ -90,9 +86,8 @@ export default function ProjectForm({
 
         const categoryIdToRemove = categories[indexToRemove].categoryId;
         if (edit && categoryIdToRemove !== "") {
-            const { success, message } = await deleteCategory(
-                categoryIdToRemove
-            );
+            const { success, message } =
+                await deleteCategory(categoryIdToRemove);
             if (success) {
                 remove(indexToRemove);
             }
