@@ -35,6 +35,8 @@ const FormSchema = z.object({
     }),
 });
 
+type FilterByStatusFormInputs = z.infer<typeof FormSchema>;
+
 export default function FilterByStatus({
     statuses,
     selectedStatus,
@@ -47,14 +49,14 @@ export default function FilterByStatus({
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const { replace } = useRouter();
-    const form = useForm<z.infer<typeof FormSchema>>({
+    const form = useForm<FilterByStatusFormInputs>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
             status: selectedStatus,
         },
     });
 
-    function onSubmit(values: z.infer<typeof FormSchema>) {
+    function onSubmit(values: FilterByStatusFormInputs) {
         const params = new URLSearchParams(searchParams);
         params.set("page", "1");
         params.set("status", values.status);
