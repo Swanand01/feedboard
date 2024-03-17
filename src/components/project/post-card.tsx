@@ -8,10 +8,12 @@ import { getUserSession } from "@/auth";
 async function PostCard({
     post,
     clampContent,
+    baseLink,
     showStatus,
 }: {
     post: Post;
     clampContent?: boolean;
+    baseLink?: string;
     showStatus?: boolean;
 }) {
     let hasUpvoted = false;
@@ -26,7 +28,10 @@ async function PostCard({
 
     return (
         <Card key={post.id}>
-            <Link href={""} className="flex items-center">
+            <Link
+                href={`${baseLink}/${post.slug}`}
+                className="flex items-center"
+            >
                 <UpvotePostButton
                     postId={post.id}
                     upvotes={post._count?.upvotes || 0}
