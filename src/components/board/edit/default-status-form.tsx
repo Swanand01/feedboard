@@ -57,7 +57,7 @@ export default function DefaultStatusForm({
     };
 
     return (
-        <Card className={cn("h-fit w-full md:w-96", className)}>
+        <Card className={className}>
             <CardHeader>
                 <CardTitle>Select Default Status</CardTitle>
             </CardHeader>

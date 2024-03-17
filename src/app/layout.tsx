@@ -29,8 +29,8 @@ export default async function RootLayout({
         <html lang="en">
             <body
                 className={cn(
-                    "min-h-screen bg-background font-sans antialiased flex flex-col gap-8",
-                    fontSans.variable
+                    "bg-background flex min-h-screen flex-col gap-8 font-sans antialiased",
+                    fontSans.variable,
                 )}
             >
                 <SessionProvider session={session}>
@@ -40,8 +40,10 @@ export default async function RootLayout({
                         enableSystem
                         disableTransitionOnChange
                     >
-                        <Header />
-                        <main className="px-8 w-full">{children}</main>
+                        <Header className="px-8 py-4 sm:px-16 md:px-32 lg:px-64" />
+                        <main className="px-8 sm:px-16 md:px-32 lg:px-64">
+                            {children}
+                        </main>
                     </ThemeProvider>
                     <Toaster />
                 </SessionProvider>

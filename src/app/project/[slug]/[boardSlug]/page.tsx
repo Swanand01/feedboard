@@ -40,7 +40,7 @@ export default async function Page({
                 </Link>
             </div>
             <div className="flex flex-wrap gap-8">
-                <div className="order-2 flex flex-1 flex-col gap-8 lg:order-1">
+                <div className="order-2 flex w-full flex-1 flex-col gap-8 lg:order-1">
                     <div className="flex gap-4">
                         <Search
                             placeholder="Search by title..."
@@ -54,6 +54,7 @@ export default async function Page({
                     </div>
                     <Posts
                         categoryId={category.id}
+                        baseLink={`/project/${projectSlug}/${category.slug}`}
                         query={query}
                         currentPage={currentPage}
                         status={status}

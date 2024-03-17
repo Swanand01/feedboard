@@ -87,3 +87,29 @@ export async function getPostsByStatus(statusId: string) {
     });
     return posts;
 }
+
+export async function getPost(postSlug: string) {
+    const post = await prisma.post.findUnique({
+        where: { slug: postSlug },
+        include: {
+            _count: {
+                select: {
+                    upvotes: true,
+                },
+            },
+            upvotes: {
+                select: {
+                    userId: true,
+                },
+            },
+            status: {
+                include: {
+                    category: {
+                        select: { title: true },
+                    },
+                },
+            },
+        },
+    });
+    return post;
+}

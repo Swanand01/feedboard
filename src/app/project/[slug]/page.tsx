@@ -18,7 +18,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
     return (
         <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-8">
-                <div className="flex gap-4 items-center">
+                <div className="flex items-center gap-4">
                     <Link href="/">
                         <ArrowLeftIcon width={28} height={28} />
                     </Link>
@@ -34,7 +34,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 <Boards projectSlug={slug} categories={categories} />
             </div>
             <div className="flex flex-col gap-4">
-                <Roadmaps categories={categories} />
+                <Roadmaps projectSlug={slug} categories={categories} />
             </div>
         </div>
     );
