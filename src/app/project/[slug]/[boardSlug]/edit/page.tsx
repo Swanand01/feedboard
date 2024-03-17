@@ -20,13 +20,13 @@ export default async function Page({
     });
 
     return (
-        <div className="flex flex-wrap justify-center gap-8">
+        <div className="flex flex-wrap gap-8">
             <EditBoardForm
                 edit={true}
                 category={category}
                 initialStatuses={statuses}
             />
-            <div className="flex w-full flex-col gap-8 md:w-96">
+            <div className="flex w-full flex-1 flex-col gap-8 md:w-96">
                 <DefaultStatusForm statuses={statuses} />
                 <DeleteBoardForm
                     categoryId={category.id}
