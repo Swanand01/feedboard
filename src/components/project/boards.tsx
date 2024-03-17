@@ -10,10 +10,10 @@ function Boards({
     categories: Array<Category>;
 }) {
     return (
-        <div className="flex flex-wrap gap-x-16 gap-y-4">
+        <div className="flex flex-wrap justify-between gap-y-4">
             {categories.map((category: Category) => {
                 return (
-                    <Card key={category.id} className="w-full md:w-96">
+                    <Card key={category.id} className="w-full lg:w-[32%]">
                         <Link href={`${projectSlug}/${category.slug}`}>
                             <CardHeader>
                                 <CardTitle className="text-xl hover:opacity-70">

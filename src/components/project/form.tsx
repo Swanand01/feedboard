@@ -113,7 +113,7 @@ export default function ProjectForm({
     };
 
     return (
-        <Card className={cn("h-fit w-full md:w-96", className)}>
+        <Card className={cn("w-full lg:w-1/2", className)}>
             <CardHeader>
                 <CardTitle>
                     {edit ? "Edit Project" : "Create Project"}

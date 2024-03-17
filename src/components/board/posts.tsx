@@ -5,11 +5,13 @@ import { POSTS_PER_PAGE } from "@/lib/post/constants";
 
 export default async function Posts({
     categoryId,
+    baseLink,
     query,
     currentPage,
     status,
 }: {
     categoryId: string;
+    baseLink: string;
     query: string;
     currentPage: number;
     status: string;
@@ -18,7 +20,7 @@ export default async function Posts({
         categoryId,
         status,
         query,
-        currentPage
+        currentPage,
     );
 
     return (
@@ -27,7 +29,12 @@ export default async function Posts({
                 <div className="text-sm">No posts found.</div>
             ) : (
                 posts.map((post) => (
-                    <PostCard key={post.id} post={post} showStatus />
+                    <PostCard
+                        key={post.id}
+                        post={post}
+                        baseLink={baseLink}
+                        showStatus
+                    />
                 ))
             )}
             <PaginationWrapper
