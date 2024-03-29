@@ -2,6 +2,7 @@ import {
     Prisma,
     Category as PrismaCategory,
     Post as PrismaPost,
+    Comment as PrismaComment,
 } from "@prisma/client";
 
 export type Category = PrismaCategory &
@@ -13,6 +14,7 @@ export type Category = PrismaCategory &
             };
         }>
     >;
+
 export type Post = PrismaPost &
     Partial<
         Prisma.PostGetPayload<{
@@ -30,6 +32,15 @@ export type Post = PrismaPost &
                         userId: true;
                     };
                 };
+            };
+        }>
+    >;
+
+export type Comment = PrismaComment &
+    Partial<
+        Prisma.CommentGetPayload<{
+            include: {
+                creator: true;
             };
         }>
     >;
