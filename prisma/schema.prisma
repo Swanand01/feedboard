@@ -53,6 +53,7 @@ model User {
     projectsAdministered ProjectAdmin[]
     postsCreated         Post[]
     upvotesGiven         Upvote[]
+    commentsCreated      Comment[]
 }
 
 model ProjectAdmin {
@@ -67,16 +68,17 @@ model ProjectAdmin {
 }
 
 model Post {
-    id        String   @id @default(uuid())
+    id        String    @id @default(uuid())
     userId    String
-    creator   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    creator   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
     title     String
     content   String
-    slug      String?  @unique
-    createdAt DateTime @default(now())
+    slug      String?   @unique
+    createdAt DateTime  @default(now())
     statusId  String
-    status    Status   @relation(fields: [statusId], references: [id], onDelete: Cascade)
+    status    Status    @relation(fields: [statusId], references: [id], onDelete: Cascade)
     upvotes   Upvote[]
+    comments  Comment[]
 }
 
 model Upvote {
@@ -87,4 +89,17 @@ model Upvote {
     post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
     @@id([userId, postId])
+}
+
+model Comment {
+    id        String    @id @default(uuid())
+    text      String    @db.VarChar(140)
+    createdAt DateTime  @default(now())
+    userId    String
+    creator   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    post      Post      @relation(fields: [postId], references: [id])
+    postId    String
+    replyToId String?
+    replyTo   Comment?  @relation("ReplyTo", fields: [replyToId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    replies   Comment[] @relation("ReplyTo")
 }
