@@ -7,6 +7,7 @@ import { PostFormInputs } from "./constants";
 import { formSchema as CreatePost } from "./constants";
 import { generateUniqueSlug } from "../utils";
 import { revalidatePath } from "next/cache";
+import { isProjectAdmin, isSuperuser } from "../permissions";
 
 export async function createPost(categoryId: string, values: PostFormInputs) {
     const session = await getUserSession();
@@ -61,6 +62,135 @@ export async function createPost(categoryId: string, values: PostFormInputs) {
         return {
             success: false,
             message: "Failed to create post.",
+        };
+    }
+}
+
+export async function updatePost(postId: string, values: PostFormInputs) {
+    const session = await getUserSession();
+    if (!session?.user) return redirect("/users/login");
+
+    const validatedFields = CreatePost.safeParse(values);
+    if (!validatedFields.success) {
+        return { success: false, message: "Invalid payload." };
+    }
+
+    const { title, content } = validatedFields.data;
+    try {
+        const existingPost = await prisma.post.findUnique({
+            where: {
+                id: postId,
+            },
+            include: {
+                status: {
+                    select: {
+                        category: {
+                            select: {
+                                projectId: true,
+                            },
+                        },
+                    },
+                },
+            },
+        });
+
+        if (!existingPost) {
+            return { success: false, message: "Post not found." };
+        }
+
+        const { projectId } = existingPost.status.category;
+
+        const isAuthorized =
+            (await isSuperuser()) ||
+            (await isProjectAdmin(projectId)) ||
+            existingPost.userId === session.user.id;
+
+        if (!isAuthorized) {
+            return { success: false, message: "Access denied." };
+        }
+
+        const titleChanged = existingPost.title !== title;
+        const data = {
+            title,
+            content,
+            slug: titleChanged
+                ? await generateUniqueSlug("post", title)
+                : undefined,
+        };
+
+        const updatedPost = await prisma.post.update({
+            where: { id: postId },
+            data,
+        });
+
+        return {
+            success: true,
+            message: "Post updated successfully.",
+            post: updatedPost,
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            success: false,
+            message: "Failed to update post.",
+        };
+    }
+}
+
+export async function deletePost(postId: string) {
+    const session = await getUserSession();
+    if (!session?.user) return redirect("/users/login");
+
+    const existingPost = await prisma.post.findUnique({
+        where: {
+            id: postId,
+        },
+        include: {
+            status: {
+                select: {
+                    category: {
+                        select: {
+                            projectId: true,
+                        },
+                    },
+                },
+            },
+        },
+    });
+
+    if (!existingPost) {
+        return {
+            success: false,
+            message: "Post not found.",
+        };
+    }
+
+    const { projectId } = existingPost.status.category;
+
+    const isAuthorized =
+        (await isSuperuser()) ||
+        (await isProjectAdmin(projectId)) ||
+        existingPost.userId === session.user.id;
+
+    if (!isAuthorized) {
+        return { success: false, message: "Access denied." };
+    }
+
+    try {
+        const deletedPost = await prisma.post.delete({
+            where: {
+                id: postId,
+            },
+        });
+        return {
+            success: true,
+            message: "Post deleted successfully.",
+            category: deletedPost,
+        };
+    } catch (error) {
+        return {
+            success: false,
+            message: "Failed to delete Post.",
         };
     }
 }
@@ -120,7 +250,6 @@ export async function votePost(postId: string) {
                 message: "Post upvoted",
             };
         }
-        rev;
     } catch (error) {
         return {
             success: false,
