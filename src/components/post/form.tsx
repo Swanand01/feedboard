@@ -53,7 +53,6 @@ export default function PostForm({
         let res;
         if (edit && post) {
             res = await updatePost(post.id, values);
-            router.replace(`${boardUrl}/${res.post?.slug}`);
         } else {
             res = await createPost(categoryId, values);
         }
@@ -61,6 +60,7 @@ export default function PostForm({
         if (!res) return;
         if (res.success) {
             toast({ title: edit ? "Post updated!" : "Post created!" });
+            router.replace(`${boardUrl}/${res.post?.slug}`);
             form.reset();
         } else {
             toast({ title: res.message });
