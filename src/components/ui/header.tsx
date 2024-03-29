@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
 import { getUserSession } from "@/auth";
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "./button";
@@ -11,7 +10,7 @@ export default async function Header({ className }: { className?: string }) {
     return (
         <nav
             className={cn(
-                "flex justify-between border-b-[1px] align-middle",
+                "flex justify-between border-b align-middle",
                 className,
             )}
         >
