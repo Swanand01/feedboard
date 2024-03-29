@@ -21,6 +21,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                 edit={true}
                 project={project}
                 initialCategories={categories}
+                className="lg:w-1/2"
             />
             <div className="flex w-full flex-1 flex-col gap-8 md:w-96">
                 <ProjectAdminsForm projectId={project.id} />
