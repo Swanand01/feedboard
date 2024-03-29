@@ -5,6 +5,8 @@ import PostCard from "@/components/project/post-card";
 import { getPost } from "@/lib/post/data";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import PostActions from "@/components/post/post-actions";
+import { getUserSession } from "@/auth";
+import { isProjectAdmin, isSuperuser } from "@/lib/permissions";
 
 export default async function Page({
     params,
@@ -12,11 +14,18 @@ export default async function Page({
     params: { slug: string; boardSlug: string; postSlug: string };
 }) {
     const { slug: projectSlug, boardSlug, postSlug } = params;
+    const session = await getUserSession();
     const post = await getPost(postSlug);
 
     if (!post) {
         notFound();
     }
+
+    const isAuthorized =
+        session?.user &&
+        ((await isSuperuser()) ||
+            (await isProjectAdmin(post.status.category.projectId)) ||
+            post.userId === session?.user.id);
 
     const boardUrl = `/project/${projectSlug}/${boardSlug}/`;
     const postUrl = `/project/${projectSlug}/${boardSlug}/${postSlug}`;
@@ -30,11 +39,13 @@ export default async function Page({
                     </Link>
                     <h3 className="text-2xl">View Post</h3>
                 </div>
-                <PostActions
-                    postId={post.id}
-                    postUrl={postUrl}
-                    boardUrl={boardUrl}
-                />
+                {isAuthorized && (
+                    <PostActions
+                        postId={post.id}
+                        postUrl={postUrl}
+                        boardUrl={boardUrl}
+                    />
+                )}
             </div>
             <div className="flex flex-wrap gap-8">
                 <PostCard post={post} baseLink="" linkInTitle={false} />

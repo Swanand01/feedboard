@@ -105,7 +105,10 @@ export async function getPost(postSlug: string) {
             status: {
                 include: {
                     category: {
-                        select: { title: true },
+                        select: {
+                            title: true,
+                            projectId: true,
+                        },
                     },
                 },
             },
