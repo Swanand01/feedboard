@@ -19,19 +19,23 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
-import { createPost } from "@/lib/post/actions";
+import { createPost, updatePost } from "@/lib/post/actions";
+import { useRouter } from "next/navigation";
 
 export default function PostForm({
     categoryId,
     edit = false,
     post,
     className,
+    boardUrl,
 }: {
     categoryId: string;
     edit?: Boolean;
     post?: Post;
     className?: string;
+    boardUrl: string;
 }) {
+    const router = useRouter();
     const { toast } = useToast();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -46,20 +50,27 @@ export default function PostForm({
 
     const onSubmit = async (values: PostFormInputs) => {
         setIsSubmitting(true);
-        const res = await createPost(categoryId, values);
-        if (res) {
-            if (res.success) {
-                toast({ title: "Post created!" });
-                form.reset();
-            } else {
-                toast({ title: res.message });
-            }
+        let res;
+        if (edit && post) {
+            res = await updatePost(post.id, values);
+            router.replace(`${boardUrl}/${res.post?.slug}`);
+        } else {
+            res = await createPost(categoryId, values);
         }
+
+        if (!res) return;
+        if (res.success) {
+            toast({ title: edit ? "Post updated!" : "Post created!" });
+            form.reset();
+        } else {
+            toast({ title: res.message });
+        }
+
         setIsSubmitting(false);
     };
 
     return (
-        <Card className={cn("h-fit w-full lg:max-w-96", className)}>
+        <Card className={cn("h-fit w-full", !edit && "lg:max-w-96", className)}>
             <CardHeader>
                 <CardTitle>Create a Post</CardTitle>
             </CardHeader>
