@@ -41,6 +41,9 @@ export type Comment = PrismaComment &
         Prisma.CommentGetPayload<{
             include: {
                 creator: true;
+                _count: {
+                    select: { replies: true };
+                };
             };
         }>
     >;
