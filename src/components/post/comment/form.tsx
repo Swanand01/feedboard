@@ -15,8 +15,17 @@ import { Input } from "@/components/ui/input";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import { createComment } from "@/lib/post/comment/actions";
 import { useToast } from "@/components/ui/use-toast";
+import { cn } from "@/lib/utils";
 
-export default function CommentForm({ postId }: { postId: string }) {
+export default function CommentForm({
+    postId,
+    replyToId,
+    className,
+}: {
+    postId: string;
+    replyToId?: string;
+    className?: string;
+}) {
     const { toast } = useToast();
     const formDefaultValues = {
         text: "",
@@ -27,8 +36,12 @@ export default function CommentForm({ postId }: { postId: string }) {
     });
 
     const onSubmit = async (values: CommentFormInputs) => {
-        const res = await createComment(postId, values);
-        if (res && !res.success) {
+        const res = await createComment(postId, replyToId, values);
+        if (!res) return;
+        if (res.success) {
+            toast({ title: "Your comment was posted!" });
+            form.reset();
+        } else {
             toast({ title: res.message });
         }
     };
@@ -37,7 +50,7 @@ export default function CommentForm({ postId }: { postId: string }) {
         <Form {...form}>
             <form
                 onSubmit={form.handleSubmit(onSubmit)}
-                className="flex gap-x-3"
+                className={cn("flex gap-x-3", className)}
             >
                 <FormField
                     control={form.control}
