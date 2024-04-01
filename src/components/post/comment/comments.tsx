@@ -2,7 +2,13 @@ import { getComments } from "@/lib/post/comment/data";
 import PostComment from "./comment";
 import CommentForm from "./form";
 
-export default async function Comments({ postId }: { postId: string }) {
+export default async function Comments({
+    postId,
+    hasPostPermissions,
+}: {
+    postId: string;
+    hasPostPermissions: boolean;
+}) {
     const comments = await getComments(postId);
     return (
         <div className="mt-4 flex w-full flex-col gap-y-4">
@@ -14,11 +20,9 @@ export default async function Comments({ postId }: { postId: string }) {
                     .map((comment) => (
                         <PostComment
                             key={comment.id}
-                            commentId={comment.id}
-                            username={comment.creator?.username || "none"}
-                            createdAt={comment.createdAt}
-                            text={comment.text}
-                            replyCount={comment._count.replies}
+                            postId={postId}
+                            comment={comment}
+                            hasPostPermissions={hasPostPermissions}
                         />
                     ))}
             </div>

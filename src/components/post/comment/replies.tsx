@@ -4,7 +4,15 @@ import { useState, useEffect } from "react";
 import { getReplies } from "@/lib/post/comment/data";
 import PostComment from "./comment";
 
-export default function Replies({ commentId }: { commentId: string }) {
+export default function Replies({
+    commentId,
+    postId,
+    hasPostPermissions,
+}: {
+    commentId: string;
+    postId: string;
+    hasPostPermissions: boolean;
+}) {
     const [replies, setReplies] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -25,12 +33,10 @@ export default function Replies({ commentId }: { commentId: string }) {
     return replies.map((reply) => (
         <PostComment
             key={reply.id}
-            commentId={reply.id}
-            username={reply.creator?.username || "none"}
-            createdAt={reply.createdAt}
-            text={reply.text}
+            postId={postId}
+            comment={reply}
+            hasPostPermissions={hasPostPermissions}
             className="md:ml-10"
-            replyCount={reply._count.replies}
         />
     ));
 }
