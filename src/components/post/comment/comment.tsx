@@ -11,53 +11,85 @@ import {
 } from "@/components/ui/card";
 import Replies from "./replies";
 import { Button } from "@/components/ui/button";
+import ReplyForm from "./form";
+import CommentActions from "./comment-actions";
+import { useSession } from "next-auth/react";
+import { Comment as PrismaComment } from "@/lib/types";
 
 export default function Comment({
-    commentId,
-    username,
-    createdAt,
-    text,
+    postId,
+    comment,
     className,
-    replyCount,
+    hasPostPermissions,
 }: {
-    commentId: string;
-    username: string;
-    createdAt: Date;
-    text: string;
+    postId: string;
+    comment: PrismaComment;
     className?: string;
-    replyCount: number;
+    hasPostPermissions: boolean;
 }) {
     const [showReplies, setShowReplies] = useState(false);
+    const [showReplyForm, setShowReplyForm] = useState(false);
+    const { data: session } = useSession();
+    const isAuthor = session?.user.id === comment.userId;
+    const replyCount = comment._count?.replies || 0;
 
     const toggleReplies = () => {
         setShowReplies(!showReplies);
+    };
+
+    const toggleReplyForm = () => {
+        setShowReplyForm(!showReplyForm);
     };
 
     return (
         <div className={className}>
             <Card className="mt-3">
                 <CardHeader className="p-4 pb-3">
-                    <CardTitle>{username}</CardTitle>
-                    <CardDescription>
-                        {getReadableTime(createdAt)}
-                    </CardDescription>
+                    <div className="flex justify-between">
+                        <div>
+                            <CardTitle>{comment.creator?.username}</CardTitle>
+                            <CardDescription>
+                                {getReadableTime(comment.createdAt)}
+                            </CardDescription>
+                        </div>
+                        {(hasPostPermissions || isAuthor) && (
+                            <CommentActions commentId={comment.id} />
+                        )}
+                    </div>
                 </CardHeader>
                 <CardContent className="space-y-3 p-4 pt-0">
-                    <p>{text}</p>
-                    {replyCount !== 0 && (
-                        <Button
-                            variant={"secondary"}
-                            onClick={toggleReplies}
-                            className=""
-                        >
-                            {showReplies
-                                ? "Hide Replies"
-                                : `Show ${replyCount} Replies`}
+                    <p>{comment.text}</p>
+                    <div className="flex gap-3">
+                        <Button variant={"secondary"} onClick={toggleReplyForm}>
+                            Reply
                         </Button>
-                    )}
+                        {replyCount !== 0 && (
+                            <Button
+                                variant={"secondary"}
+                                onClick={toggleReplies}
+                            >
+                                {showReplies
+                                    ? "Hide Replies"
+                                    : `Show ${replyCount} Replies`}
+                            </Button>
+                        )}
+                    </div>
                 </CardContent>
             </Card>
-            {showReplies && <Replies commentId={commentId} />}
+            {showReplyForm && (
+                <ReplyForm
+                    postId={postId}
+                    replyToId={comment.id}
+                    className="mt-3"
+                />
+            )}
+            {showReplies && (
+                <Replies
+                    commentId={comment.id}
+                    postId={postId}
+                    hasPostPermissions={hasPostPermissions}
+                />
+            )}
         </div>
     );
 }
