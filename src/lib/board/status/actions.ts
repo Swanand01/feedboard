@@ -183,7 +183,7 @@ export async function deleteStatus(statusId: string) {
         return {
             success: true,
             message: "Status deleted successfully.",
-            category: deletedStatus,
+            status: deletedStatus,
         };
     } catch (error) {
         return {
