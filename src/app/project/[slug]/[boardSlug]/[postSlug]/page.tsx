@@ -21,11 +21,13 @@ export default async function Page({
         notFound();
     }
 
-    const isAuthorized =
-        session?.user &&
-        ((await isSuperuser()) ||
-            (await isProjectAdmin(post.status.category.projectId)) ||
-            post.userId === session?.user.id);
+    const isLoggedIn = session?.user;
+    const hasPostPermissions =
+        (await isSuperuser()) ||
+        (await isProjectAdmin(post.status.category.projectId)) ||
+        post.userId === session?.user.id;
+
+    const isAuthorized = Boolean(isLoggedIn && hasPostPermissions);
 
     const boardUrl = `/project/${projectSlug}/${boardSlug}/`;
     const postUrl = `/project/${projectSlug}/${boardSlug}/${postSlug}`;
@@ -49,7 +51,10 @@ export default async function Page({
             </div>
             <div className="flex flex-wrap gap-8">
                 <PostCard post={post} baseLink="" linkInTitle={false} />
-                <Comments postId={post.id} />
+                <Comments
+                    postId={post.id}
+                    hasPostPermissions={hasPostPermissions}
+                />
             </div>
         </div>
     );

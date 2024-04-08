@@ -230,7 +230,6 @@ export async function deleteProjectAdmin(projectAdminId: string) {
 }
 
 export async function deleteProject(projectId: string) {
-    const session = await getUserSession();
     if (!(await isSuperuser())) {
         return {
             success: false,
