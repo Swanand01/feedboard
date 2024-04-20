@@ -5,7 +5,7 @@ import { getUserSession } from "@/auth";
 import { redirect } from "next/navigation";
 import { CommentFormInputs, formSchema as CreateComment } from "./constants";
 import { revalidatePath } from "next/cache";
-import { isProjectAdmin, isSuperuser } from "@/lib/permissions";
+import { isProjectAdmin, isProjectOwner, isSuperuser } from "@/lib/permissions";
 
 export async function createComment(
     postId: string,
@@ -82,11 +82,12 @@ export async function deleteComment(commentId: string) {
         };
     }
 
+    const projectId = existingComment.post.status.category.projectId;
+
     const isAuthorized =
         (await isSuperuser()) ||
-        (await isProjectAdmin(
-            existingComment.post.status.category.projectId,
-        )) ||
+        (await isProjectOwner(projectId)) ||
+        (await isProjectAdmin(projectId)) ||
         session.user.id === existingComment.userId;
 
     if (!isAuthorized) {

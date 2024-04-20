@@ -6,7 +6,7 @@ import { getPost } from "@/lib/post/data";
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import PostActions from "@/components/post/post-actions";
 import { getUserSession } from "@/auth";
-import { isProjectAdmin, isSuperuser } from "@/lib/permissions";
+import { isProjectAdmin, isProjectOwner, isSuperuser } from "@/lib/permissions";
 
 export default async function Page({
     params,
@@ -24,6 +24,7 @@ export default async function Page({
     const isLoggedIn = session?.user;
     const hasPostPermissions =
         (await isSuperuser()) ||
+        (await isProjectOwner(post.status.category.projectId)) ||
         (await isProjectAdmin(post.status.category.projectId)) ||
         post.userId === session?.user.id;
 

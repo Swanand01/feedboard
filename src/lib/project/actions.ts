@@ -7,7 +7,7 @@ import { ProjectFormInputs } from "@/lib/project/constants";
 import { CategoryFormField, formSchema as CreateProject } from "./constants";
 import { generateUniqueSlug } from "@/lib/utils";
 import { createCategory, updateCategory } from "../board/actions";
-import { isSuperuser } from "../permissions";
+import { isProjectOwner, isSuperuser } from "../permissions";
 
 async function createOrUpdateProjectCategory(
     projectId: string,
@@ -88,7 +88,7 @@ export async function updateProject(
     projectId: string,
     values: ProjectFormInputs,
 ) {
-    if (!(await isSuperuser())) {
+    if (!((await isSuperuser()) || (await isProjectOwner(projectId)))) {
         return {
             success: false,
             message: "Access denied. You are not a superuser.",
@@ -175,7 +175,7 @@ export async function updateProject(
 }
 
 export async function createProjectAdmin(userId: string, projectId: string) {
-    if (!(await isSuperuser())) {
+    if (!((await isSuperuser()) || (await isProjectOwner(projectId)))) {
         return {
             success: false,
             message: "Access denied. You are not a superuser.",
@@ -204,7 +204,22 @@ export async function createProjectAdmin(userId: string, projectId: string) {
 }
 
 export async function deleteProjectAdmin(projectAdminId: string) {
-    if (!(await isSuperuser())) {
+    const existingProjectAdmin = await prisma.projectAdmin.findUnique({
+        where: { id: projectAdminId },
+    });
+    if (!existingProjectAdmin) {
+        return {
+            success: false,
+            message: "ProjectAdmin not found.",
+        };
+    }
+
+    if (
+        !(
+            (await isSuperuser()) ||
+            (await isProjectOwner(existingProjectAdmin.projectId))
+        )
+    ) {
         return {
             success: false,
             message: "Access denied. You are not a superuser.",
@@ -230,7 +245,7 @@ export async function deleteProjectAdmin(projectAdminId: string) {
 }
 
 export async function deleteProject(projectId: string) {
-    if (!(await isSuperuser())) {
+    if (!((await isSuperuser()) || (await isProjectOwner(projectId)))) {
         return {
             success: false,
             message: "Access denied. You are not a superuser.",
