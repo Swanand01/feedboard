@@ -123,6 +123,7 @@ export async function updateCategory(categoryId: string, title: string) {
 export async function deleteCategory(categoryId: string) {
     const existingCategory = await prisma.category.findUnique({
         where: { id: categoryId },
+        select: { projectId: true },
     });
     if (!existingCategory) {
         return {
