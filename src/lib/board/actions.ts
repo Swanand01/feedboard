@@ -3,7 +3,7 @@
 import prisma from "@/lib/prisma";
 import { generateUniqueSlug } from "../utils";
 import { statusesData } from "../project/constants";
-import { isProjectAdmin, isSuperuser } from "../permissions";
+import { isProjectAdmin, isProjectOwner, isSuperuser } from "../permissions";
 import { revalidatePath } from "next/cache";
 
 export async function createCategory(
@@ -11,7 +11,13 @@ export async function createCategory(
     title: string,
     useDefaultStatuses: boolean,
 ) {
-    if (!((await isSuperuser()) || (await isProjectAdmin(projectId)))) {
+    if (
+        !(
+            (await isSuperuser()) ||
+            (await isProjectOwner(projectId)) ||
+            (await isProjectAdmin(projectId))
+        )
+    ) {
         return {
             success: false,
             message: "Access denied.",
@@ -76,6 +82,7 @@ export async function updateCategory(categoryId: string, title: string) {
         if (
             !(
                 (await isSuperuser()) ||
+                (await isProjectOwner(existingCategory.projectId)) ||
                 (await isProjectAdmin(existingCategory.projectId))
             )
         ) {
@@ -114,7 +121,23 @@ export async function updateCategory(categoryId: string, title: string) {
 }
 
 export async function deleteCategory(categoryId: string) {
-    if (!(await isSuperuser())) {
+    const existingCategory = await prisma.category.findUnique({
+        where: { id: categoryId },
+        select: { projectId: true },
+    });
+    if (!existingCategory) {
+        return {
+            success: false,
+            message: "Category not found.",
+        };
+    }
+
+    if (
+        !(
+            (await isSuperuser()) ||
+            (await isProjectOwner(existingCategory.projectId))
+        )
+    ) {
         return {
             success: false,
             message: "Access denied.",
