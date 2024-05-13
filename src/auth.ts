@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import prisma from "@/lib/prisma";
 import { User } from "@prisma/client";
 import { NextAuthOptions } from "next-auth";
@@ -18,6 +17,9 @@ export const authOptions: NextAuthOptions = {
         GoogleProvider({
             clientId: process.env.GOOGLE_CLIENT_ID as string,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+            httpOptions: {
+                timeout: 10000,
+            },
             async profile(profile) {
                 const user: User = await prisma.user.findUnique({
                     where: {
