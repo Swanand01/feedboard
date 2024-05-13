@@ -7,7 +7,7 @@ import { PostFormInputs } from "./constants";
 import { formSchema as CreatePost } from "./constants";
 import { generateUniqueSlug } from "../utils";
 import { revalidatePath } from "next/cache";
-import { isProjectAdmin, isSuperuser } from "../permissions";
+import { isProjectAdmin, isProjectOwner, isSuperuser } from "../permissions";
 
 export async function createPost(categoryId: string, values: PostFormInputs) {
     const session = await getUserSession();
@@ -102,6 +102,7 @@ export async function updatePost(postId: string, values: PostFormInputs) {
 
         const isAuthorized =
             (await isSuperuser()) ||
+            (await isProjectOwner(projectId)) ||
             (await isProjectAdmin(projectId)) ||
             existingPost.userId === session.user.id;
 
@@ -169,6 +170,7 @@ export async function deletePost(postId: string) {
 
     const isAuthorized =
         (await isSuperuser()) ||
+        (await isProjectOwner(projectId)) ||
         (await isProjectAdmin(projectId)) ||
         existingPost.userId === session.user.id;
 

@@ -4,8 +4,7 @@ import prisma from "@/lib/prisma";
 import { StatusFormInputs, formSchema as CreateStatus } from "./constants";
 import { generateUniqueSlug } from "@/lib/utils";
 import { StatusFormField } from "../constants";
-import { isProjectAdmin, isSuperuser } from "@/lib/permissions";
-import { revalidatePath } from "next/cache";
+import { isProjectAdmin, isProjectOwner, isSuperuser } from "@/lib/permissions";
 
 export async function createStatus(
     values: StatusFormInputs,
@@ -24,7 +23,11 @@ export async function createStatus(
     }
 
     if (
-        !((await isSuperuser()) || (await isProjectAdmin(category.projectId)))
+        !(
+            (await isSuperuser()) ||
+            (await isProjectAdmin(category.projectId)) ||
+            (await isProjectOwner(category.projectId))
+        )
     ) {
         return {
             success: false,
@@ -75,6 +78,7 @@ export async function updateStatus(values: StatusFormInputs, statusId: string) {
     if (
         !(
             (await isSuperuser()) ||
+            (await isProjectOwner(existingStatus.category.projectId)) ||
             (await isProjectAdmin(existingStatus.category.projectId))
         )
     ) {
@@ -142,6 +146,7 @@ export async function deleteStatus(statusId: string) {
     if (
         !(
             (await isSuperuser()) ||
+            (await isProjectOwner(existingStatus.category.projectId)) ||
             (await isProjectAdmin(existingStatus.category.projectId))
         )
     ) {

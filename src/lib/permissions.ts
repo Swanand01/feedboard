@@ -21,3 +21,18 @@ export async function isProjectAdmin(projectId: string) {
     }
     return false;
 }
+
+export async function isProjectOwner(projectId: string) {
+    const session = await getUserSession();
+    if (session?.user) {
+        const project = await prisma.project.findUnique({
+            where: { id: projectId },
+            select: {
+                owner: { select: { id: true } },
+            },
+        });
+        const isOwner = session.user.id === project?.owner.id;
+        return !!isOwner;
+    }
+    return false;
+}
