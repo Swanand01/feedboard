@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import EditBoardForm from "@/components/board/form";
 import DefaultStatusForm from "@/components/board/edit/default-status-form";
 import DeleteBoardForm from "@/components/board/edit/delete-board-form";
+import { isProjectAdmin, isProjectOwner, isSuperuser } from "@/lib/permissions";
 
 export default async function Page({
     params,
@@ -14,6 +15,18 @@ export default async function Page({
     if (!category) {
         notFound();
     }
+
+    const userIsSuperuser = await isSuperuser();
+    const userIsProjectOwner = await isProjectOwner(category.projectId);
+    const userIsProjectAdmin = await isProjectAdmin(category.projectId);
+
+    const hasPagePermissions =
+        userIsSuperuser || userIsProjectOwner || userIsProjectAdmin;
+    if (!hasPagePermissions) {
+        notFound();
+    }
+
+    const hasDeletePermissions = userIsSuperuser || userIsProjectOwner;
 
     const statuses = category.statuses.map((status) => {
         return { ...status, statusId: status.id };
@@ -28,10 +41,12 @@ export default async function Page({
             />
             <div className="flex w-full flex-1 flex-col gap-8 md:w-96">
                 <DefaultStatusForm statuses={statuses} />
-                <DeleteBoardForm
-                    categoryId={category.id}
-                    projectSlug={category.project?.slug || ""}
-                />
+                {hasDeletePermissions && (
+                    <DeleteBoardForm
+                        categoryId={category.id}
+                        projectSlug={category.project?.slug || ""}
+                    />
+                )}
             </div>
         </div>
     );
