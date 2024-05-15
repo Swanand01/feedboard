@@ -3,18 +3,25 @@ import { getProject } from "@/lib/project/data";
 import EditProjectForm from "@/components/project/form";
 import ProjectAdminsForm from "@/components/project/edit/project-admins-form";
 import DeleteProjectForm from "@/components/project/edit/delete-project-form";
+import { isProjectOwner, isSuperuser } from "@/lib/permissions";
 
 export default async function Page({ params }: { params: { slug: string } }) {
     const slug = params.slug;
     const project = await getProject(slug);
-
     if (!project) {
+        notFound();
+    }
+
+    const hasPagePermissions =
+        (await isSuperuser()) || (await isProjectOwner(project.id));
+    if (!hasPagePermissions) {
         notFound();
     }
 
     const categories = project.categories?.map((category) => {
         return { categoryId: category.id, title: category.title };
     });
+
     return (
         <div className="flex flex-wrap gap-8">
             <EditProjectForm
