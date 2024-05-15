@@ -4,14 +4,17 @@ import { ArrowLeftIcon, GearIcon } from "@radix-ui/react-icons";
 import Boards from "@/components/project/boards";
 import Roadmaps from "@/components/project/roadmaps";
 import { notFound } from "next/navigation";
+import { isProjectOwner, isSuperuser } from "@/lib/permissions";
 
 export default async function Page({ params }: { params: { slug: string } }) {
     const slug = params.slug;
     const project = await getProject(slug);
-
     if (!project) {
         notFound();
     }
+
+    const hasPagePermissions =
+        (await isSuperuser()) || (await isProjectOwner(project.id));
 
     const categories = project.categories;
 
@@ -23,9 +26,11 @@ export default async function Page({ params }: { params: { slug: string } }) {
                         <ArrowLeftIcon width={28} height={28} />
                     </Link>
                     <h3 className="text-2xl">{project.title}</h3>
-                    <Link href={`/project/${slug}/edit/`}>
-                        <GearIcon width={24} height={24} />
-                    </Link>
+                    {hasPagePermissions && (
+                        <Link href={`/project/${slug}/edit/`}>
+                            <GearIcon width={24} height={24} />
+                        </Link>
+                    )}
                 </div>
                 <p>{project.description}</p>
             </div>
