@@ -26,6 +26,7 @@ export default function CategoryFormFields({
     handleRemoveCategory,
 }: CategoryFieldsProps) {
     return categories.map((category, index) => {
+        const categoryData = category as unknown as CategoryFormField;
         return (
             <FormField
                 key={category.id}
@@ -40,10 +41,10 @@ export default function CategoryFormFields({
                                     <Input
                                         placeholder={`Category ${index + 1}`}
                                         {...register(
-                                            `categories.${index}.title` as const
+                                            `categories.${index}.title` as const,
                                         )}
                                     />
-                                    {category.categoryId === "" ? (
+                                    {categoryData.categoryId === "" ? (
                                         <Button
                                             type="button"
                                             variant={"destructive"}
