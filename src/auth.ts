@@ -21,6 +21,7 @@ export const authOptions: NextAuthOptions = {
                 timeout: 10000,
             },
             async profile(profile) {
+                // @ts-ignore
                 const user: User = await prisma.user.findUnique({
                     where: {
                         email: profile.email,

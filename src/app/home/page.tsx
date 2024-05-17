@@ -3,9 +3,10 @@ import { Button } from "@/components/ui/button";
 import ProjectCard from "@/components/home/project-card";
 import { getProjects } from "@/lib/home/data";
 import { isSuperuser } from "@/lib/permissions";
+import { Project } from "@prisma/client";
 
 export default async function Page() {
-    const projects = await getProjects();
+    const projects: Project[] = await getProjects();
 
     return (
         <div className="flex flex-col gap-8">
