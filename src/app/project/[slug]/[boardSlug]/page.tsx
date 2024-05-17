@@ -63,6 +63,7 @@ export default async function Page({
                 <CreatePostForm
                     categoryId={category.id}
                     className="order-1 lg:sticky lg:top-8"
+                    boardUrl={`/project/${projectSlug}/${category.slug}`}
                 />
             </div>
         </div>

@@ -26,6 +26,7 @@ export default function StatusFormFields({
     handleRemoveStatus,
 }: StatusFieldsProps) {
     return statuses.map((status, index) => {
+        const statusData = status as unknown as StatusFormField;
         return (
             <FormField
                 key={status.id}
@@ -36,7 +37,7 @@ export default function StatusFormFields({
                         <FormItem className="w-full">
                             <FormLabel>
                                 Status {index + 1}
-                                {status.isDefault && " - Default"}
+                                {statusData.isDefault && " - Default"}
                             </FormLabel>
                             <FormControl>
                                 <div className="flex gap-4">
@@ -53,8 +54,8 @@ export default function StatusFormFields({
                                         )}
                                         className="w-20 px-1"
                                     />
-                                    {!status.isDefault &&
-                                        (status.statusId === "" ? (
+                                    {!statusData.isDefault &&
+                                        (statusData.statusId === "" ? (
                                             <Button
                                                 type="button"
                                                 variant={"destructive"}
