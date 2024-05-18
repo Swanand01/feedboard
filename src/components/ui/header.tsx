@@ -3,6 +3,7 @@ import { getUserSession } from "@/auth";
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "./button";
 import { cn } from "@/lib/utils";
+import { LogoutButton, ProfileDropdown } from "./profile-dropdown";
 
 export default async function Header({ className }: { className?: string }) {
     const session = await getUserSession();
@@ -19,7 +20,13 @@ export default async function Header({ className }: { className?: string }) {
             </Link>
             <div className="flex items-center gap-4">
                 {session?.user ? (
-                    <h3>{session.user.username}</h3>
+                    <ProfileDropdown
+                        trigger={
+                            <Button variant={"outline"}>
+                                {session.user.username}
+                            </Button>
+                        }
+                    />
                 ) : (
                     <Button>
                         <Link href="/users/login">Login</Link>

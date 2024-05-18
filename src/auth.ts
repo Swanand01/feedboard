@@ -21,12 +21,21 @@ export const authOptions: NextAuthOptions = {
                 timeout: 10000,
             },
             async profile(profile) {
-                // @ts-ignore
-                const user: User = await prisma.user.findUnique({
+                const user = await prisma.user.findUnique({
                     where: {
                         email: profile.email,
                     },
                 });
+
+                if (!user) {
+                    const user = await prisma.user.create({
+                        data: {
+                            username: profile.name,
+                            email: profile.email,
+                        },
+                    });
+                    return user;
+                }
                 return {
                     id: user.id,
                     username: user.username,
