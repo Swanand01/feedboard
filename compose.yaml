@@ -5,6 +5,8 @@ services:
             POSTGRES_PASSWORD: postgres
         ports:
             - "5432:5432"
+        volumes:
+            - postgres:/var/lib/postgres
     app:
         build:
             context: .
@@ -23,5 +25,11 @@ services:
                       - node_modules/
                 - action: rebuild
                   path: package.json
+        volumes:
+            - ./src:/app/src
+            - /app/node_modules
+            - /app/.next
         depends_on:
             - db
+volumes:
+    postgres: {}
