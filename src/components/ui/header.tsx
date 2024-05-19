@@ -16,7 +16,7 @@ export default async function Header({ className }: { className?: string }) {
             )}
         >
             <Link href={"/home"} className="text-2xl">
-                Feedboard
+                {process.env.INSTANCE_TITLE || "Feedboard"}
             </Link>
             <div className="flex items-center gap-4">
                 {session?.user ? (
