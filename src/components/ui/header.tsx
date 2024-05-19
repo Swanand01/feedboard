@@ -3,7 +3,7 @@ import { getUserSession } from "@/auth";
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "./button";
 import { cn } from "@/lib/utils";
-import { LogoutButton, ProfileDropdown } from "./profile-dropdown";
+import { ProfileDropdown } from "./profile-dropdown";
 
 export default async function Header({ className }: { className?: string }) {
     const session = await getUserSession();
