@@ -19,16 +19,18 @@ export default async function Page() {
                 )}
             </div>
             <div className="flex flex-wrap gap-8">
-                {projects.map((project) => {
-                    return (
-                        <ProjectCard
-                            key={project.id}
-                            title={project.title}
-                            slug={project?.slug || ""}
-                            description={project.description}
-                        />
-                    );
-                })}
+                {projects.length === 0
+                    ? "No projects found."
+                    : projects.map((project) => {
+                          return (
+                              <ProjectCard
+                                  key={project.id}
+                                  title={project.title}
+                                  slug={project?.slug || ""}
+                                  description={project.description}
+                              />
+                          );
+                      })}
             </div>
         </div>
     );
