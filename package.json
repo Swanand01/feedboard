@@ -6,7 +6,11 @@
         "dev": "next dev",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "prisma:generate": "npx prisma generate",
+        "prisma:migrate:dev": "npx prisma migrate dev --name init",
+        "prisma:migrate:deploy": "npx prisma migrate deploy",
+        "create-superuser": "tsc src/lib/createSuperuser.ts && node src/lib/createSuperuser.js"
     },
     "dependencies": {
         "@hookform/resolvers": "^3.3.3",
