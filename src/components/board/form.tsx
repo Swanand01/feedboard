@@ -101,22 +101,27 @@ export default function BoardForm({
         if (!edit) {
             statuses[0].isDefault = true;
         }
-        const results = await Promise.all(
-            statuses.map(async (status) => {
-                const { success, message } = await createOrUpdateStatus(
-                    status,
-                    categoryId,
-                );
-                if (!success) {
-                    return { success: false, message };
-                }
-            }),
-        );
-        return results;
+
+        for (const status of statuses) {
+            const { success } = await createOrUpdateStatus(status, categoryId);
+
+            if (!success) {
+                return {
+                    success: false,
+                    message: "Failed to create or update statuses.",
+                };
+            }
+        }
+
+        return {
+            success: true,
+            message: "Statuses created or updated successfully.",
+        };
     };
 
     const onSubmit = async (values: CategoryFormInputs) => {
         let result;
+        let submitSuccess = false;
         setIsSubmitting(true);
 
         if (edit && category?.id) {
@@ -125,28 +130,22 @@ export default function BoardForm({
             if (!projectId) return;
             result = await createCategory(projectId, values.title, false);
         }
+        toast({ title: result.message });
 
         if (result.success && result.category?.id) {
-            const statusResults = await handleStatusUpdates(
-                values.statuses,
-                result.category.id,
-            );
-            const failedStatus = statusResults.find(
-                (result) => !result?.success,
-            );
-            if (failedStatus) {
-                return {
-                    success: false,
-                    message: "One or more status creation failed.",
-                };
-            }
+            const { success: statusSuccess, message: statusMessage } =
+                await handleStatusUpdates(values.statuses, result.category.id);
+            toast({ title: statusMessage });
+            submitSuccess = statusSuccess;
         }
 
         setIsSubmitting(false);
-        toast({ title: result.message });
-        router.replace(
-            `/project/${category?.project?.slug}/${result.category?.slug}`,
-        );
+
+        if (submitSuccess) {
+            router.replace(
+                `/project/${category?.project?.slug}/${result.category?.slug}`,
+            );
+        }
     };
 
     return (

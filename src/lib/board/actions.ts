@@ -166,21 +166,21 @@ export async function deleteCategory(categoryId: string) {
 
 export async function createDefaultStatuses(categoryId: string) {
     try {
-        await Promise.all(
-            statusesData.map(async ({ title, colour, isDefault }) => {
-                const uniqueSlug = await generateUniqueSlug("status", title);
+        const createdStatuses = [];
+        for (const { title, colour, isDefault } of statusesData) {
+            const uniqueSlug = await generateUniqueSlug("status", title);
+            const status = await prisma.status.create({
+                data: {
+                    title,
+                    colour,
+                    categoryId,
+                    isDefault,
+                    slug: uniqueSlug,
+                },
+            });
+            createdStatuses.push(status);
+        }
 
-                return prisma.status.create({
-                    data: {
-                        title,
-                        colour,
-                        categoryId,
-                        isDefault,
-                        slug: uniqueSlug,
-                    },
-                });
-            }),
-        );
         return {
             success: true,
             message: "Default statuses created successfully.",
