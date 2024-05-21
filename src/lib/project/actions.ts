@@ -48,27 +48,20 @@ export async function createProject(values: ProjectFormInputs) {
             },
         });
 
-        const categoryResults = await Promise.all(
-            categories.map(async (category) => {
-                const { success, message } =
-                    await createOrUpdateProjectCategory(project.id, category);
-                if (!success) {
-                    return {
-                        success: false,
-                        message,
-                    };
-                }
-            }),
-        );
+        const categoryResults = [];
+        for (const category of categories) {
+            const { success, message } = await createOrUpdateProjectCategory(
+                project.id,
+                category,
+            );
+            categoryResults.push({ success, message });
 
-        const failedCategory = categoryResults.find(
-            (result) => !result?.success,
-        );
-        if (failedCategory) {
-            return {
-                success: false,
-                message: "One or more category creation failed.",
-            };
+            if (!success) {
+                return {
+                    success: false,
+                    message: `Failed to create category: ${message}`,
+                };
+            }
         }
 
         return {
@@ -136,27 +129,20 @@ export async function updateProject(
             },
         });
 
-        const categoryResults = await Promise.all(
-            categories.map(async (category) => {
-                const { success, message } =
-                    await createOrUpdateProjectCategory(project.id, category);
-                if (!success) {
-                    return {
-                        success: false,
-                        message,
-                    };
-                }
-            }),
-        );
+        const categoryResults = [];
+        for (const category of categories) {
+            const { success, message } = await createOrUpdateProjectCategory(
+                project.id,
+                category,
+            );
+            categoryResults.push({ success, message });
 
-        const failedCategory = categoryResults.find(
-            (result) => !result?.success,
-        );
-        if (failedCategory) {
-            return {
-                success: false,
-                message: "One or more category updates failed.",
-            };
+            if (!success) {
+                return {
+                    success: false,
+                    message: `Failed to update category: ${message}`,
+                };
+            }
         }
 
         revalidatePath(`/project/${project.slug}/edit`);
