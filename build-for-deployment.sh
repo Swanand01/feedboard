@@ -17,11 +17,6 @@ npm_run_build() {
     npm run build
 }
 
-npm_run_start() {
-    echo "Running: npm run start"
-    npm run start
-}
-
 npm_run_create_superuser() {
     echo "Running: npm run create-superuser"
     npm run create-superuser
@@ -32,7 +27,6 @@ main() {
     prisma_generate
     npm_run_create_superuser
     npm_run_build
-    npm_run_start
 }
 
 main
