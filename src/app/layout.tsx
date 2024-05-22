@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Header from "@/components/ui/header";
 import { cn } from "@/lib/utils";
 import { getUserSession } from "@/auth";
+import NextTopLoader from "nextjs-toploader";
 import "./globals.css";
 
 export const fontSans = FontSans({
@@ -33,6 +34,7 @@ export default async function RootLayout({
                     fontSans.variable,
                 )}
             >
+                <NextTopLoader showSpinner={false} color="#fafafa" />
                 <SessionProvider session={session}>
                     <ThemeProvider
                         attribute="class"
