@@ -17,7 +17,7 @@ npm_run_build() {
     npm run build
 }
 
-npm_run_build() {
+npm_run_start() {
     echo "Running: npm run start"
     npm run start
 }
