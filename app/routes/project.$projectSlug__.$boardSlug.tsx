@@ -8,6 +8,11 @@ import FilterByStatus from "~/components/board/filter-by-status";
 import { authenticator } from "~/services/auth.server";
 import { getFilteredPosts } from "~/lib/post/data";
 import { getCategory } from "~/lib/board/data";
+import {
+  isProjectAdmin,
+  isProjectOwner,
+  isSuperuser,
+} from "~/lib/permissions.server";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { projectSlug, boardSlug } = params;
@@ -45,8 +50,18 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         title: post.status.title,
         colour: post.status.colour,
       },
+      createdAt: post.createdAt.toString(),
     };
   });
+
+  const userIsSuperuser = user && (await isSuperuser(user));
+  const userIsProjectOwner =
+    user && (await isProjectOwner(user, category.projectId));
+  const userIsProjectAdmin =
+    user && (await isProjectAdmin(user, category.projectId));
+
+  const hasEditPermissions =
+    userIsSuperuser || userIsProjectOwner || userIsProjectAdmin;
 
   return {
     category: {
@@ -59,12 +74,19 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     postsCount,
     status,
     boardBaseLink: `/project/${projectSlug}/${boardSlug}`,
+    hasEditPermissions,
   };
 }
 
 export default function Page() {
-  const { category, posts, postsCount, status, boardBaseLink } =
-    useLoaderData<typeof loader>();
+  const {
+    category,
+    posts,
+    postsCount,
+    status,
+    boardBaseLink,
+    hasEditPermissions,
+  } = useLoaderData<typeof loader>();
   return (
     <div className="flex flex-col gap-8">
       <div className="flex items-center gap-4">
@@ -72,9 +94,11 @@ export default function Page() {
           <ArrowLeftIcon width={28} height={28} />
         </Link>
         <h3 className="text-2xl">{category.title}</h3>
-        <Link to={"settings"}>
-          <GearIcon width={24} height={24} />
-        </Link>
+        {hasEditPermissions && (
+          <Link to={"settings"}>
+            <GearIcon width={24} height={24} />
+          </Link>
+        )}
       </div>
       <div className="flex flex-wrap gap-8">
         <div className="order-2 flex w-full flex-1 flex-col gap-8 lg:order-1">
@@ -89,11 +113,7 @@ export default function Page() {
               className="flex-1"
             />
           </div>
-          <Posts
-            posts={posts}
-            postsCount={postsCount}
-            baseLink={boardBaseLink}
-          />
+          <Posts posts={posts} postsCount={postsCount} />
         </div>
         <CreatePostForm
           categoryId={category.id}
