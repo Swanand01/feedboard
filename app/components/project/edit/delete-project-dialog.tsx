@@ -2,19 +2,22 @@ import ActionDialog from "~/components/ui/action-dialog";
 import { Button } from "~/components/ui/button";
 import { useFetcher } from "@remix-run/react";
 import { useEffect } from "react";
+import { useToast } from "~/components/ui/use-toast";
 
 export default function DeleteProjectDialog({
   projectId,
 }: {
   projectId: string;
 }) {
-  const fetcher = useFetcher();
+  const { toast } = useToast();
+  const fetcher = useFetcher<{ success: boolean; message: string }>();
 
   useEffect(() => {
     if (fetcher.state === "idle" && fetcher.data) {
-      const { success, message } = fetcher.data;
+      const { message } = fetcher.data;
+      toast({ title: message });
     }
-  }, [fetcher.state, fetcher.data]);
+  }, [fetcher.state, fetcher.data, toast]);
 
   function removeProject() {
     fetcher.submit(

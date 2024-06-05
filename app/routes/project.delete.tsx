@@ -8,8 +8,5 @@ export async function action({ request }: ActionFunctionArgs) {
   if (success) {
     return redirect("/");
   }
-  return new Response(null, {
-    status: 500,
-    statusText: message,
-  });
+  return { success, message };
 }
