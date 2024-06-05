@@ -1,7 +1,14 @@
 import { Link } from "@remix-run/react";
 import { Badge } from "../ui/badge";
-import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from "../ui/card";
 import { UpvotePostButton } from "./upvote-post-button";
+import { getReadableTime } from "~/lib/utils";
 
 export interface Post {
   id: string;
@@ -14,12 +21,12 @@ export interface Post {
     title: string;
     colour: string;
   };
+  createdAt: string;
 }
 
 interface PostCardProps {
   post: Post;
   clampContent?: boolean;
-  baseLink?: string;
   showStatus?: boolean;
   linkInTitle?: boolean;
 }
@@ -27,7 +34,6 @@ interface PostCardProps {
 export function PostCard({
   post,
   clampContent,
-  baseLink,
   showStatus,
   linkInTitle = true,
 }: PostCardProps) {
@@ -40,12 +46,9 @@ export function PostCard({
       />
       <div>
         <CardHeader className="p-4">
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
             {linkInTitle ? (
-              <Link
-                to={`${baseLink}/${post.slug}`}
-                className="flex items-center"
-              >
+              <Link to={post.slug} className="flex items-center">
                 <CardTitle className="line-clamp-1 font-semibold hover:opacity-70">
                   {post.title}
                 </CardTitle>
@@ -55,7 +58,9 @@ export function PostCard({
                 {post.title}
               </CardTitle>
             )}
-
+            <CardDescription>
+              {getReadableTime(new Date(post.createdAt))}
+            </CardDescription>
             {showStatus && (
               <Badge
                 variant="outline"
