@@ -135,7 +135,10 @@ export default function BoardForm({
       </CardHeader>
       <CardContent>
         <FormProvider {...form}>
-          <Form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <Form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4 prose"
+          >
             <FormField
               control={form.control}
               name="title"

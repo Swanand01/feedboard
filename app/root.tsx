@@ -35,7 +35,7 @@ export function Document({ children }: { children: React.ReactNode }) {
       </head>
       <body
         className={
-          "bg-background flex min-h-screen flex-col gap-8 font-sans antialiased"
+          "bg-background flex min-h-screen flex-col gap-8 font-sans antialiased w-full"
         }
       >
         <Header

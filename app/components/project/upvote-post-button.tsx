@@ -43,7 +43,12 @@ export function UpvotePostButton({
       method="POST"
     >
       <Input type="hidden" name="postId" value={postId} />
-      <Button type="submit" onClick={handleUpvote} variant="ghost">
+      <Button
+        type="submit"
+        onClick={handleUpvote}
+        variant="ghost"
+        className="px-2"
+      >
         {vote.isUpvoted ? (
           <TriangleUpIcon width={28} height={28} />
         ) : (

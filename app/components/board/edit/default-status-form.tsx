@@ -68,7 +68,7 @@ export default function DefaultStatusForm({
           <fetcher.Form
             action="/status/change-default/"
             method="POST"
-            className={cn("space-y-6", className)}
+            className={cn("space-y-6 prose", className)}
           >
             <FormField
               control={form.control}

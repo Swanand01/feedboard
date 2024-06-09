@@ -16,8 +16,8 @@ export default function Header({ className, user, title }: HeaderProps) {
     <nav
       className={cn("flex justify-between border-b align-middle", className)}
     >
-      <Link to="/" className="text-2xl">
-        {title || "Feedboard"}
+      <Link to="/" className="prose">
+        <h2>{title || "Feedboard"}</h2>
       </Link>
       <div className="flex items-center gap-4">
         {user ? (

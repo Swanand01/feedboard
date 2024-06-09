@@ -1,5 +1,5 @@
 import { Params, UIMatch, useMatches } from "@remix-run/react";
-import { HTMLAttributes } from "react";
+import { Fragment, HTMLAttributes } from "react";
 import { Breadcrumb, BreadcrumbList, BreadcrumbSeparator } from "./breadcrumb";
 
 type BreadcrumbMatch = UIMatch<
@@ -23,10 +23,10 @@ export const Breadcrumbs = ({ ...props }: HTMLAttributes<HTMLElement>) => {
     <Breadcrumb>
       <BreadcrumbList>
         {matches.map(({ handle, data, params, pathname, id }, i) => (
-          <>
+          <Fragment key={id}>
             {i > 0 && <BreadcrumbSeparator />}
             {handle.breadcrumb({ data, params, pathname, id })}
-          </>
+          </Fragment>
         ))}
       </BreadcrumbList>
     </Breadcrumb>

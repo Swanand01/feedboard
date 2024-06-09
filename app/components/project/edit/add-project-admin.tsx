@@ -53,7 +53,7 @@ export function AddProjectAdmin({ projectId }: { projectId: string }) {
         <users.Form
           method="get"
           action="/users"
-          className="flex flex-col gap-4"
+          className="flex flex-col gap-4 prose"
         >
           {selectedUser.id === "" && (
             <>
@@ -110,7 +110,11 @@ export function AddProjectAdmin({ projectId }: { projectId: string }) {
           )}
         </users.Form>
         <DialogFooter>
-          <fetcher.Form action="/project/admins/add" method="POST">
+          <fetcher.Form
+            action="/project/admins/add"
+            method="POST"
+            className="prose"
+          >
             <input type="hidden" name="projectId" value={projectId} />
             <input type="hidden" name="userId" value={selectedUser.id} />
             <Button type="submit" disabled={selectedUser.id === ""}>

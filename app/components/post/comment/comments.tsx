@@ -13,10 +13,10 @@ export default function Comments({
   hasCommentPermissions,
 }: CommentsProps) {
   return (
-    <div className="mt-4 flex w-full flex-col gap-y-4">
+    <div className="flex w-full flex-col gap-y-4 prose">
       <h3 className="text-lg">Comments</h3>
       <CommentForm postId={postId} />
-      <div className="flex flex-col gap-y-3">
+      <div className="flex flex-col gap-y-3 not-prose">
         {comments
           .filter((comment) => !comment.replyToId)
           .map((comment) => (
