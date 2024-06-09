@@ -14,7 +14,7 @@ export default function Comments({
 }: CommentsProps) {
   return (
     <div className="mt-4 flex w-full flex-col gap-y-4">
-      <h3 className="text-xl">Comments</h3>
+      <h3 className="text-lg">Comments</h3>
       <CommentForm postId={postId} />
       <div className="flex flex-col gap-y-3">
         {comments

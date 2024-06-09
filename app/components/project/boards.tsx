@@ -13,7 +13,7 @@ function Boards({ categories }: BoardsProps) {
           <Card key={category.id} className="w-full lg:w-[32%]">
             <Link to={`${category.slug}`}>
               <CardHeader>
-                <CardTitle className="text-xl hover:opacity-70">
+                <CardTitle className="text-lg hover:opacity-70">
                   {category.title}
                 </CardTitle>
               </CardHeader>
