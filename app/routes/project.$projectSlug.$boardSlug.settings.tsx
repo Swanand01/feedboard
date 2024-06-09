@@ -10,6 +10,7 @@ import {
 import { authenticator } from "~/services/auth.server";
 import DefaultStatusForm from "~/components/board/edit/default-status-form";
 import DeleteBoardForm from "~/components/board/edit/delete-board-form";
+import { BreadcrumbItem, BreadcrumbLink } from "~/components/ui/breadcrumb";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request, {
@@ -47,7 +48,7 @@ export default function Page() {
   const { category, statuses, hasDeletePermissions } =
     useLoaderData<typeof loader>();
   return (
-    <div className="flex flex-wrap gap-8">
+    <div className="flex flex-wrap gap-8 mt-8">
       <EditBoardForm
         edit={true}
         category={category}
@@ -60,3 +61,11 @@ export default function Page() {
     </div>
   );
 }
+
+export const handle = {
+  breadcrumb: ({ pathname }) => (
+    <BreadcrumbItem>
+      <BreadcrumbLink href={pathname}>Settings</BreadcrumbLink>
+    </BreadcrumbItem>
+  ),
+};

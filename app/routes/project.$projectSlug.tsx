@@ -1,11 +1,10 @@
-import { Link, useLoaderData } from "@remix-run/react";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import { getProject } from "~/lib/project/data";
-import { ArrowLeftIcon, GearIcon } from "@radix-ui/react-icons";
-import Boards from "~/components/project/boards";
 import { isProjectOwner, isSuperuser } from "~/lib/permissions.server";
 import { authenticator } from "~/services/auth.server";
 import { LoaderFunctionArgs } from "@remix-run/node";
-import Roadmaps from "~/components/project/roadmaps";
+import { BreadcrumbItem, BreadcrumbLink } from "~/components/ui/breadcrumb";
+import { GearIcon } from "@radix-ui/react-icons";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { projectSlug } = params;
@@ -45,6 +44,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
           hasUpvoted: user
             ? post.upvotes.some((obj) => obj.userId === user.id)
             : false,
+          createdAt: post.createdAt.toString(),
           status: {
             title: status.title,
             colour: status.colour,
@@ -70,32 +70,22 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   };
 }
 
+export type projectLoader = Awaited<ReturnType<typeof loader>>;
+
 export default function Page() {
-  const { title, description, slug, hasEditPermissions, categories } =
-    useLoaderData<typeof loader>();
-  return (
-    <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-8">
-        <div className="flex items-center gap-4">
-          <Link to="/">
-            <ArrowLeftIcon width={28} height={28} />
-          </Link>
-          <h3 className="text-2xl">{title}</h3>
-          {hasEditPermissions && (
-            <Link to={`/project/${slug}/settings/`}>
-              <GearIcon width={24} height={24} />
-            </Link>
-          )}
-        </div>
-        <p>{description}</p>
-      </div>
-      <div className="flex flex-col gap-4">
-        <h3 className="text-xl">Boards</h3>
-        <Boards categories={categories} />
-      </div>
-      <div className="flex flex-col gap-4">
-        <Roadmaps categories={categories} />
-      </div>
-    </div>
-  );
+  const data = useLoaderData();
+  return <Outlet context={data} />;
 }
+
+export const handle = {
+  breadcrumb: ({ data, pathname }) => (
+    <BreadcrumbItem>
+      <BreadcrumbLink href={pathname}>{data.title}</BreadcrumbLink>
+      {data.hasEditPermissions && (
+        <Link to={`/project/${data.slug}/settings/`}>
+          <GearIcon width={24} height={24} />
+        </Link>
+      )}
+    </BreadcrumbItem>
+  ),
+};

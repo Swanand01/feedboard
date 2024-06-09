@@ -1,10 +1,4 @@
-import { Link, useLoaderData } from "@remix-run/react";
 import { LoaderFunctionArgs } from "@remix-run/node";
-import Search from "~/components/ui/search";
-import { ArrowLeftIcon, GearIcon } from "@radix-ui/react-icons";
-import Posts from "~/components/board/posts";
-import CreatePostForm from "~/components/post/form";
-import FilterByStatus from "~/components/board/filter-by-status";
 import { authenticator } from "~/services/auth.server";
 import { getFilteredPosts } from "~/lib/post/data";
 import { getCategory } from "~/lib/board/data";
@@ -13,6 +7,9 @@ import {
   isProjectOwner,
   isSuperuser,
 } from "~/lib/permissions.server";
+import { BreadcrumbItem, BreadcrumbLink } from "~/components/ui/breadcrumb";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
+import { GearIcon } from "@radix-ui/react-icons";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { projectSlug, boardSlug } = params;
@@ -78,49 +75,22 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   };
 }
 
+export type categoryLoader = Awaited<ReturnType<typeof loader>>;
+
 export default function Page() {
-  const {
-    category,
-    posts,
-    postsCount,
-    status,
-    boardBaseLink,
-    hasEditPermissions,
-  } = useLoaderData<typeof loader>();
-  return (
-    <div className="flex flex-col gap-8">
-      <div className="flex items-center gap-4">
-        <Link to={"settings"}>
-          <ArrowLeftIcon width={28} height={28} />
-        </Link>
-        <h3 className="text-2xl">{category.title}</h3>
-        {hasEditPermissions && (
-          <Link to={"settings"}>
-            <GearIcon width={24} height={24} />
-          </Link>
-        )}
-      </div>
-      <div className="flex flex-wrap gap-8">
-        <div className="order-2 flex w-full flex-1 flex-col gap-8 lg:order-1">
-          <div className="flex gap-4">
-            <Search
-              placeholder="Search by title..."
-              className="w-2/3 lg:w-3/4"
-            />
-            <FilterByStatus
-              statuses={category.statuses}
-              selectedStatus={status}
-              className="flex-1"
-            />
-          </div>
-          <Posts posts={posts} postsCount={postsCount} />
-        </div>
-        <CreatePostForm
-          categoryId={category.id}
-          className="order-1 lg:sticky lg:top-8"
-          boardUrl={boardBaseLink}
-        />
-      </div>
-    </div>
-  );
+  const data = useLoaderData();
+  return <Outlet context={data} />;
 }
+
+export const handle = {
+  breadcrumb: ({ data, pathname }) => (
+    <BreadcrumbItem>
+      <BreadcrumbLink href={pathname}>{data.category.title}</BreadcrumbLink>
+      {data.hasEditPermissions && (
+        <Link to={"settings"}>
+          <GearIcon width={24} height={24} />
+        </Link>
+      )}
+    </BreadcrumbItem>
+  ),
+};

@@ -6,6 +6,7 @@ import { isProjectOwner, isSuperuser } from "~/lib/permissions.server";
 import { LoaderFunctionArgs, redirect } from "@remix-run/node";
 import { authenticator } from "~/services/auth.server";
 import { useLoaderData } from "@remix-run/react";
+import { BreadcrumbItem, BreadcrumbLink } from "~/components/ui/breadcrumb";
 
 export async function loader({ request, params }: LoaderFunctionArgs) {
   const { projectSlug } = params;
@@ -56,7 +57,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 export default function Page() {
   const { project, categories, projectAdmins } = useLoaderData<typeof loader>();
   return (
-    <div className="flex flex-wrap gap-8">
+    <div className="flex flex-wrap gap-8 mt-8">
       <EditProjectForm
         edit={true}
         project={project}
@@ -73,3 +74,11 @@ export default function Page() {
     </div>
   );
 }
+
+export const handle = {
+  breadcrumb: ({ pathname }) => (
+    <BreadcrumbItem>
+      <BreadcrumbLink href={pathname}>Settings</BreadcrumbLink>
+    </BreadcrumbItem>
+  ),
+};
