@@ -28,6 +28,7 @@ model Category {
   projectId String
   project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   statuses  Status[]
+  post      Post[]
 }
 
 model Status {
@@ -68,17 +69,19 @@ model ProjectAdmin {
 }
 
 model Post {
-  id        String    @id @default(uuid())
-  userId    String
-  creator   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  title     String
-  content   String
-  slug      String?   @unique
-  createdAt DateTime  @default(now())
-  statusId  String
-  status    Status    @relation(fields: [statusId], references: [id], onDelete: Cascade)
-  upvotes   Upvote[]
-  comments  Comment[]
+  id         String    @id @default(uuid())
+  userId     String
+  creator    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String
+  content    String
+  slug       String?   @unique
+  createdAt  DateTime  @default(now())
+  statusId   String
+  status     Status    @relation(fields: [statusId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   Category  @relation(fields: [categoryId], references: [id])
+  upvotes    Upvote[]
+  comments   Comment[]
 }
 
 model Upvote {
