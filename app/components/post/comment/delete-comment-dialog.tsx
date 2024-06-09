@@ -13,7 +13,7 @@ export default function DeleteCommentDialog({
   const { toast } = useToast();
   const fetcher = useFetcher<{ success: boolean; message: string }>();
 
-  function removePost() {
+  function removeComment() {
     fetcher.submit(
       { commentId },
       {
@@ -42,7 +42,7 @@ export default function DeleteCommentDialog({
         }
         title="Are you absolutely sure?"
         description="This will delete the comment."
-        onClickContinue={removePost}
+        onClickContinue={removeComment}
       />
     </DropdownMenuItem>
   );
