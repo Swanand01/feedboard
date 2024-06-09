@@ -15,7 +15,13 @@ export default function Posts({ posts, postsCount, baseLink }: PostsProps) {
         <div className="text-sm">No posts found.</div>
       ) : (
         posts.map((post) => (
-          <PostCard key={post.id} post={post} baseLink={baseLink} showStatus />
+          <PostCard
+            key={post.id}
+            post={post}
+            baseLink={baseLink}
+            clampLines={2}
+            showStatus
+          />
         ))
       )}
       <PaginationWrapper totalCount={postsCount} pageSize={POSTS_PER_PAGE} />

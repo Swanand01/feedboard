@@ -17,7 +17,7 @@ export default function PostsByStatus({
   baseLink: string;
 }) {
   return (
-    <div className="flex max-h-96 w-full flex-col items-center gap-4 lg:w-[32%]">
+    <div className="flex max-h-96 w-full flex-col items-center gap-4 lg:w-[31%]">
       <Badge
         variant="outline"
         className="text-md px-3 py-1"
@@ -36,7 +36,7 @@ export default function PostsByStatus({
                 key={post.id}
                 post={post}
                 baseLink={baseLink}
-                clampContent
+                clampLines={1}
               />
             );
           })}
