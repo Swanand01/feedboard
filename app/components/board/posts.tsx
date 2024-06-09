@@ -19,7 +19,7 @@ export default function Posts({ posts, postsCount, baseLink }: PostsProps) {
             key={post.id}
             post={post}
             baseLink={baseLink}
-            clampLines={2}
+            lineClampClass={"line-clamp-2"}
             showStatus
           />
         ))

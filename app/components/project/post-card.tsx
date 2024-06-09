@@ -29,7 +29,7 @@ export interface Post {
 
 interface PostCardProps {
   post: Post;
-  clampLines?: number;
+  lineClampClass?: string;
   showStatus?: boolean;
   baseLink?: string;
   linkInTitle?: boolean;
@@ -38,14 +38,20 @@ interface PostCardProps {
 
 export function PostCard({
   post,
-  clampLines,
+  lineClampClass,
   showStatus,
   baseLink,
   linkInTitle = true,
   showActions = false,
 }: PostCardProps) {
+  console.log(lineClampClass);
   const editor = useEditor({
     editable: false,
+    editorProps: {
+      attributes: {
+        class: `${lineClampClass}  [&_p]:mb-0 [&_p]:mt-0`,
+      },
+    },
     content: post.content,
     extensions: [StarterKit],
   });
@@ -91,12 +97,7 @@ export function PostCard({
             )}
           </div>
         </CardHeader>
-        <CardContent
-          className={cn(
-            "p-4 pt-0 prose [&_p]:mb-0 [&_p]:mt-0",
-            clampLines && "[&_p]:line-clamp-" + `${clampLines}`,
-          )}
-        >
+        <CardContent className="p-4 pt-0 prose">
           <EditorContent editor={editor} />
         </CardContent>
         {showActions && (

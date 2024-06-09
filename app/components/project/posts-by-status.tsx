@@ -36,7 +36,7 @@ export default function PostsByStatus({
                 key={post.id}
                 post={post}
                 baseLink={baseLink}
-                clampLines={1}
+                lineClampClass="line-clamp-1"
               />
             );
           })}
