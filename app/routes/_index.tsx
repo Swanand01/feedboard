@@ -19,8 +19,7 @@ export default function Page() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex justify-between">
-        <h3 className="text-2xl">Projects</h3>
+      <div className="flex justify-end">
         {isSuperuser && (
           <Button>
             <Link to={"/project/create/"}>New Project</Link>
