@@ -87,7 +87,7 @@ export const handle = {
     <BreadcrumbItem>
       <BreadcrumbLink href={pathname}>{data.category.title}</BreadcrumbLink>
       {data.hasEditPermissions && (
-        <Link to={"settings"}>
+        <Link to={`${pathname}/settings`}>
           <GearIcon width={24} height={24} />
         </Link>
       )}
