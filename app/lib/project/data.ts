@@ -23,6 +23,7 @@ export async function getProject(slug: string) {
                   title: true,
                   content: true,
                   slug: true,
+                  createdAt: true,
                   _count: {
                     select: {
                       upvotes: true,

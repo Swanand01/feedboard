@@ -31,7 +31,21 @@ export type Post = PrismaPost &
             upvotes: true;
           };
         };
-        status: true;
+        upvotes: {
+          select: {
+            userId: true;
+          };
+        };
+        status: {
+          include: {
+            category: {
+              select: {
+                title: true;
+                projectId: true;
+              };
+            };
+          };
+        };
       };
       select: {
         upvotes: {

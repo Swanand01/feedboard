@@ -30,7 +30,7 @@ export async function createPost(
 
   const defaultStatus = await prisma.status.findFirst({
     where: {
-      categoryId: categoryId,
+      categoryId,
       isDefault: true,
     },
   });
@@ -45,8 +45,9 @@ export async function createPost(
   try {
     const post = await prisma.post.create({
       data: {
-        title: title,
-        content: content,
+        title,
+        content,
+        categoryId,
         slug: uniqueSlug,
         userId: user.id,
         statusId: defaultStatus.id,
@@ -55,7 +56,7 @@ export async function createPost(
     return {
       success: true,
       message: "Post created successfully.",
-      post: post,
+      post,
     };
   } catch (error) {
     return {
@@ -79,20 +80,16 @@ export async function updatePost(
     return { success: false, message: "Invalid payload." };
   }
 
-  const { title, content } = validatedFields.data;
+  const { title, content, status } = validatedFields.data;
   try {
     const existingPost = await prisma.post.findUnique({
       where: {
         id: postId,
       },
       include: {
-        status: {
+        category: {
           select: {
-            category: {
-              select: {
-                projectId: true,
-              },
-            },
+            projectId: true,
           },
         },
       },
@@ -102,7 +99,7 @@ export async function updatePost(
       return { success: false, message: "Post not found." };
     }
 
-    const { projectId } = existingPost.status.category;
+    const { projectId } = existingPost.category;
 
     const isAuthorized =
       (await isSuperuser(user)) ||
@@ -119,11 +116,25 @@ export async function updatePost(
       title,
       content,
       slug: titleChanged ? await generateUniqueSlug("post", title) : undefined,
+      statusId: status,
     };
 
     const updatedPost = await prisma.post.update({
       where: { id: postId },
       data,
+      select: {
+        slug: true,
+        category: {
+          select: {
+            slug: true,
+            project: {
+              select: {
+                slug: true,
+              },
+            },
+          },
+        },
+      },
     });
 
     return {
@@ -186,11 +197,24 @@ export async function deletePost(request: Request, postId: string) {
       where: {
         id: postId,
       },
+      select: {
+        slug: true,
+        category: {
+          select: {
+            slug: true,
+            project: {
+              select: {
+                slug: true,
+              },
+            },
+          },
+        },
+      },
     });
     return {
       success: true,
       message: "Post deleted successfully.",
-      category: deletedPost,
+      post: deletedPost,
     };
   } catch (error) {
     return {

@@ -7,6 +7,11 @@ export const formSchema = z.object({
   content: z.string().min(10, {
     message: "Content must be at least 10 characters long",
   }),
+  status: z
+    .string({
+      required_error: "Please select a status.",
+    })
+    .optional(),
 });
 
 export type PostFormInputs = z.infer<typeof formSchema>;

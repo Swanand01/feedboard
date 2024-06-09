@@ -101,16 +101,14 @@ export async function getPost(postSlug: string) {
           userId: true,
         },
       },
-      status: {
-        include: {
-          category: {
-            select: {
-              title: true,
-              projectId: true,
-            },
-          },
+      category: {
+        select: {
+          title: true,
+          projectId: true,
+          statuses: true,
         },
       },
+      status: true,
     },
   });
   return post;
