@@ -15,6 +15,7 @@ import Header from "./components/ui/header";
 import Error from "./components/error";
 import RouteError from "./components/route-error";
 import { Toaster } from "./components/ui/toaster";
+import { Breadcrumbs } from "./components/ui/breadcrumbs";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request);
@@ -42,7 +43,10 @@ export function Document({ children }: { children: React.ReactNode }) {
           title={title}
           className="px-8 py-4 sm:px-16 md:px-32 lg:px-64"
         />
-        <main className="px-8 sm:px-16 md:px-32 lg:px-64">{children}</main>
+        <main className="px-8 sm:px-16 md:px-32 lg:px-64">
+          <Breadcrumbs />
+          {children}
+        </main>
         <Toaster />
         <ScrollRestoration />
         <Scripts />
