@@ -44,7 +44,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
     return {
       id: comment.id,
       creator: comment.creator.username,
-      createdAt: comment.createdAt,
+      createdAt: comment.createdAt.toString(),
       content: comment.text,
       replyCount: comment._count.replies || 0,
       replyToId: comment.replyToId,
