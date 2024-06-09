@@ -15,7 +15,7 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { cn } from "~/lib/utils";
-import { Form, useFetcher } from "@remix-run/react";
+import { useFetcher } from "@remix-run/react";
 import {
   Select,
   SelectContent,
@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { useToast } from "../ui/use-toast";
+import Editor from "../ui/editor/editor";
 
 interface Status {
   statusId: string;
@@ -108,7 +109,7 @@ export default function PostForm({
         <FormProvider {...form}>
           <fetcher.Form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4"
+            className="space-y-4 prose"
           >
             <FormField
               control={form.control}
@@ -130,10 +131,12 @@ export default function PostForm({
                 <FormItem>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
-                    <Textarea
-                      className="h-[120px] lg:h-[200px]"
+                    <Editor
                       placeholder="Tell us a little bit about this post."
-                      {...field}
+                      content={field.value}
+                      onChange={(value) => {
+                        field.onChange(value);
+                      }}
                     />
                   </FormControl>
                   <FormMessage />

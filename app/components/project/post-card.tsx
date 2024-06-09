@@ -8,8 +8,10 @@ import {
   CardDescription,
 } from "../ui/card";
 import { UpvotePostButton } from "./upvote-post-button";
-import { getReadableTime } from "~/lib/utils";
+import { cn, getReadableTime } from "~/lib/utils";
 import PostActions from "../post/post-actions";
+import { EditorContent, useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
 
 export interface Post {
   id: string;
@@ -27,21 +29,27 @@ export interface Post {
 
 interface PostCardProps {
   post: Post;
-  clampContent?: boolean;
+  clampLines?: number;
   showStatus?: boolean;
-  baseLink: string;
+  baseLink?: string;
   linkInTitle?: boolean;
   showActions?: boolean;
 }
 
 export function PostCard({
   post,
-  clampContent,
+  clampLines,
   showStatus,
   baseLink,
   linkInTitle = true,
   showActions = false,
 }: PostCardProps) {
+  const editor = useEditor({
+    editable: false,
+    content: post.content,
+    extensions: [StarterKit],
+  });
+
   return (
     <Card key={post.id} className="flex w-full items-center">
       <UpvotePostButton
@@ -52,7 +60,7 @@ export function PostCard({
       <div className="w-full relative">
         <CardHeader className="p-4">
           <div className="flex flex-col gap-2">
-            {linkInTitle ? (
+            {linkInTitle && baseLink ? (
               <Link
                 to={`${baseLink}/${post.slug}`}
                 className="flex items-center"
@@ -83,12 +91,13 @@ export function PostCard({
             )}
           </div>
         </CardHeader>
-        <CardContent className="p-4 pt-0">
-          {clampContent ? (
-            <p className="line-clamp-1 text-sm">{post.content}</p>
-          ) : (
-            <p>{post.content}</p>
+        <CardContent
+          className={cn(
+            "p-4 pt-0 prose [&_p]:mb-0 [&_p]:mt-0",
+            clampLines && "[&_p]:line-clamp-" + `${clampLines}`,
           )}
+        >
+          <EditorContent editor={editor} />
         </CardContent>
         {showActions && (
           <div className="absolute top-4 right-4">
