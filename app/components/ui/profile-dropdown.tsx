@@ -25,7 +25,7 @@ export function ProfileDropdown({ trigger }: { trigger: ReactNode }) {
               </div>
             }
             title="Do you want to logout?"
-            description="Logging out will end your session.."
+            description="Logging out will end your session."
             onClickContinue={() => {
               submit(null, { action: "/logout", method: "POST" });
             }}
