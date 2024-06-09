@@ -1,0 +1,24 @@
+# fly.toml app configuration file generated for feedboard-v2 on 2024-06-05T13:30:02+05:30
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'feedboard-v2'
+
+[build]
+
+[deploy]
+release_command = 'npx prisma migrate deploy'
+
+[http_service]
+internal_port = 3000
+force_https = true
+auto_stop_machines = true
+auto_start_machines = true
+min_machines_running = 0
+processes = ['app']
+
+[[vm]]
+memory = '1gb'
+cpu_kind = 'shared'
+cpus = 1

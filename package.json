@@ -12,7 +12,7 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate:dev": "prisma migrate dev --name init",
     "prisma:migrate:deploy": "prisma migrate deploy",
-    "create-superuser": "tsx app/lib/createSuperuser.js"
+    "create-superuser": "tsx app/lib/createSuperuser.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.4.2",
@@ -48,6 +48,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.7",
     "@remix-run/dev": "^2.9.2",
     "@types/react": "^18.2.20",
     "@types/react-dom": "^18.2.7",
