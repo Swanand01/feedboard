@@ -1,5 +1,6 @@
 import slugify from "slugify";
 import prisma from "./prisma.server";
+import { Post, User } from "./types";
 
 export async function generateUniqueSlug(
   modelName: string,
@@ -23,4 +24,22 @@ export async function generateUniqueSlug(
   // If the baseSlug already exists, append a random string
   const randomString = Math.random().toString(36).substring(2, 6);
   return `${baseSlug}-${randomString}`;
+}
+
+export function mapPost(post: Post, user: User | null) {
+  return {
+    id: post.id,
+    title: post.title,
+    content: post.content,
+    upvotes: post._count?.upvotes || 0,
+    slug: String(post.slug),
+    hasUpvoted: user
+      ? post.upvotes?.some((obj) => obj.userId === user.id)
+      : false,
+    status: {
+      title: post.status?.title,
+      colour: post.status?.colour,
+    },
+    createdAt: post.createdAt.toString(),
+  };
 }
