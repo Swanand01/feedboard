@@ -44,7 +44,6 @@ export function PostCard({
   linkInTitle = true,
   showActions = false,
 }: PostCardProps) {
-  console.log(lineClampClass);
   const editor = useEditor({
     editable: false,
     editorProps: {
