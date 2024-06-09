@@ -9,6 +9,7 @@ import {
 } from "../ui/card";
 import { UpvotePostButton } from "./upvote-post-button";
 import { getReadableTime } from "~/lib/utils";
+import PostActions from "../post/post-actions";
 
 export interface Post {
   id: string;
@@ -28,14 +29,18 @@ interface PostCardProps {
   post: Post;
   clampContent?: boolean;
   showStatus?: boolean;
+  baseLink: string;
   linkInTitle?: boolean;
+  showActions?: boolean;
 }
 
 export function PostCard({
   post,
   clampContent,
   showStatus,
+  baseLink,
   linkInTitle = true,
+  showActions = false,
 }: PostCardProps) {
   return (
     <Card key={post.id} className="flex w-full items-center">
@@ -44,11 +49,14 @@ export function PostCard({
         upvotes={post.upvotes || 0}
         hasUpvoted={post.hasUpvoted}
       />
-      <div>
+      <div className="w-full relative">
         <CardHeader className="p-4">
           <div className="flex flex-col gap-2">
             {linkInTitle ? (
-              <Link to={post.slug} className="flex items-center">
+              <Link
+                to={`${baseLink}/${post.slug}`}
+                className="flex items-center"
+              >
                 <CardTitle className="line-clamp-1 font-semibold hover:opacity-70">
                   {post.title}
                 </CardTitle>
@@ -82,6 +90,11 @@ export function PostCard({
             <p>{post.content}</p>
           )}
         </CardContent>
+        {showActions && (
+          <div className="absolute top-4 right-4">
+            <PostActions postId={post.id} />
+          </div>
+        )}
       </div>
     </Card>
   );

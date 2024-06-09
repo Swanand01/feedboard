@@ -1,9 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PostFormInputs, formSchema } from "~/lib/post/constants";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Post } from "@prisma/client";
 import {
   Form as FormProvider,
   FormControl,
@@ -17,34 +16,59 @@ import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import { cn } from "~/lib/utils";
 import { Form, useFetcher } from "@remix-run/react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+import { useToast } from "../ui/use-toast";
+
+interface Status {
+  statusId: string;
+  title: string;
+}
+
+interface PostFormProps {
+  categoryId?: string;
+  edit?: boolean;
+  post?: {
+    id: string;
+    title: string;
+    content: string;
+    status: Status;
+  };
+  statuses?: Status[];
+  hasStatusChangePermissions?: boolean;
+  className?: string;
+  boardUrl: string;
+}
 
 export default function PostForm({
   categoryId,
   edit = false,
   post,
+  statuses,
+  hasStatusChangePermissions = false,
   className,
   boardUrl,
-}: {
-  categoryId: string;
-  edit?: boolean;
-  post?: Post;
-  className?: string;
-  boardUrl: string;
-}) {
-  const fetcher = useFetcher();
+}: PostFormProps) {
+  const { toast } = useToast();
+  const fetcher = useFetcher<{ success: boolean; message: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formDefaultValues = {
     title: edit && post?.title ? post.title : "",
     content: edit && post?.content ? post.content : "",
+    status: edit && post?.status ? post.status.statusId : "",
   };
   const form = useForm<PostFormInputs>({
     resolver: zodResolver(formSchema),
-    defaultValues: formDefaultValues,
+    values: formDefaultValues,
   });
 
   const onSubmit = async (values: PostFormInputs) => {
-    setIsSubmitting(true);
     if (edit && post) {
       fetcher.submit(
         { postId: post.id, values },
@@ -55,6 +79,7 @@ export default function PostForm({
         },
       );
     } else {
+      if (!categoryId) return;
       fetcher.submit(
         { categoryId, values, boardUrl },
         {
@@ -64,8 +89,15 @@ export default function PostForm({
         },
       );
     }
-    setIsSubmitting(false);
   };
+
+  useEffect(() => {
+    setIsSubmitting(fetcher.state === "submitting");
+    if (fetcher.state === "idle" && fetcher.data) {
+      const { message } = fetcher.data;
+      toast({ title: message });
+    }
+  }, [fetcher.state, fetcher.data, toast]);
 
   return (
     <Card className={cn("h-fit w-full", !edit && "lg:max-w-96", className)}>
@@ -74,7 +106,10 @@ export default function PostForm({
       </CardHeader>
       <CardContent>
         <FormProvider {...form}>
-          <Form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <fetcher.Form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="title"
@@ -105,6 +140,42 @@ export default function PostForm({
                 </FormItem>
               )}
             />
+            {hasStatusChangePermissions && statuses && (
+              <FormField
+                control={form.control}
+                name="status"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Status</FormLabel>
+                    <Select
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                      }}
+                      defaultValue={field.value}
+                      value={field.value}
+                      name="statusId"
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Choose a Status" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {statuses.map((status) => (
+                          <SelectItem
+                            key={status.statusId}
+                            value={status.statusId}
+                          >
+                            {status.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
             <div className="flex justify-between">
               <Button
                 type="submit"
@@ -113,7 +184,7 @@ export default function PostForm({
                 {edit ? "Save Post" : "Create Post"}
               </Button>
             </div>
-          </Form>
+          </fetcher.Form>
         </FormProvider>
       </CardContent>
     </Card>
