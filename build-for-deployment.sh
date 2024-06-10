@@ -3,13 +3,13 @@
 set -e
 
 prisma_migrate_deploy() {
-    echo "Running: npx prisma migrate deploy"
-    npx prisma migrate deploy
+    echo "Running: npm run prisma:migrate:deploy"
+    npm run prisma:migrate:deploy
 }
 
 prisma_generate() {
-    echo "Running: npx prisma generate"
-    npx prisma generate
+    echo "Running: npm run prisma:generate"
+    npm run prisma:generate
 }
 
 npm_run_build() {

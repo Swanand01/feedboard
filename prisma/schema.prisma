@@ -1,105 +1,108 @@
 generator client {
-    provider      = "prisma-client-js"
-    binaryTargets = ["native", "linux-musl", "linux-arm64-openssl-3.0.x"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl", "linux-arm64-openssl-3.0.x"]
 }
 
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Project {
-    id           String         @id @default(uuid())
-    title        String
-    description  String         @default("")
-    slug         String?        @unique
-    createdAt    DateTime       @default(now())
-    categories   Category[]
-    owner        User           @relation(fields: [userId], references: [id])
-    userId       String
-    ProjectAdmin ProjectAdmin[]
+  id           String         @id @default(uuid())
+  title        String
+  description  String         @default("")
+  slug         String?        @unique
+  createdAt    DateTime       @default(now())
+  categories   Category[]
+  owner        User           @relation(fields: [userId], references: [id])
+  userId       String
+  ProjectAdmin ProjectAdmin[]
 }
 
 model Category {
-    id        String   @id @default(uuid())
-    title     String
-    slug      String?  @unique
-    createdAt DateTime @default(now())
-    projectId String
-    project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-    statuses  Status[]
+  id        String   @id @default(uuid())
+  title     String
+  slug      String?  @unique
+  createdAt DateTime @default(now())
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  statuses  Status[]
+  post      Post[]
 }
 
 model Status {
-    id        String   @id @default(uuid())
-    title     String
-    slug      String?  @unique
-    isDefault Boolean  @default(false)
-    colour    String   @default("#808080")
-    createdAt DateTime @default(now())
+  id        String   @id @default(uuid())
+  title     String
+  slug      String?  @unique
+  isDefault Boolean  @default(false)
+  colour    String   @default("#808080")
+  createdAt DateTime @default(now())
 
-    categoryId String
-    category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-    posts      Post[]
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  posts      Post[]
 }
 
 model User {
-    id                   String         @id @default(uuid())
-    username             String
-    email                String         @unique
-    dateJoined           DateTime       @default(now())
-    isSuperuser          Boolean        @default(false)
-    projectsCreated      Project[]
-    projectsAdministered ProjectAdmin[]
-    postsCreated         Post[]
-    upvotesGiven         Upvote[]
-    commentsCreated      Comment[]
+  id                   String         @id @default(uuid())
+  username             String
+  email                String         @unique
+  dateJoined           DateTime       @default(now())
+  isSuperuser          Boolean        @default(false)
+  projectsCreated      Project[]
+  projectsAdministered ProjectAdmin[]
+  postsCreated         Post[]
+  upvotesGiven         Upvote[]
+  commentsCreated      Comment[]
 }
 
 model ProjectAdmin {
-    id        String   @id @default(uuid())
-    createdAt DateTime @default(now())
-    userId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    projectId String
-    project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-    @@unique([userId, projectId])
+  @@unique([userId, projectId])
 }
 
 model Post {
-    id        String    @id @default(uuid())
-    userId    String
-    creator   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    title     String
-    content   String
-    slug      String?   @unique
-    createdAt DateTime  @default(now())
-    statusId  String
-    status    Status    @relation(fields: [statusId], references: [id], onDelete: Cascade)
-    upvotes   Upvote[]
-    comments  Comment[]
+  id         String    @id @default(uuid())
+  userId     String
+  creator    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String
+  content    String
+  slug       String?   @unique
+  createdAt  DateTime  @default(now())
+  statusId   String
+  status     Status    @relation(fields: [statusId], references: [id], onDelete: Cascade)
+  categoryId String
+  category   Category  @relation(fields: [categoryId], references: [id])
+  upvotes    Upvote[]
+  comments   Comment[]
 }
 
 model Upvote {
-    createdAt DateTime @default(now())
-    userId    String
-    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    postId    String
-    post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-    @@id([userId, postId])
+  @@id([userId, postId])
 }
 
 model Comment {
-    id        String    @id @default(uuid())
-    text      String    @db.VarChar(140)
-    createdAt DateTime  @default(now())
-    userId    String
-    creator   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    post      Post      @relation(fields: [postId], references: [id])
-    postId    String
-    replyToId String?
-    replyTo   Comment?  @relation("ReplyTo", fields: [replyToId], references: [id], onDelete: Cascade, onUpdate: NoAction)
-    replies   Comment[] @relation("ReplyTo")
+  id        String    @id @default(uuid())
+  text      String    @db.VarChar(140)
+  createdAt DateTime  @default(now())
+  userId    String
+  creator   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post      Post      @relation(fields: [postId], references: [id])
+  postId    String
+  replyToId String?
+  replyTo   Comment?  @relation("ReplyTo", fields: [replyToId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  replies   Comment[] @relation("ReplyTo")
 }
