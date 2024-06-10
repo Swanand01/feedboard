@@ -101,7 +101,7 @@ export default function PostForm({
 
   return (
     <Card className={cn("h-fit w-full", !edit && "lg:max-w-96", className)}>
-      <CardHeader>
+      <CardHeader className="prose dark:prose-invert">
         <CardTitle>Create a Post</CardTitle>
       </CardHeader>
       <CardContent>

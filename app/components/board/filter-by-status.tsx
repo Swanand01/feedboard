@@ -59,7 +59,7 @@ export default function FilterByStatus({
 
   return (
     <FormProvider {...form}>
-      <Form className={cn("space-y-6 prose", className)}>
+      <Form className={cn("space-y-6 prose dark:prose-invert", className)}>
         <FormField
           control={form.control}
           name="status"

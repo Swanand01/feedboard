@@ -13,7 +13,7 @@ export default function Comments({
   hasCommentPermissions,
 }: CommentsProps) {
   return (
-    <div className="flex w-full flex-col gap-y-4 prose">
+    <div className="flex w-full flex-col gap-y-4 prose dark:prose-invert">
       <h3 className="text-lg">Comments</h3>
       <CommentForm postId={postId} />
       <div className="flex flex-col gap-y-3 not-prose">

@@ -11,7 +11,7 @@ export default function DeleteBoardForm({
 }) {
   return (
     <Card className={cn("h-fit", className)}>
-      <CardHeader>
+      <CardHeader className="prose dark:prose-invert">
         <CardTitle>Delete Board</CardTitle>
       </CardHeader>
       <CardContent>

@@ -23,7 +23,7 @@ export default function ProjectAdminsForm({
 }: ProjectAdminsFormProps) {
   return (
     <Card className={cn("h-fit", className)}>
-      <CardHeader>
+      <CardHeader className="prose dark:prose-invert">
         <CardTitle>Edit Project Admins</CardTitle>
       </CardHeader>
       <CardContent>

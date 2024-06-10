@@ -26,7 +26,7 @@ export default function Page() {
           </Button>
         )}
       </div>
-      <div className="flex flex-wrap gap-8">
+      <div className="grid-cols-1 grid gap-4 md:grid-cols-3">
         {projects.length === 0
           ? "No projects found."
           : projects.map((project) => {

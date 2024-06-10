@@ -53,7 +53,7 @@ export function AddProjectAdmin({ projectId }: { projectId: string }) {
         <users.Form
           method="get"
           action="/users"
-          className="flex flex-col gap-4 prose"
+          className="flex flex-col gap-4 prose dark:prose-invert"
         >
           {selectedUser.id === "" && (
             <>
@@ -75,7 +75,7 @@ export function AddProjectAdmin({ projectId }: { projectId: string }) {
                 users.data.results.map((user: User) => (
                   <Button
                     variant={"secondary"}
-                    className="rounded-sm px-2 py-1.5 text-sm hover:bg-accent cursor-pointer"
+                    className="rounded-md px-2 py-1.5 text-sm hover:bg-accent cursor-pointer"
                     key={user.id}
                     onClick={() => {
                       setSelectedUser(user);
@@ -113,7 +113,7 @@ export function AddProjectAdmin({ projectId }: { projectId: string }) {
           <fetcher.Form
             action="/project/admins/add"
             method="POST"
-            className="prose"
+            className="prose dark:prose-invert"
           >
             <input type="hidden" name="projectId" value={projectId} />
             <input type="hidden" name="userId" value={selectedUser.id} />

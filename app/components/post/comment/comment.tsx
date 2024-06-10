@@ -58,7 +58,7 @@ export default function Comment({
             {hasCommentPermissions && <CommentActions commentId={comment.id} />}
           </div>
         </CardHeader>
-        <CardContent className="space-y-3 p-4 pt-0 prose">
+        <CardContent className="space-y-3 p-4 pt-0 prose dark:prose-invert">
           <p>{comment.content}</p>
           <div className="flex gap-3">
             <Button variant={"secondary"} onClick={toggleReplyForm}>

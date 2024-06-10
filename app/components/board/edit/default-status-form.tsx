@@ -60,7 +60,7 @@ export default function DefaultStatusForm({
 
   return (
     <Card className={className}>
-      <CardHeader>
+      <CardHeader className="prose dark:prose-invert">
         <CardTitle>Select Default Status</CardTitle>
       </CardHeader>
       <CardContent>
@@ -68,7 +68,7 @@ export default function DefaultStatusForm({
           <fetcher.Form
             action="/status/change-default/"
             method="POST"
-            className={cn("space-y-6 prose", className)}
+            className={cn("space-y-6 prose dark:prose-invert", className)}
           >
             <FormField
               control={form.control}

@@ -132,14 +132,14 @@ export default function ProjectForm({
 
   return (
     <Card className={cn("w-full", className)}>
-      <CardHeader>
+      <CardHeader className="prose dark:prose-invert">
         <CardTitle>{edit ? "Edit Project" : "Create Project"}</CardTitle>
       </CardHeader>
       <CardContent>
         <FormProvider {...form}>
           <Form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 prose"
+            className="space-y-4 prose dark:prose-invert"
           >
             <FormField
               control={form.control}

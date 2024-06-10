@@ -12,7 +12,7 @@ export default function Page() {
     <div className="flex flex-col gap-8 mt-8">
       <div className="flex flex-wrap gap-8">
         <div className="order-2 flex w-full flex-1 flex-col gap-8 lg:order-1">
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-end">
             <Search
               placeholder="Search by title..."
               className="w-2/3 lg:w-3/4"

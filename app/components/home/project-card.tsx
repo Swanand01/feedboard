@@ -9,12 +9,12 @@ type ProjectCardProps = {
 
 function ProjectCard({ title, slug, description }: ProjectCardProps) {
   return (
-    <Card className="w-full md:w-96">
+    <Card>
       <Link to={`project/${slug}/`}>
-        <CardHeader className="prose">
+        <CardHeader className="prose dark:prose-invert">
           <CardTitle className="hover:opacity-70">{title}</CardTitle>
         </CardHeader>
-        <CardContent className="prose">
+        <CardContent className="prose dark:prose-invert">
           <p className="line-clamp-4">{description}</p>
         </CardContent>
       </Link>
