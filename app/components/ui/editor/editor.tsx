@@ -1,7 +1,7 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
+import { HardBreak } from "@tiptap/extension-hard-break";
 import EditorToolbar from "./toolbar/editor-toolbar";
-import HardBreak from "@tiptap/extension-hard-break";
 
 interface EditorProps {
   content: string;
