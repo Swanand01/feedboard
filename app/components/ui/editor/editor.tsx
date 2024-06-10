@@ -18,7 +18,7 @@ const Editor = ({ content, placeholder, onChange }: EditorProps) => {
       },
     },
     extensions: [
-      StarterKit,
+      StarterKit.configure({ hardBreak: false }),
       HardBreak.extend({
         addKeyboardShortcuts() {
           return {
