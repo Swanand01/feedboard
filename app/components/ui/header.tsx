@@ -1,5 +1,5 @@
 import { Link } from "@remix-run/react";
-// import { ModeToggle } from "./mode-toggle";
+import { ModeToggle } from "./mode-toggle";
 import { Button } from "./button";
 import { cn } from "~/lib/utils";
 import { ProfileDropdown } from "./profile-dropdown";
@@ -16,7 +16,7 @@ export default function Header({ className, user, title }: HeaderProps) {
     <nav
       className={cn("flex justify-between border-b align-middle", className)}
     >
-      <Link to="/" className="prose">
+      <Link to="/" className="prose dark:prose-invert">
         <h2>{title || "Feedboard"}</h2>
       </Link>
       <div className="flex items-center gap-4">
@@ -29,7 +29,7 @@ export default function Header({ className, user, title }: HeaderProps) {
             <Link to="/login">Login</Link>
           </Button>
         )}
-        {/* <ModeToggle /> */}
+        <ModeToggle />
       </div>
     </nav>
   );
