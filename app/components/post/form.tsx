@@ -108,7 +108,7 @@ export default function PostForm({
         <FormProvider {...form}>
           <fetcher.Form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 prose"
+            className="space-y-4 prose dark:prose-invert"
           >
             <FormField
               control={form.control}

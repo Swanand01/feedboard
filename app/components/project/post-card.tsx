@@ -96,7 +96,7 @@ export function PostCard({
             )}
           </div>
         </CardHeader>
-        <CardContent className="p-4 pt-0 prose">
+        <CardContent className="p-4 pt-0 prose dark:prose-invert">
           <EditorContent editor={editor} />
         </CardContent>
         {showActions && (
