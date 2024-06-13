@@ -1,6 +1,7 @@
 import { Post, PostCard } from "../project/post-card";
 import PaginationWrapper from "../ui/pagination-wrapper";
 import { POSTS_PER_PAGE } from "~/lib/post/constants";
+import BoardPostCard from "../ui/post-cards/board-post-card";
 
 interface PostsProps {
   posts: Post[];
@@ -15,13 +16,7 @@ export default function Posts({ posts, postsCount, baseLink }: PostsProps) {
         <div className="text-sm">No posts found.</div>
       ) : (
         posts.map((post) => (
-          <PostCard
-            key={post.id}
-            post={post}
-            baseLink={baseLink}
-            lineClampClass={"line-clamp-2"}
-            showStatus
-          />
+          <BoardPostCard key={post.id} post={post} baseLink={baseLink} />
         ))
       )}
       <PaginationWrapper totalCount={postsCount} pageSize={POSTS_PER_PAGE} />

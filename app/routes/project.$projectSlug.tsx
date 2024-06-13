@@ -44,6 +44,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
           hasUpvoted: user
             ? post.upvotes.some((obj) => obj.userId === user.id)
             : false,
+          creator: post.creator.username,
           createdAt: post.createdAt.toString(),
           status: {
             title: status.title,

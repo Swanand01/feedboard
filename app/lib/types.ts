@@ -46,11 +46,9 @@ export type Post = PrismaPost &
             };
           };
         };
-      };
-      select: {
-        upvotes: {
+        creator: {
           select: {
-            userId: true;
+            username: true;
           };
         };
       };
