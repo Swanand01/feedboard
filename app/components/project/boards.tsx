@@ -7,7 +7,7 @@ interface BoardsProps {
 
 function Boards({ categories }: BoardsProps) {
   return (
-    <div className="flex flex-wrap justify-between gap-x-4 gap-y-4">
+    <div className="flex flex-wrap justify-start gap-x-4 gap-y-4">
       {categories.map((category) => {
         return (
           <Card key={category.id} className="w-full lg:w-[31%]">
