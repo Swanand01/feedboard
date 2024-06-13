@@ -7,13 +7,13 @@ interface BoardsProps {
 
 function Boards({ categories }: BoardsProps) {
   return (
-    <div className="flex flex-wrap justify-between gap-x-4 gap-y-4 not-prose">
+    <div className="flex flex-wrap justify-start gap-x-4 gap-y-4">
       {categories.map((category) => {
         return (
           <Card key={category.id} className="w-full lg:w-[31%]">
-            <Link to={`${category.slug}`}>
-              <CardHeader>
-                <CardTitle className="text-lg hover:opacity-70">
+            <Link to={category.slug}>
+              <CardHeader className="prose dark:prose-invert">
+                <CardTitle className="hover:opacity-70">
                   {category.title}
                 </CardTitle>
               </CardHeader>

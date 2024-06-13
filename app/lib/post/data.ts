@@ -49,6 +49,11 @@ export async function getFilteredPosts(
           userId: true,
         },
       },
+      creator: {
+        select: {
+          username: true,
+        },
+      },
     },
     skip: (currentPage - 1) * POSTS_PER_PAGE,
     take: POSTS_PER_PAGE,
@@ -109,6 +114,11 @@ export async function getPost(postSlug: string) {
         },
       },
       status: true,
+      creator: {
+        select: {
+          username: true,
+        },
+      },
     },
   });
   return post;

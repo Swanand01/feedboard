@@ -34,6 +34,11 @@ export async function getProject(slug: string) {
                       userId: true,
                     },
                   },
+                  creator: {
+                    select: {
+                      username: true,
+                    },
+                  },
                 },
                 orderBy: {
                   upvotes: {

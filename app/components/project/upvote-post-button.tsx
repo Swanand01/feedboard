@@ -37,7 +37,7 @@ export function UpvotePostButton({
   return (
     <fetcher.Form
       className={
-        "bg-tertiary ml-4 flex h-full flex-none flex-col items-center justify-center rounded-l-md"
+        "bg-tertiary ml-4 flex h-full flex-none flex-col items-center justify-center rounded-l-md not-prose"
       }
       action="/post/vote/"
       method="POST"
