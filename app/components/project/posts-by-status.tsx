@@ -1,6 +1,7 @@
-import { Post, PostCard } from "./post-card";
+import { Post } from "../ui/post-cards/full-post-card";
 import { Badge } from "~/components/ui/badge";
 import { ScrollArea } from "~/components/ui/scroll-area";
+import RoadmapPostCard from "../ui/post-cards/roadmap-post-card";
 
 export interface Status {
   id: string;
@@ -32,12 +33,7 @@ export default function PostsByStatus({
         <div className="flex w-full flex-col gap-4">
           {status.posts.map((post) => {
             return (
-              <PostCard
-                key={post.id}
-                post={post}
-                baseLink={baseLink}
-                lineClampClass="line-clamp-1"
-              />
+              <RoadmapPostCard key={post.id} post={post} baseLink={baseLink} />
             );
           })}
         </div>
