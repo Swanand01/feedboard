@@ -47,6 +47,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
         title: post.status.title,
         colour: post.status.colour,
       },
+      creator: post.creator.username,
       createdAt: post.createdAt.toString(),
     };
   });
