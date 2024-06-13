@@ -58,9 +58,7 @@ export default function FullPostCard({
         <CardHeader className="p-4">
           <div className="flex flex-col gap-2">
             <div className="prose dark:prose-invert">
-              <CardTitle className="line-clamp-2 font-semibold">
-                {post.title}
-              </CardTitle>
+              <CardTitle>{post.title}</CardTitle>
             </div>
             {post.creator}
             <CardDescription>
