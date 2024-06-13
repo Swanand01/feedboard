@@ -49,7 +49,6 @@ export default function RoadmapPostCard({
                 </CardTitle>
               </div>
             </Link>
-            {post.creator}
             <CardDescription className="not-prose">
               {getReadableTime(new Date(post.createdAt))}
             </CardDescription>

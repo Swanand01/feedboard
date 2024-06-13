@@ -1,4 +1,4 @@
-import { Post, PostCard } from "../project/post-card";
+import { Post } from "../ui/post-cards/full-post-card";
 import PaginationWrapper from "../ui/pagination-wrapper";
 import { POSTS_PER_PAGE } from "~/lib/post/constants";
 import BoardPostCard from "../ui/post-cards/board-post-card";

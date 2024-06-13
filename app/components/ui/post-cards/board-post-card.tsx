@@ -48,7 +48,9 @@ export default function BoardPostCard({ post, baseLink }: BoardPostCardProps) {
                 {post.title}
               </CardTitle>
             </Link>
-            {post.creator}
+            <p className="max-w-72 text-ellipsis whitespace-nowrap overflow-hidden">
+              {post.creator}
+            </p>
             <CardDescription>
               {getReadableTime(new Date(post.createdAt))}
             </CardDescription>
