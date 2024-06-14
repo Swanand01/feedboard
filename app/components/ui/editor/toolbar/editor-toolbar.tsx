@@ -18,7 +18,7 @@ interface EditorToolbarProps {
 const EditorToolbar = ({ editor }: EditorToolbarProps) => {
   return (
     <Toolbar
-      className="m-0 flex flex-wrap items-center justify-start p-2 rounded-md rounded-b-none"
+      className="m-0 flex flex-wrap items-center justify-start p-2 rounded-md rounded-b-none gap-y-1"
       aria-label="Formatting options"
     >
       <Toggle
