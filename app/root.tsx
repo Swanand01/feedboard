@@ -23,6 +23,7 @@ import {
   useTheme,
 } from "remix-themes";
 import { themeSessionResolver } from "./services/session.server";
+import "@fontsource-variable/figtree/wght.css";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request);
@@ -55,7 +56,7 @@ function App() {
       </head>
       <body
         className={
-          "bg-background flex min-h-screen flex-col gap-8 font-sans antialiased w-full"
+          "bg-background flex min-h-screen flex-col gap-8 antialiased w-full"
         }
       >
         <Header

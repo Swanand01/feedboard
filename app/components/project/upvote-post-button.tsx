@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useFetcher } from "@remix-run/react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -14,25 +13,9 @@ export function UpvotePostButton({
   hasUpvoted: boolean;
 }) {
   const fetcher = useFetcher();
-  const [vote, setVote] = useState<{ isUpvoted: boolean; voteCount: number }>({
-    isUpvoted: hasUpvoted,
-    voteCount: upvotes,
-  });
-
-  async function handleUpvote() {
-    setVote((vote) => {
-      if (vote.isUpvoted) {
-        return {
-          isUpvoted: !vote.isUpvoted,
-          voteCount: vote.voteCount - 1,
-        };
-      }
-      return {
-        isUpvoted: !vote.isUpvoted,
-        voteCount: vote.voteCount + 1,
-      };
-    });
-  }
+  const upvoted = fetcher.formData
+    ? fetcher.formData.get("upvoted") === "1"
+    : hasUpvoted;
 
   return (
     <fetcher.Form
@@ -45,17 +28,18 @@ export function UpvotePostButton({
       <Input type="hidden" name="postId" value={postId} />
       <Button
         type="submit"
-        onClick={handleUpvote}
+        name="upvoted"
         variant="ghost"
-        className="px-2"
+        size="icon"
+        value={upvoted ? "0" : "1"}
       >
-        {vote.isUpvoted ? (
-          <TriangleUpIcon width={28} height={28} />
+        {upvoted ? (
+          <TriangleUpIcon className="h-4 w-4" />
         ) : (
-          <CaretUpIcon width={28} height={28} />
+          <CaretUpIcon className="h-4 w-4" />
         )}
       </Button>
-      <p>{vote.voteCount.toString()}</p>
+      <p>{upvotes.toString()}</p>
     </fetcher.Form>
   );
 }
