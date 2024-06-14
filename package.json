@@ -15,6 +15,7 @@
     "create-superuser": "tsx app/lib/createSuperuser.ts"
   },
   "dependencies": {
+    "@fontsource-variable/figtree": "^5.0.21",
     "@hookform/resolvers": "^3.4.2",
     "@prisma/client": "^5.14.0",
     "@radix-ui/react-alert-dialog": "^1.0.5",
