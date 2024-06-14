@@ -1,6 +1,5 @@
 import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import { HardBreak } from "@tiptap/extension-hard-break";
 import EditorToolbar from "./toolbar/editor-toolbar";
 
 interface EditorProps {
@@ -17,16 +16,7 @@ const Editor = ({ content, placeholder, onChange }: EditorProps) => {
           "w-full h-[180px] lg:h-[200px] px-2 py-0 focus-visible:outline-none  overflow-auto border border-input bg-transparent dark:prose-invert rounded-b-md",
       },
     },
-    extensions: [
-      StarterKit.configure({ hardBreak: false }),
-      HardBreak.extend({
-        addKeyboardShortcuts() {
-          return {
-            Enter: () => this.editor.commands.setHardBreak(),
-          };
-        },
-      }),
-    ],
+    extensions: [StarterKit],
     content: content,
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
