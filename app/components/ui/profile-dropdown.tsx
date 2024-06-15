@@ -1,4 +1,3 @@
-import { ReactNode, useEffect } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,13 +7,16 @@ import {
 import ActionDialog from "./action-dialog";
 import { ExitIcon } from "@radix-ui/react-icons";
 import { useSubmit } from "@remix-run/react";
+import UserAvatar from "./user-avatar";
 
-export function ProfileDropdown({ trigger }: { trigger: ReactNode }) {
+export function ProfileDropdown({ initials }: { initials: string }) {
   const submit = useSubmit();
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+      <DropdownMenuTrigger className="rounded-full">
+        <UserAvatar initials={initials} />
+      </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
           <ActionDialog
