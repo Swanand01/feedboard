@@ -4,6 +4,7 @@ import { Button } from "./button";
 import { cn } from "~/lib/utils";
 import { ProfileDropdown } from "./profile-dropdown";
 import { User } from "~/lib/types";
+import UserAvatar from "./user-avatar";
 
 interface HeaderProps {
   user: User | null;
@@ -21,9 +22,7 @@ export default function Header({ className, user, title }: HeaderProps) {
       </Link>
       <div className="flex items-center gap-4">
         {user ? (
-          <ProfileDropdown
-            trigger={<Button variant={"outline"}>{user.username}</Button>}
-          />
+          <ProfileDropdown initials={user.username.slice(0, 2)} />
         ) : (
           <Button>
             <Link to="/login">Login</Link>
