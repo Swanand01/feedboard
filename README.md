@@ -48,34 +48,46 @@ To run this project, you will need to add the following environment variables to
 
 `SUPERUSER_EMAIL`: Email address of the user you wish to make superuser.
 
+## Deployment
+
+[![Deploy to DO](https://www.deploytodo.com/do-btn-blue.svg)](https://cloud.digitalocean.com/apps/new?repo=https://github.com/Swanand01/feedboard/tree/main)
+
+- Feel free to customise the resources as per your requirement.
+- Configure the [environment variables](#environment-variables). If you choose to proceed with DigitalOcean Postgres instance, you don't need to edit the `DATABASE_URL` variable.
 
 ## FAQ
 
-#### How do I set up a Postgres database locally?
+1. ### How do I get `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`?
 
-Please read [this.](https://www.prisma.io/dataguide/postgresql/setting-up-a-local-postgresql-database)
+    1. Go to https://console.cloud.google.com/
+    2. Select a project or create a new one.
+    3. Once the project is selected, go to https://console.cloud.google.com/apis/credentials
+    4. Open the Credentials tab from the sidebar
+    5. Click on Create Credentials and select OAuth client ID.
+    6. Select Application type as Web application.
+    7. Name your application.
+    8. In the Authorised redirect URIs section, click on ADD URI and add http://localhost:3000/auth/google/callback
+  
+    **Note**: The port may be different for you.
+  
+    9. Click on CREATE.
+    10. You will now get your `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`. Copy them to your `.env` file.
 
-#### How do I get `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`?
+2. ### How do I set up a Postgres database locally?
 
-1. Go to https://console.cloud.google.com/
-2. Select a project or create a new one.
-3. Once the project is selected, go to https://console.cloud.google.com/apis/credentials
-4. Open the Credentials tab from the sidebar
-5. Click on Create Credentials and select OAuth client ID.
-6. Select Application type as Web application.
-7. Name your application.
-8. In the Authorised redirect URIs section, click on ADD URI and add http://localhost:3000/auth/google/callback
+    Please read [this.](https://www.prisma.io/dataguide/postgresql/setting-up-a-local-postgresql-database)
 
-**Note**: The port may be different for you.
+3. ### Do I *have* to use DigitalOcean managed Postgres?
 
-9. Click on CREATE.
-10. You will now get your `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`. Copy them to your `.env` file.
+    No, you can use any managed Postgres. Just make sure to set the `DATABASE_URL` environment variable accordingly while deploying.
 
+4. ### How do I set up a managed Postgres instance?
 
-## Deployment
-
-To deploy this project please refer to [DEPLOYMENT.md](./docs/DEPLOYMENT.md).
-
+    - [Amazon RDS for PostgreSQL](https://aws.amazon.com/rds/postgresql/)
+    - [Azure Database for PostgreSQL](https://azure.microsoft.com/en-us/products/postgresql/#overview)
+    - [Digital Ocean Managed Postgres](https://www.digitalocean.com/products/managed-databases-postgresql)
+    - [Google Cloud SQL for PostgreSQL](https://cloud.google.com/sql/docs/postgres/)
+    - [Heroku Managed Data Services](https://www.heroku.com/managed-data-services)
 
 ## Contributing
 
