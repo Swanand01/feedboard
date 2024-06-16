@@ -1,12 +1,3 @@
-features:
-  - buildpack-stack=ubuntu-22
-ingress:
-  rules:
-    - component:
-        name: feedboard
-      match:
-        path:
-          prefix: /
 name: feedboard
 services:
   - build_command: npm run build
