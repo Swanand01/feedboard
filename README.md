@@ -27,7 +27,7 @@ With Feedboard, you can easily gather insights from your user base, track featur
 
 1. Clone the repository: `git clone https://github.com/Swanand01/feedboard.git`
 2. Install dependencies: `npm install`
-3. Configure the application by updating the `.env` file. Please refer to the **Environment Variables**  section below.
+3. Configure the application by updating the `.env` file. Please refer to the **[Environment Variables](#environment-variables)**  section below.
 4. Apply prisma migrations: `npm run prisma:migrate:dev`
 5. Generate prisma types: `npm run prisma:generate`
 6. Create the superuser: `npm run create-superuser`
