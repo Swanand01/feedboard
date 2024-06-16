@@ -74,7 +74,7 @@ Please read [this.](https://www.prisma.io/dataguide/postgresql/setting-up-a-loca
 
 ## Deployment
 
-To deploy this project please refer to DEPLOYMENT.md.
+To deploy this project please refer to [DEPLOYMENT.md](./docs/DEPLOYMENT.md).
 
 
 ## Contributing
