@@ -18,6 +18,7 @@ spec:
       envs:
         - key: DATABASE_URL
           scope: RUN_AND_BUILD_TIME
+          value: ${feedboard-db.DATABASE_URL}
         - key: GOOGLE_CLIENT_ID
           scope: RUN_AND_BUILD_TIME
         - key: GOOGLE_CLIENT_SECRET
@@ -32,3 +33,5 @@ spec:
         repo_clone_url: https://github.com/Swanand01/feedboard.git
       run_command: npm start
       source_dir: /
+  databases:
+    - name: feedboard-db
