@@ -29,7 +29,7 @@ spec:
           scope: RUN_AND_BUILD_TIME
       name: feedboard
       git:
-        branch: update-build-process
+        branch: main
         repo_clone_url: https://github.com/Swanand01/feedboard.git
       run_command: npm start
       source_dir: /
