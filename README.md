@@ -71,6 +71,12 @@ Please read [this.](https://www.prisma.io/dataguide/postgresql/setting-up-a-loca
 9. Click on CREATE.
 10. You will now get your `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`. Copy them to your `.env` file.
 
+
+## Deployment
+
+To deploy this project please refer to DEPLOYMENT.md.
+
+
 ## Contributing
 
 We welcome contributions from the community! If you'd like to contribute to Feedboard, please follow these steps:
