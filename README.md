@@ -93,4 +93,4 @@ We welcome contributions from the community! If you'd like to contribute to Feed
 
 ## Feedback
 
-If you have any feedback, please create a new issue, or head over to [Feedboard's Feedboard.](https://feedboard.fly.dev/)
+If you have any feedback, please create a new issue, or head over to [Feedboard's Feedboard.](https://feedboard-sr8bt.ondigitalocean.app/)
