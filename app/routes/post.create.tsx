@@ -11,5 +11,5 @@ export async function action({ request }: ActionFunctionArgs) {
   if (success) {
     return redirect(`${boardUrl}/${post?.slug}`);
   }
-  return null;
+  return { success, message };
 }
