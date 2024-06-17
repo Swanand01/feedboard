@@ -48,6 +48,9 @@ export async function getProject(slug: string) {
                 take: POSTS_PER_ROADMAP,
               },
             },
+            orderBy: {
+              createdAt: "asc",
+            },
           },
         },
         orderBy: {

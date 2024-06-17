@@ -12,6 +12,9 @@ export async function getComments(postId: string, replyToId?: string) {
         select: { replies: true },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
   return comments;
 }
