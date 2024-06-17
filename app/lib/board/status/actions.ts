@@ -249,7 +249,12 @@ export async function changeDefaultStatus(request: Request, statusId: string) {
   const existingStatus = await prisma.status.findUnique({
     where: { id: statusId },
     select: {
-      category: { select: { projectId: true } },
+      category: {
+        select: {
+          id: true,
+          projectId: true,
+        },
+      },
     },
   });
 
@@ -274,7 +279,10 @@ export async function changeDefaultStatus(request: Request, statusId: string) {
 
   try {
     await prisma.status.updateMany({
-      where: { isDefault: true },
+      where: {
+        isDefault: true,
+        categoryId: existingStatus.category.id,
+      },
       data: { isDefault: false },
     });
     const defaultStatus = await prisma.status.update({
