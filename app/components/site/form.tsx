@@ -125,9 +125,13 @@ export default function SiteForm({
             />
 
             {selectedImageURL && (
-              <div className="w-28">
+              <div>
                 <FormLabel>{edit ? "Current Logo" : "Preview"}</FormLabel>
-                <img src={selectedImageURL} alt="Selected" className="my-2" />
+                <img
+                  src={selectedImageURL}
+                  alt="Selected"
+                  className="my-2 w-28 h-28 object-cover"
+                />
               </div>
             )}
 
