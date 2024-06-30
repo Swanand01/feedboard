@@ -24,12 +24,14 @@ import {
 } from "remix-themes";
 import { themeSessionResolver } from "./services/session.server";
 import "@fontsource-variable/figtree/wght.css";
+import { getSiteOption } from "./lib/utils.server";
 
 export async function loader({ request }: LoaderFunctionArgs) {
   const user = await authenticator.isAuthenticated(request);
-  const title = String(process.env.INSTANCE_TITLE);
+  const title = (await getSiteOption("title")) || "Feedboard";
+  const logoURL = await getSiteOption("logo");
   const { getTheme } = await themeSessionResolver(request);
-  return { user, title, theme: getTheme() };
+  return { user, title, logoURL, theme: getTheme() };
 }
 
 export default function AppWithProviders() {
@@ -42,7 +44,7 @@ export default function AppWithProviders() {
 }
 
 function App() {
-  const { user, title, theme } = useLoaderData<typeof loader>();
+  const { user, title, logoURL, theme } = useLoaderData<typeof loader>();
   const [themeState] = useTheme();
 
   return (
@@ -62,6 +64,7 @@ function App() {
         <Header
           user={user}
           title={title}
+          logoURL={logoURL}
           className="px-8 py-4 sm:px-16 md:px-32 lg:px-64 xl:px-80 2xl:px-96"
         />
         <main className="px-8 sm:px-16 md:px-32 lg:px-64 xl:px-80 2xl:px-96">
