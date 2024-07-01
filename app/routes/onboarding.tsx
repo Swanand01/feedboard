@@ -63,7 +63,7 @@ export async function action({ request }: ActionFunctionArgs) {
     setSiteOption("logo", `/uploads/${logo.name}`);
   }
 
-  // setSiteOption("onboardingCompleted", "true");
+  setSiteOption("onboardingCompleted", "true");
 
   return redirect("/project/create/");
 }
