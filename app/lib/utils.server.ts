@@ -44,3 +44,31 @@ export function mapPost(post: Post, user: User | null) {
     createdAt: post.createdAt.toString(),
   };
 }
+
+export async function getSiteOption(key: string) {
+  if (!key) return null;
+  const option = await prisma.siteOptions.findUnique({
+    where: {
+      key,
+    },
+  });
+  if (!option) return null;
+  return option.value;
+}
+
+export async function setSiteOption(key: string, value: string) {
+  if (!key) return null;
+  const option = await prisma.siteOptions.upsert({
+    create: {
+      key,
+      value,
+    },
+    update: {
+      value,
+    },
+    where: {
+      key,
+    },
+  });
+  return option;
+}

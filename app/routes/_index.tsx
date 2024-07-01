@@ -11,7 +11,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
   const projects: Project[] = await getProjects();
   const user = await authenticator.isAuthenticated(request);
   const userIsSuperuser = user && (await isSuperuser(user));
-  return json({ projects, isSuperuser: userIsSuperuser });
+  return { projects, isSuperuser: userIsSuperuser };
 }
 
 export default function Page() {
@@ -19,11 +19,16 @@ export default function Page() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-4">
         {isSuperuser && (
-          <Button>
-            <Link to={"/project/create/"}>New Project</Link>
-          </Button>
+          <>
+            <Link to="/settings/">
+              <Button variant="secondary">Site Settings</Button>
+            </Link>
+            <Link to="/project/create/">
+              <Button>New Project</Button>
+            </Link>
+          </>
         )}
       </div>
       <div className="grid-cols-1 grid gap-4 md:grid-cols-3">
