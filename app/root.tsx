@@ -7,6 +7,7 @@ import {
   isRouteErrorResponse,
   useLoaderData,
   useRouteError,
+  useRouteLoaderData,
 } from "@remix-run/react";
 import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
 import styles from "./tailwind.css?url";
@@ -19,6 +20,7 @@ import { Breadcrumbs } from "./components/ui/breadcrumbs";
 import clsx from "clsx";
 import {
   PreventFlashOnWrongTheme,
+  Theme,
   ThemeProvider,
   useTheme,
 } from "remix-themes";
@@ -56,11 +58,7 @@ function App() {
         <PreventFlashOnWrongTheme ssrTheme={Boolean(theme)} />
         <Links />
       </head>
-      <body
-        className={
-          "bg-background flex min-h-screen flex-col gap-8 antialiased w-full"
-        }
-      >
+      <body className="bg-background flex min-h-screen flex-col gap-8 antialiased w-full">
         <Header
           user={user}
           title={title}
@@ -82,17 +80,38 @@ function App() {
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
 export function ErrorBoundary() {
-  const error = useRouteError();
+  const { theme } = useRouteLoaderData("root") as { theme: Theme };
+
   return (
-    <html lang="en">
+    <ThemeProvider specifiedTheme={theme} themeAction="/set-theme">
+      <ErrorBoundaryWithTheme theme={theme} />
+    </ThemeProvider>
+  );
+}
+
+function ErrorBoundaryWithTheme({ theme }: { theme: Theme }) {
+  const error = useRouteError();
+  const [themeState] = useTheme();
+
+  return (
+    <html lang="en" className={clsx(themeState)}>
       <head>
         <title>Oh no!</title>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
+        <PreventFlashOnWrongTheme ssrTheme={Boolean(theme)} />
         <Links />
       </head>
-      <body>
-        {isRouteErrorResponse(error) ? <RouteError error={error} /> : <Error />}
-        <Scripts />
+      <body className="bg-background min-h-screen gap-8 antialiased w-full">
+        <main className="h-screen px-8 sm:px-16 md:px-32 lg:px-64 xl:px-80 2xl:px-96 flex flex-col items-center justify-center">
+          {isRouteErrorResponse(error) ? (
+            <RouteError error={error} />
+          ) : (
+            <Error />
+          )}
+          <Scripts />
+        </main>
       </body>
     </html>
   );

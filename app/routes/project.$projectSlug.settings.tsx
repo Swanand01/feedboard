@@ -3,7 +3,7 @@ import EditProjectForm from "~/components/project/form";
 import ProjectAdminsForm from "~/components/project/edit/project-admins-form";
 import DeleteProjectForm from "~/components/project/edit/delete-project-form";
 import { isProjectOwner, isSuperuser } from "~/lib/permissions.server";
-import { LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/node";
 import { authenticator } from "~/services/auth.server";
 import { useLoaderData } from "@remix-run/react";
 import { BreadcrumbItem, BreadcrumbLink } from "~/components/ui/breadcrumb";
@@ -33,7 +33,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const hasPagePermissions = userIsSuperuser || userIsProjectOwner;
 
   if (!hasPagePermissions) {
-    return redirect("/");
+    throw new Response(null, {
+      status: 403,
+      statusText: "Unauthorised",
+    });
   }
 
   const categories = project.categories.map((category) => {

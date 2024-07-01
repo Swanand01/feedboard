@@ -24,7 +24,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const userIsSuperuser = await isSuperuser(user);
   if (!userIsSuperuser) {
-    return redirect("/");
+    throw new Response(null, {
+      status: 403,
+      statusText: "Unauthorised",
+    });
   }
 
   const onboardingCompleted = await getSiteOption("onboardingCompleted");
@@ -38,7 +41,10 @@ export async function action({ request }: ActionFunctionArgs) {
 
   const userIsSuperuser = await isSuperuser(user);
   if (!userIsSuperuser) {
-    return redirect("/");
+    throw new Response(null, {
+      status: 403,
+      statusText: "Unauthorised",
+    });
   }
 
   const formData = await parseSiteFormData(request);

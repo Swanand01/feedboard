@@ -13,12 +13,17 @@ export async function loader({ request }: LoaderFunctionArgs) {
     failureRedirect: "/login",
   });
   const hasPermissions = isSuperuser(user);
-  if (!hasPermissions) return redirect("/");
+  if (!hasPermissions) {
+    throw new Response(null, {
+      status: 403,
+      statusText: "Unauthorised.",
+    });
+  }
   return null;
 }
 
 export async function action({ request }: ActionFunctionArgs) {
-  const { success, message, project } = await createProject(request);
+  const { success, project } = await createProject(request);
 
   if (success) {
     return redirect(`/project/${project?.slug}`);
