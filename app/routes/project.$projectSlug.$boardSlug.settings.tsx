@@ -1,4 +1,4 @@
-import { LoaderFunctionArgs, redirect } from "@remix-run/node";
+import { LoaderFunctionArgs } from "@remix-run/node";
 import EditBoardForm from "~/components/board/form";
 import { useLoaderData } from "@remix-run/react";
 import { getCategory } from "~/lib/board/data";
@@ -32,7 +32,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const hasPagePermissions =
     userIsSuperuser || userIsProjectOwner || userIsProjectAdmin;
   if (!hasPagePermissions) {
-    return redirect("/");
+    throw new Response(null, {
+      status: 403,
+      statusText: "Unauthorised",
+    });
   }
 
   const hasDeletePermissions = userIsSuperuser || userIsProjectOwner;
