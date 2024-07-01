@@ -27,9 +27,9 @@ export default function Header({
           <img
             src={logoURL}
             alt="Logo"
-            width={30}
-            height={30}
-            className="m-0 justify-center items-center object-cover"
+            width={32}
+            height={32}
+            className="m-0 justify-center items-center"
           />
         )}
         <h2 className="mt-0">{title}</h2>
