@@ -29,7 +29,7 @@ function getErrorMessage(status: number) {
     case 403:
       return "We apologize, but it seems you don't have permission to access this resource.";
     case 404:
-      return "Sorry! We could not find you the page you are looking for.";
+      return "Sorry! We could not find the page you are looking for.";
     case 504:
       return "Uh-oh! We're experiencing a temporary issue, and your request couldn't be completed.";
     default:
