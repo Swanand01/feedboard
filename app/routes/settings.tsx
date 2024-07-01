@@ -10,7 +10,7 @@ import { isSuperuser } from "~/lib/permissions.server";
 import { getSiteOption, setSiteOption } from "~/lib/utils.server";
 import { parseSiteFormData } from "~/lib/site/actions";
 import {
-  UpdateSiteFormInputs,
+  SiteFormInputs,
   updateFormSchema as UpdateSite,
 } from "~/lib/site/constants";
 import EditSiteForm from "~/components/site/form";
@@ -41,7 +41,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const formData = await parseSiteFormData(request);
-  const formInputs: UpdateSiteFormInputs = {
+  const formInputs: SiteFormInputs = {
     title: formData.get("title") as string,
     logo: formData.get("file"),
   };

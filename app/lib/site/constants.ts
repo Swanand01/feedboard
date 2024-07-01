@@ -8,11 +8,11 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/webp",
 ];
 
-const titleSchema = z
+const titleValidation = z
   .string()
   .min(3, { message: "Title must be at least 3 characters long" });
 
-const logoSchema = z
+const logoValidation = z
   .any()
   .refine(
     (file) => !file || file.size <= MAX_FILE_SIZE,
@@ -24,14 +24,16 @@ const logoSchema = z
   );
 
 export const createFormSchema = z.object({
-  title: titleSchema,
-  logo: logoSchema,
+  title: titleValidation,
+  logo: z
+    .any()
+    .refine((file) => file != null, "Logo is required")
+    .and(logoValidation),
 });
 
 export const updateFormSchema = z.object({
-  title: titleSchema,
-  logo: logoSchema.optional(),
+  title: titleValidation,
+  logo: logoValidation.optional(),
 });
 
-export type CreateSiteFormInputs = z.infer<typeof createFormSchema>;
-export type UpdateSiteFormInputs = z.infer<typeof updateFormSchema>;
+export type SiteFormInputs = z.infer<typeof createFormSchema>;

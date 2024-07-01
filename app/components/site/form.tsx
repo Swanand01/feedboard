@@ -3,8 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   createFormSchema,
   updateFormSchema,
-  CreateSiteFormInputs,
-  UpdateSiteFormInputs,
+  SiteFormInputs,
 } from "~/lib/site/constants";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
@@ -50,12 +49,12 @@ export default function SiteForm({
     logo: undefined,
   };
 
-  const form = useForm<CreateSiteFormInputs | UpdateSiteFormInputs>({
+  const form = useForm<SiteFormInputs>({
     resolver: zodResolver(edit ? updateFormSchema : createFormSchema),
     values: formDefaultValues,
   });
 
-  function onSubmit({ title }: CreateSiteFormInputs | UpdateSiteFormInputs) {
+  function onSubmit({ title }: SiteFormInputs) {
     const formData = new FormData();
     formData.append("title", title);
     if (selectedImage) {

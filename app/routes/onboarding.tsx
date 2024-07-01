@@ -12,7 +12,7 @@ import { isSuperuser } from "~/lib/permissions.server";
 import { parseSiteFormData } from "~/lib/site/actions";
 import {
   createFormSchema as CreateSite,
-  CreateSiteFormInputs,
+  SiteFormInputs,
 } from "~/lib/site/constants";
 import { getSiteOption, setSiteOption } from "~/lib/utils.server";
 import { authenticator } from "~/services/auth.server";
@@ -42,7 +42,7 @@ export async function action({ request }: ActionFunctionArgs) {
   }
 
   const formData = await parseSiteFormData(request);
-  const formInputs: CreateSiteFormInputs = {
+  const formInputs: SiteFormInputs = {
     title: formData.get("title") as string,
     logo: formData.get("file"),
   };
@@ -63,7 +63,7 @@ export async function action({ request }: ActionFunctionArgs) {
     setSiteOption("logo", `/uploads/${logo.name}`);
   }
 
-  setSiteOption("onboardingCompleted", "true");
+  // setSiteOption("onboardingCompleted", "true");
 
   return redirect("/project/create/");
 }
