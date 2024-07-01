@@ -34,9 +34,9 @@ export function UpvotePostButton({
         value={upvoted ? "0" : "1"}
       >
         {upvoted ? (
-          <TriangleUpIcon className="h-4 w-4" />
+          <TriangleUpIcon className="h-7 w-7" />
         ) : (
-          <CaretUpIcon className="h-4 w-4" />
+          <CaretUpIcon className="h-7 w-7" />
         )}
       </Button>
       <p>{upvotes.toString()}</p>
