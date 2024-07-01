@@ -32,13 +32,12 @@ With Feedboard, you can easily gather insights from your user base, track featur
 5. Generate prisma types: `npm run prisma:generate`
 6. Create the superuser: `npm run create-superuser`
 4. Start the server: `npm run dev`
+5. Start the onboarding process at the `/onboarding` route
 
 
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
-
-`INSTANCE_TITLE`: The title of your instance. This will be shown in the header.
 
 `DATABASE_URL`: The URL of the local Postgres database.
 
@@ -54,6 +53,8 @@ To run this project, you will need to add the following environment variables to
 
 - Feel free to customise the resources as per your requirement.
 - Configure the [environment variables](#environment-variables). If you choose to proceed with DigitalOcean Postgres instance, you don't need to edit the `DATABASE_URL` variable.
+- Once deployed, start the onboarding process at the `/onboarding` route.
+
 
 ## FAQ
 
@@ -67,9 +68,9 @@ To run this project, you will need to add the following environment variables to
     6. Select Application type as Web application.
     7. Name your application.
     8. In the Authorised redirect URIs section, click on ADD URI and add http://localhost:3000/auth/google/callback
-  
+
     **Note**: The port may be different for you.
-  
+
     9. Click on CREATE.
     10. You will now get your `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`. Copy them to your `.env` file.
 
