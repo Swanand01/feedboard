@@ -1,6 +1,5 @@
-import { Link, useLoaderData } from "@remix-run/react";
-import { LoaderFunctionArgs, redirect } from "@remix-run/node";
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
+import { useLoaderData } from "@remix-run/react";
+import { LoaderFunctionArgs } from "@remix-run/node";
 import EditPostForm from "~/components/post/form";
 import { getPost } from "~/lib/post/data";
 import { authenticator } from "~/services/auth.server";
@@ -42,7 +41,10 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
   const hasPagePermissions = hasStatusChangePermissions || userIsPostAuthor;
 
   if (!hasPagePermissions) {
-    return redirect("/");
+    throw new Response(null, {
+      status: 403,
+      statusText: "Unauthorised",
+    });
   }
 
   const statuses = post.category.statuses.map((status) => {

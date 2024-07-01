@@ -22,7 +22,10 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   const userIsSuperuser = await isSuperuser(user);
   if (!userIsSuperuser) {
-    return redirect("/");
+    throw new Response(null, {
+      status: 403,
+      statusText: "Unauthorised",
+    });
   }
 
   const title = (await getSiteOption("title")) || "";

@@ -5,12 +5,12 @@ import { Button } from "./ui/button";
 export default function RouteError({ error }: { error: ErrorResponse }) {
   const { status, statusText } = error;
   return (
-    <div className="flex flex-col space-y-2 justify-center items-center w-screen h-screen">
-      <h4 className="text-4xl font-bold">
+    <div className="flex flex-col space-y-2 justify-center items-center prose dark:prose-invert">
+      <h2>
         {status} | {statusText}
-      </h4>
-      <p className="text-lg text-gray-600">{getErrorMessage(status)}</p>
-      <Link to={".."} className="!mt-8">
+      </h2>
+      <p className="text-lg text-center">{getErrorMessage(status)}</p>
+      <Link to={".."} className="!mt-8 not-prose">
         <Button className="flex space-x-2 items-center">
           <ArrowLeftIcon />
           <span>Go Back</span>
@@ -29,7 +29,7 @@ function getErrorMessage(status: number) {
     case 403:
       return "We apologize, but it seems you don't have permission to access this resource.";
     case 404:
-      return "Sorry! We could not find you the page you are looking for.";
+      return "Sorry! We could not find the page you are looking for.";
     case 504:
       return "Uh-oh! We're experiencing a temporary issue, and your request couldn't be completed.";
     default:
