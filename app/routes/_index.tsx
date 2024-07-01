@@ -1,4 +1,4 @@
-import { Link, json, useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { Button } from "~/components/ui/button";
 import ProjectCard from "~/components/home/project-card";
 import { getProjects } from "~/lib/home/data";
@@ -19,18 +19,16 @@ export default function Page() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex justify-end gap-4">
-        {isSuperuser && (
-          <>
-            <Link to="/settings/">
-              <Button variant="secondary">Site Settings</Button>
-            </Link>
-            <Link to="/project/create/">
-              <Button>New Project</Button>
-            </Link>
-          </>
-        )}
-      </div>
+      {isSuperuser && (
+        <div className="flex justify-end gap-4">
+          <Link to="/settings/">
+            <Button variant="secondary">Site Settings</Button>
+          </Link>
+          <Link to="/project/create/">
+            <Button>New Project</Button>
+          </Link>
+        </div>
+      )}
       <div className="grid-cols-1 grid gap-4 md:grid-cols-3">
         {projects.length === 0
           ? "No projects found."
