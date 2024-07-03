@@ -23,6 +23,7 @@ With Feedboard, you can easily gather insights from your user base, track featur
 ### User Engagement
 - Allow users to upvote posts, indicating the popularity of a feature request
 - Enable commenting on posts for further discussion and clarification
+
 ## Run Locally
 
 1. Clone the repository: `git clone https://github.com/Swanand01/feedboard.git`
@@ -46,6 +47,9 @@ To run this project, you will need to add the following environment variables to
 `GOOGLE_CLIENT_SECRET`: Google OAuth Client Secret.
 
 `SUPERUSER_EMAIL`: Email address of the user you wish to make superuser.
+
+`SESSION_SECRET`: A randomly generated string used for securely signing session cookies.
+
 
 ## Deployment
 
