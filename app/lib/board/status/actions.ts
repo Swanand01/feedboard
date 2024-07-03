@@ -234,7 +234,6 @@ export async function createOrUpdateStatus(
   status: StatusFormField,
   categoryId: string,
 ) {
-  console.log(status);
   if (status.statusId === "") {
     return await createStatus(request, status, categoryId);
   }
