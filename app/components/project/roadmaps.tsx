@@ -19,7 +19,7 @@ export default function Roadmaps({ categories, projectSlug }: RoadmapsProps) {
             <div className="prose dark:prose-invert">
               <h3>{category.title} Roadmap</h3>
             </div>
-            <div className="flex flex-wrap justify-between gap-y-4">
+            <div className="flex flex-wrap justify-between gap-y-6">
               {category.statuses.map((status) => {
                 return (
                   <PostsByStatus
