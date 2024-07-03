@@ -10,7 +10,8 @@ const ACCEPTED_IMAGE_TYPES = [
 
 const titleValidation = z
   .string()
-  .min(3, { message: "Title must be at least 3 characters long" });
+  .min(3, { message: "Title must be at least 3 characters long" })
+  .max(50, { message: "Title can at most be 50 characters long" });
 
 const logoValidation = z
   .any()
