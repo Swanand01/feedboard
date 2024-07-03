@@ -34,7 +34,7 @@ export default function CommentForm({
   };
   const form = useForm<CommentFormInputs>({
     resolver: zodResolver(formSchema),
-    values: formDefaultValues,
+    defaultValues: formDefaultValues,
   });
 
   useEffect(() => {
