@@ -44,7 +44,7 @@ export default function RoadmapPostCard({
           <div className="flex flex-col gap-2 prose-a:no-underline">
             <Link to={`${baseLink}/${post.slug}`} className="flex items-center">
               <div className="prose dark:prose-invert">
-                <CardTitle className="line-clamp-2 font-semibold hover:opacity-70">
+                <CardTitle className="text-lg line-clamp-2 font-semibold hover:opacity-70">
                   {post.title}
                 </CardTitle>
               </div>
