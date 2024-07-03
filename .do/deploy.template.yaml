@@ -25,6 +25,8 @@ spec:
           scope: RUN_AND_BUILD_TIME
         - key: SUPERUSER_EMAIL
           scope: RUN_AND_BUILD_TIME
+        - key: SESSION_SECRET
+          scope: RUN_AND_BUILD_TIME
       name: feedboard
       git:
         branch: main

@@ -63,9 +63,9 @@ function App() {
           user={user}
           title={title}
           logoURL={logoURL}
-          className="px-8 py-4 sm:px-16 md:px-32 lg:px-64 xl:px-80 2xl:px-96"
+          className="px-8 py-4 sm:px-[20%] 2xl:px-[25%]"
         />
-        <main className="px-8 sm:px-16 md:px-32 lg:px-64 xl:px-80 2xl:px-96">
+        <main className="px-8 sm:px-[20%] 2xl:px-[25%]">
           <Breadcrumbs />
           <Outlet />
         </main>

@@ -31,11 +31,19 @@ export default function PostsByStatus({
       </Badge>
       <ScrollArea className="max-h-96 w-full">
         <div className="flex w-full flex-col gap-4">
-          {status.posts.map((post) => {
-            return (
-              <RoadmapPostCard key={post.id} post={post} baseLink={baseLink} />
-            );
-          })}
+          {status.posts.length > 0 ? (
+            status.posts.map((post) => {
+              return (
+                <RoadmapPostCard
+                  key={post.id}
+                  post={post}
+                  baseLink={baseLink}
+                />
+              );
+            })
+          ) : (
+            <p className="text-center">No posts yet.</p>
+          )}
         </div>
       </ScrollArea>
     </div>
